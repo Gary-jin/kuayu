@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>确认支付</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/tab/style.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <!-- <link rel="stylesheet" href="../../js/mint-ui/style.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" > -->
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .header .right{
+            width: 1.2rem;
+            height: 0.32rem;
+            position: absolute;
+            right: 0.3rem;
+            top: 0.29rem;
+            font-size: 0.28rem;
+            font-weight: 500;
+            line-height: 0.32rem;
+            color:  #999999;
+        }
+        .videoPay {
+  height: 100%;
+}
+.videoPay .list {
+  height: 1.2rem;
+  display: flex;
+  align-items: center;
+  padding: 0 .3rem;
+  background: #fff;
+}
+.videoPay .list .select {
+  margin-right: .3rem;
+}
+.videoPay .list img {
+  height: .4rem;
+}
+.videoPay .info {
+  padding: .3rem;
+}
+.videoPay .info span {
+  font-size: .3rem;
+}
+.videoPay .btn {
+  position: absolute;
+  bottom: 1rem;
+  left: .5rem;
+  width: 6.5rem;
+  height: .9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: .34rem;
+  border-radius: .2rem;
+}
+
+
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="videoPay">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">确认支付</div>
+        </div>
+        <div class="list" @click="way = 1">
+            <div class="select">
+              <i class="iconfont icon-duihao2 selected" v-if="way === 1" style="color:#FF5847"></i>
+              <i class="iconfont icon-circle2yuanquan" v-else></i>
+            </div>
+            <img src="../../image/share_video/videoAli.png" alt="">
+        </div>
+        <div class="list" @click="way = 2">
+            <div class="select">
+              <i class="iconfont icon-duihao2 selected" v-if="way === 2" style="color:#FF5847" ></i>
+              <i class="iconfont icon-circle2yuanquan" v-else></i>
+            </div>
+            <img src="../../image/share_video/videoWx.png" alt="">
+        </div>
+        <p class="info">本次购买需支付<span style="color:#FF5847" >{{price}}</span>元</p>
+        <div class="btn" @click="pay" style="background:#FF5847">去支付</div>
+         
+         
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!-- <script src="../../js/mint-ui/index.js"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script> -->
+<!-- <script src="../../js/tab/index.js"></script>000000000000 -->
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+          way: 1,
+          data: '',
+          price:''
+        },
+        created: function() {
+          this.getParameter()
+        },
+        mounted: function () {
+            
+        },
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            // 获取传参
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.price = Request['price']
+            },
+            pay () {
+              Http.post(Http.HOST+Http.API_URL.MOVIEAGENTPAY, {
+                type: this.way === 1 ? 'alipay' : 'wxpay'
+              }, true).then(res => {
+                if (res.code === 0) {
+                  this.data = res.data.payOrder
+                  let info = {
+                    apiKey: this.data.appid,
+                    orderId: this.data.prepayid,
+                    mchId: this.data.partnerid,
+                    nonceStr: this.data.noncestr,
+                    timeStamp: this.data.timestamp,
+                    sign: this.data.sign
+                  }
+                  if (this.way === 1) {
+                    if (dsBridge.call('receiveParams', 'codeVersion') >= 300) {
+                        dsBridge.call("alipayPay", {orderInfo: this.data}, (ret) =>{
+                            if (ret == 0) {
+                                //    支付成功
+                                dsBridge.call('toast', {msg: '支付成功'})
+                                dsBridge.call('closeWin')
+                            } else if (ret == -1) {
+                                //    支付失败
+                            }
+                        })
+                    } else {
+                        dsBridge.call("alipayPay", {orderInfo: this.data})
+                    }
+                  } else {
+                    if (dsBridge.call('receiveParams', 'codeVersion') >= 300) {
+                        dsBridge.call("wxPay", info, (ret) =>{
+                            if (ret == 0) {
+                                //    支付成功
+                                dsBridge.call('toast', {msg: '支付成功'})
+                                dsBridge.call('closeWin')
+                            } else if (ret == -1) {
+                                //    支付失败
+                            }
+                        })
+                    } else {
+                        dsBridge.call("wxPay", info)
+                    }
+                  }
+                }
+              })
+            },
+        },
+        
+    })
+</script>
+
+</html>

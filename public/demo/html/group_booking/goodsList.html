@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>福利团</title>
+    <script>
+        (function(doc, win) {
+            var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function() {
+              var clientWidth = docEl.clientWidth;
+              if(!clientWidth) return;
+              if(clientWidth >= 750) {
+                docEl.style.fontSize = '100px';
+              } else {
+                docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+              }
+            };
+            if(!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+          })(document, window);
+      </script>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=1">
+    <link rel="stylesheet" href="../../css/group_booking/group.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    
+    <style>
+     	#header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: .88rem;
+            border-bottom: 1px solid #eee;
+			background:#fff;
+			z-index: 9999;
+            line-height: .88rem;
+            display: flex;
+            align-items: center;
+        }
+        #header .left img{
+            width: .18rem;
+            padding-left: .3rem;
+        }
+        #header .left {
+            display: flex;align-items: center;
+            z-index: 1;
+            position: absolute;
+            left: 0;
+			top: .28rem
+        }
+
+        #header .center {
+            position: relative;font-size: .34rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+        .common-hight{
+            height: .88rem;
+        }
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: 0.88rem;
+            bottom: 0;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="groupBooking">
+    <div id="header">
+        <div class="left" @click="onBack"><img src="../../image/group_booking/back.png"></div>
+        <div class="center">{{title}}</div>
+      </div>
+      <div class="common-hight"></div>
+      <div class="goods-list mescroll" ref="mescroll" id="mescroll">
+            <div class="list" id="d26">
+                <ul>
+                  <li class="flex" v-for="(item, index) in goodsList" :key="index"  @click="toGroupDetail(item.id)">
+                        <div class="left"><img :src="item.thumb" alt=""></div>
+                        <div class="right flex_1">
+                            <h3 class="title text-overflow_1-xzh">{{item.goodsName}}</h3>
+                            <div class="num"><span class="postage">{{item.freeShippingInfo}}</span><span class="piece">已拼{{item.sales}}件</span></div>
+                            <div class="btm">
+                                <div class="price">
+                                    <p><span>{{item.collageNum}}人拼团</span><b>¥{{item.collagePrice}}</b></p>
+                                    <span class="single">单人价¥{{item.spe_price}}</span>
+                                </div>
+                                <button>去拼团</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/libs/common.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: "#groupBooking",
+        data:{
+            goodsList: '',
+            mescroll: null,
+            type: '',
+            cid: '',
+            title: ''
+        },
+        created () {
+            this.getParameter()
+        },
+        methods: {
+            onBack: function(){
+                dsBridge.call('closeWin')
+            },
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.type = Request['type']
+                this.cid = Request['cid']
+                this.title = Request['title']
+            },
+            // downCallback(){
+            //     this.mescroll.optUp.page.num = 1
+            //     this.upCallback(this.mescroll.optUp.page, this.mescroll)
+            // },
+            upCallback(page,mescroll){
+                var params;
+                if(this.cid){
+                    params = {page: page.num, cid: this.cid}
+                }else if(this.type){
+                    params = {page: page.num, type: this.type}
+                }
+                Http.post(Http.HOST+Http.API_URL.GROUPGOODSLIST, params, true).then((res)=>{
+                    if (res.code === 0) {
+                        let arr = res.data.list === '' ? [] : res.data.list
+                        if (page.num === 1) this.goodsList = []
+                        this.goodsList = this.goodsList.concat(arr)
+                        this.$nextTick(() => {
+                            mescroll.endSuccess(res.data.list.length, true)
+                        })
+                    }
+                })
+            },
+            toGroupDetail(id){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/goodsDetails.html?id=' + id,type: 'web'})
+            }
+        },
+        mounted () {
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+                down: {
+                    // auto: false,
+                    // callback: this.downCallback,
+                },
+                up: {
+                    auto: true,
+                    // isBounce: false,
+                    callback: this.upCallback,
+                    page: {
+                        num: 0,
+                        size:5
+                    },
+                    // htmlNodata: '<p class="upwarp-nodata">—— 我也是有底线的 ——</p>',
+                    noMoreSize: 5,
+                    empty: {
+                        warpId: 'd26',
+                        icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                        tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                    }
+                }
+            });
+        }
+      
+    })
+</script>
+
+</html>

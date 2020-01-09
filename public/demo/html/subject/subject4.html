@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>专题4</title>
+    <script>
+      (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">  
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <link rel="stylesheet" href="../../js/tab/style.css">
+    <style media="screen">
+	  html,body { background: #f7f7f7;}
+        #vue-app{
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+          }
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:bold;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .list{
+          width: 100%;
+        }
+        .list .banner{
+          width: 100%;
+          height: 8.65rem;
+        }
+        .list .banner img{
+          height: 100%;
+          width: 100%;
+        }
+        .list-top{
+          width: 100%;
+        }
+        .top-title{
+          height: 1.5rem;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .top-title img{
+          width: 6.19rem;
+          height: 1.24rem;
+        }
+        .list-top .top-con{
+          /* width: 100%; */
+          width:7.02rem;
+          max-height:15rem;
+          background:rgba(255,255,255,1);
+          border-radius:0.1rem;
+          margin: 0 auto;
+        }
+        .list-top .top-con li{
+          width:6.4rem;
+          height:2.4rem;
+          background:rgba(255,255,255,1);
+          border-radius:0.1rem;
+          margin: 0 auto;
+          /* padding: 0.35rem 0.35rem; */
+          display: flex;
+          justify-content: space-between;
+          /* margin-bottom: 0.2rem; */
+          border-bottom: 0.01rem solid rgba(238,238,238,1);
+          padding: 0.3rem 0.24rem 0.24rem 0.1rem;
+        }
+        /* .list-top .top-con li:first-child{
+          margin-bottom: 0.2rem;
+        } */
+        .list-top .top-con li img{
+          width:2.4rem;
+          height:2.4rem;
+          border-radius:0.05rem;
+          /* background: skyblue; */
+        }
+        .list-top .top-con li .goods-info{
+          width: 3.8rem;
+          height: 2.4rem;
+          /* background: cyan; */
+          display: flex;
+          flex-direction: column;
+        }
+        .list-top .top-con li .goods-info h3{
+          width:3.8rem;
+          height:0.5rem;
+          font-size:0.3rem;
+          font-weight:bold;
+          color:rgba(47,47,47,1);
+          line-height: 0.5rem;
+        }
+        .list-top .top-con li .goods-info .ticketBox{
+          height: 0.3rem;
+          /* padding-left: 0.12rem; */
+          margin: 0.1rem 0;
+          display: flex;
+        }
+        .list-top .top-con li .goods-info .ticketBox .quan{
+          height: 0.3rem;
+          min-width: 0.86rem;
+          background:rgba(255,238,224,1);
+          border-radius:0.03rem;
+          font-size:0.22rem;
+          font-weight:500;
+          color:rgba(168,101,23,1);
+          line-height:0.3rem;
+          text-align: center;
+          position: relative;
+          padding: 0 0.05rem;
+        }
+        
+        .list-top .top-con li .goods-info .ticketBox .zhuan{
+          background:rgba(255,255,255,1);
+          min-width: 1.48rem;
+          height: 0.28rem;
+          border: 1px solid rgba(168,101,23,1);
+          border-radius: 0.03rem;
+          margin-left: 0.08rem;
+          font-size:0.22rem;
+          font-weight:500;
+          color:rgba(168,101,23,1);
+          line-height:0.3rem;
+          text-align: center;
+          padding: 0 0.05rem;
+        }
+        .sellNum{
+          height: 0.4rem;
+          font-size:0.22rem;
+          font-weight:500;
+          color:rgba(153,153,153,1);
+          line-height:0.4rem;
+        }
+        .price-box{
+          width:3.1rem;
+          height:0.66rem;
+          background:url(../../image/subject/sub4-03.png);
+          background-size: 100% 100%;
+          display: flex;
+          align-items: center;
+          margin-top: 0.16rem;
+        }
+        .price-box-left{
+          width:1.41rem;
+          height:0.62rem;
+          text-align: center;
+          font-size:0.26rem;
+          font-weight:500;
+          color:rgba(255,255,255,1);
+          line-height: 0.62rem;
+          text-decoration:line-through;
+        }
+        .active-price{
+          width:1.63rem;
+          height:0.66rem;
+          font-size:0.32rem;
+          font-weight:800;
+          color:rgba(161,57,29,1);
+          text-align: center;
+          line-height: 0.66rem;
+        }
+        .list-bottom{
+          width: 100%;
+        }
+        .list-bottom .bottom-con{
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          /* justify-content: center; */
+          /* margin-top: 0.2rem; */
+          min-height: calc(100% - 1.88rem)
+        }
+        .bottom-con li{
+          height: 5.36rem;
+          width: 3.44rem;
+          background:rgba(255,255,255,1);
+          border-radius:0.1rem;
+        }
+        .bottom-con li:nth-child(odd){
+          margin: 0 0.14rem 0.14rem 0.24rem;
+        }
+        .bottom-con li:nth-child(even){
+          margin-bottom: 0.14rem;
+        }
+        .bottom-con li .imgBox{
+          width:3.44rem;
+          height:3.44rem;
+          border-radius:0.1rem 0.1rem 0 0;
+          position: relative;
+        }
+        .bottom-con li .imgBox img{
+          width:3.44rem;
+          height:3.44rem;
+          border-radius:0.1rem 0.1rem 0 0;
+        }
+        .bottom-con li .imgBox p{
+          width:1.72rem;
+          height:0.36rem;
+          background:rgba(0,0,0,1);
+          opacity:0.6;
+          border-radius:0 0.1rem 0 0;
+          position: absolute;
+          left: 0;
+          bottom:0;
+          font-size:0.22rem;
+          font-weight:500;
+          color:rgba(255,255,255,1);
+          line-height: 0.36rem;
+          text-align: center;
+        }
+        .bottom-con li .goods-info{
+          width: 3.05rem;
+          height: 1.92rem;
+          padding-left: 0.2rem;
+        }
+        .bottom-con li h3{
+          width:3.05rem;
+          height:0.58rem;
+          font-size:0.26rem;
+          font-weight:bold;
+          color:#2F2F2F;
+          line-height:0.58rem;
+        }
+        .bottom-con li .ticketBox{
+          height: 0.3rem;
+          display: flex;
+          margin-bottom: 0.22rem;
+        }
+        .bottom-con li .ticketBox .quan{
+          height: 0.3rem;
+          min-width: 0.86rem;
+          font-size:0.22rem;
+          font-weight:500;
+          color:#A86517;
+          line-height:0.3rem;
+          text-align: center;
+          /* position: relative; */
+          background:#FFEEE0;
+          border-radius:0.03rem;
+          
+        }
+        
+        .bottom-con li .ticketBox .zhuan{
+          min-width:1.46rem;
+          height:0.28rem;
+          border:1px solid rgba(168,101,23,1);
+          border-radius:0.03rem;
+          margin-left: 0.1rem;
+          font-size:0.22rem;
+          font-weight:500;
+          color:#A86517;
+          line-height:0.3rem;
+          text-align: center;
+        }
+        .goods-price{
+          height: 0.58rem;
+          width: 2.69rem;
+          display: flex;
+          align-items: flex-end;
+          background: url(../../image/subject/sub4-03.png) no-repeat;
+          background-size: 100% 100%;
+        }
+        .goods-price .price{
+          height: 0.54rem;
+          width: 1.25rem;
+          font-size:0.22rem;
+          font-weight:500;
+          text-decoration:line-through;
+          color:rgba(255,255,255,1);
+          line-height: 0.54rem;
+          text-align: center;
+        }
+        
+        .goods-price .nowPrice{
+          height: 0.58rem;
+          width: 1.44rem;
+          font-size:0.3rem;
+          font-weight:800;
+          color:rgba(161,57,29,1);
+          line-height: 0.58rem;
+          text-align: center;
+        }
+        .tabBox{
+          height: 1rem;
+          margin-bottom: 0.2rem;
+        }
+        .vux-tab-container{
+          height: 1rem;
+        }
+        .vux-tab{
+          background: #1F1F1F;
+          height: 1rem;
+        }
+        .vux-tab .vux-tab-item{
+          font-size:0.28rem;
+          font-weight:500;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          line-height: 0.5rem;
+        }
+        .item-active{
+          width:1.54rem;
+          height:0.48rem;
+          background:linear-gradient(90deg,rgba(255,232,204,1) 0%,rgba(255,212,159,1) 100%);
+          border-radius:0.24rem;
+          font-weight: bold;
+          /* margin: auto; */
+        }
+        .tabListTop{
+          position: fixed;
+          display: block;
+          width: 100%;
+          top: 0.88rem;
+          left: 0;
+          z-index: 999;
+        }
+        
+        #mescroll{
+        width: 100%;
+        position: fixed;
+        top: 0.88rem;
+        bottom: 0;
+        height: auto;
+      }
+
+    </style>
+</head>
+
+<body>
+  <div id="vue-app"  v-cloak>
+    <div class="header">
+      <div  v-if='isShowBackBtn' class="left">
+          <div class="back" @click="onBack"></div>
+      </div>
+      <div class="center">{{styleInfo.title}}</div>
+    </div>
+    <div class='common-warp mescroll' ref="mescroll" id="mescroll" :style="{background:styleInfo.bgcolor}"> 
+      <div class="list" >
+        <div class="banner" v-if="styleInfo && styleInfo.url != ''">
+          <img :src="styleInfo.url">
+        </div>
+        <div class="list-top" id="empty">
+          <div class="top-title" v-if="goodsListHeader && goodsListHeader.length > 0">
+            <img src="../../image/subject/sub4-01.png">
+          </div>
+          <ul class="top-con">
+            <li v-for="(item, index) in goodsListHeader" :key="index" @click="toDetail(item)">
+              <img :imgurl="item.thumb">
+              <div class="goods-info">
+                <h3 class="text-overflow_1-xzh">
+                    {{item.title}}
+                </h3>
+                <div class="ticketBox">
+                  <div class="quan">{{item.coupon_money}}元券</div>
+                  <div class="zhuan" v-if="item.commission_money">预估赚￥{{item.commission_money}}</div>
+                </div>
+                <div class="sellNum">已售{{item.volume}}件</div>
+                <div class="price-box">
+                  <div class="price-box-left">￥{{item.zk_final_price}}</div>
+                  <div class="active-price">￥{{item.coupon_price}}</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="list-bottom">
+          <div class="top-title" v-if="goodsList && goodsList.length > 0">
+            <img src="../../image/subject/sub4-02.png">
+          </div>
+          <div class="goods-list-bottom" :style="scrollTop == 1 && tabList && tabList.length > 0? {paddingTop:'1.2rem'} : {paddingTop:0}">
+            <div v-if="tabList && tabList.length > 0 && type != 1" class="tabBox" :class="scrollTop == 1 ? 'tabListTop' : ''">
+              <tab :line-width="0" custom-bar-width=".8rem" active-color="#A1391D" default-color="#FFFFFF" v-model="active" class="resultTab" v-show="tabList">
+                <tab-item @on-item-click="resetTab" v-for="(item, index) in tabList" :key="'existtab'+index">
+                  <div :class="active == index ? 'item-active' : ''">{{item.name}}</div>
+                </tab-item>
+              </tab>
+            </div>
+            <ul class="bottom-con" :style="{minHeight:Ht + 'rem'}" v-if="goodsList && goodsList.length > 0">
+              <li v-for="(item, index) in goodsList" :key="index" @click="toDetail(item)">
+                <div class="imgBox">
+                  <img :imgurl="item.thumb">
+                  <p>已售{{item.volume}}件</p>
+                </div>
+                <div class="goods-info">
+                  <h3 class="text-overflow_1-xzh">{{item.title}}</h3>
+                  <div class="ticketBox">
+                    <div class="quan">{{item.coupon_money}}元券<p></p><p></p></div>
+                    <div class="zhuan" v-if="item.commission_money">预估赚￥{{item.commission_money}}</div>
+                  </div>
+                  <div class="goods-price">
+                    <p class="price">￥{{item.zk_final_price}}</p>
+                    <p class="nowPrice">￥{{item.coupon_price}}</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+	</div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js"></script>
+<!-- 线上路径，线上需开启 -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?201910112230"></script> -->
+<!-- 本地调试路径 -->
+<script src="../../js/http.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/tab/index.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+		      // tabList:['男女服饰','服饰箱包','美妆个护','营养保健','男女服饰','服饰箱包','美妆个护','营养保健'],
+          active:0,
+          scrollTop:'',
+          type:'', //商品源类型 type = 1没有分类的尚品源 2有分类
+          materialId:'', //分类id
+          dataList: [],
+          mescroll: null,
+          goodsList:[],
+          goodsListHeader:[],
+          id:'',
+          styleInfo:'',
+          Ht:0,
+		      // page:0,
+          tabList:[],
+        },
+        created: function() {
+          // 获取专题模板id
+          this.getParameter()
+        },
+        mounted: function(){
+          var H = document.documentElement.clientHeight
+          var size = (document.documentElement.clientWidth / 7.5)
+          this.Ht = (H/size) - 1.68
+          // 获取自定义样式
+          this.getStyle()
+          window.addEventListener('scroll', this.handleScroll, true);
+          this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+              
+            },
+            
+            up: {
+              callback: this.upCallback, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 10 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+              htmlLoading: '',
+              noMoreSize: 5,
+              toTop: {
+                src: '../../image/back_top.png',
+                offset: 1000
+              },
+              empty: {
+                warpId: 'empty',
+                icon: '../../image/kong.png',
+                tip: '暂无相关数据~'
+              },
+              lazyLoad: {
+                  use: true, // 是否开启懒加载,默认false
+                  attr: 'imgurl', // 网络地址的属性名 (图片加载成功会移除该属性): <img imgurl='网络图  src='占位图''/>
+                  showClass: 'mescroll-lazy-in', // 图片加载成功的显示动画: 渐变显示,参见mescroll.css
+                  //delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
+                  //offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
+              }
+            }
+          });
+        },
+        methods: {
+          // 获取传参
+          getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.id = Request['id']
+                console.log(this.id)
+            },
+          // 返回
+          onBack: function (ret, err) {
+            dsBridge.call('closeWin')
+          },
+          resetTab(){
+            this.materialId = this.tabList[this.active].value
+            this.reset()
+          },
+          upCallback(page){
+            if (this.type == 1) {
+                //联网请求
+              Http.post(Http.HOST+Http.API_URL.APPREPAIRDATA,{style_id: this.id, page:page.num},true,true).then((response)=> {
+                //请求的列表数据
+                let arr = response.data;
+                //如果是第一页需手动置空列表
+                if (page.num == 1) this.dataList = [];
+                //把请求到的数据添加到列表
+                this.dataList = this.dataList.concat(arr);
+                //数据渲染成功后,隐藏下拉刷新的状态
+                this.goodsListHeader = this.dataList.slice(0,5)
+                this.goodsList = this.dataList.slice(6)
+                this.$nextTick(() => {
+                  this.mescroll.endSuccess(arr.length);
+                })
+              }).catch((e)=> {
+                //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                this.mescroll.endErr();
+              })
+            } else if (this.type == 2) {
+              Http.post(Http.HOST+Http.API_URL.APPREPAIRDATA,{style_id: this.id,material_id: this.materialId, page:page.num},true,true).then((response)=> {
+                //请求的列表数据
+                let arr = response.data;
+                //如果是第一页需手动置空列表
+                if (page.num == 1) this.dataList = [];
+                //把请求到的数据添加到列表
+                this.dataList = this.dataList.concat(arr);
+                //数据渲染成功后,隐藏下拉刷新的状态
+                this.goodsListHeader = this.dataList.slice(0,5)
+                this.goodsList = this.dataList.slice(6)
+                this.$nextTick(() => {
+                  this.mescroll.endSuccess(arr.length);
+                })
+              }).catch((e)=> {
+                //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                this.mescroll.endErr();
+              })
+            }
+          },
+          // 获取自定义样式
+          getStyle:function(){
+            Http.post(Http.HOST+Http.API_URL.APPREPAIRSOURCE,{style_id: this.id},true,true).then((res)=>{
+              if(res.code == 0){
+                this.styleInfo = res.data.info
+                this.tabList = res.data.category
+                if (this.tabList == null) {
+                  this.type = 1
+                  this.reset()
+                } else {
+                  this.type = 2
+                  this.materialId = this.tabList[0].value
+                  this.reset()
+                }
+              }
+            })
+          },
+          
+          reset () {
+            this.goodsList = []
+            // this.mescrollUp.page.num = 1
+            this.mescroll.setPageNum(1);
+            this.mescroll.resetUpScroll()
+          },
+          // 监听滚动条高度，tab栏固定
+          handleScroll:function () {
+            var tabBox = document.getElementsByClassName('goods-list-bottom')[0]
+            // console.log(tabBox.offsetTop)
+            if(tabBox.offsetTop-this.$refs.mescroll.scrollTop <= 0) {
+              this.scrollTop = 1
+            }else{
+              this.scrollTop = ''
+            }
+          },
+          // 跳转详情
+          toDetail: function(item){
+            console.log(item)
+            dsBridge.call('openGood', item)
+          },
+        }
+    })
+</script>
+
+</html>

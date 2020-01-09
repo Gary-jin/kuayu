@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拉新奖励</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css"> -->
+    <!-- <link rel="stylesheet" href="../../js/mint-ui/style.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" > -->
+    <style media="screen">
+    html,body { background: #f7f7f7;font-family:PingFang SC;}
+    #vue-app{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .content{
+            flex: 1;
+            overflow-y: scroll;
+        }
+        button{
+          outline: none;
+        }
+        #pop-box {
+  z-index: 999;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+#pop-box .pop-item {
+  z-index: 9999;
+  width: 3rem;
+  height: 3rem;
+  padding: 10px;
+  background-color: white;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#pop-box .pop-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /*border: 1px solid red;*/
+}
+.banner {
+  display: block;
+  width: 100%;
+  height: 4.24rem;
+}
+.earnings {
+  width: 6.9rem;
+  height: 2.16rem;
+  background-color: white;
+  margin: 0 auto 0;
+  transform: translateY(-0.3rem);
+  box-shadow: 0px 3px 10px 1px rgba(218, 218, 218, 0.2);
+  border-radius: 5px;
+  z-index: 999;
+}
+.earnings p:nth-child(1) {
+  border-bottom: 1px solid #eeeeee;
+}
+.earnings p {
+  box-sizing: border-box;
+  padding: 0 0.3rem;
+  font-weight: 400;
+  color: #333333;
+  height: 50%;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.earnings p span {
+  /* width: 100%; */
+  font-size: 0.28rem;
+  font-family: PingFang-SC-Regular;
+}
+.earnings p span span {
+  font-size: 0.4rem;
+  color: #FF6700;
+}
+.earnings p button {
+  width: 1.28rem;
+  height: 0.48rem;
+  line-height: 0.48rem;
+  background: linear-gradient(60deg, #ff7000, #ffab00);
+  box-shadow: 0px 0px 3px 0px #cacaca;
+  border-radius: 12px;
+  font-size: 0.3rem;
+  font-weight: 400;
+  color: #ffffff;
+}
+.share {
+  width: 6.9rem;
+  background: #ffffff;
+  margin: 0 auto;
+  /*padding: 0 0.24rem;*/
+}
+.share .share-tit {
+  height: 0.68rem;
+  line-height: 0.68rem;
+  font-size: 0.28rem;
+  padding-left: 0.3rem;
+  font-family: PingFang-SC-Regular;
+  font-weight: 400;
+  color: #333333;
+  border-bottom: 1px solid #eeeeee;
+}
+.share .share-tit .share-sp {
+  display: inline-block;
+  width: 0.06rem;
+  height: 0.32rem;
+  background: linear-gradient(90deg, #ff6100, #ffbb00);
+  margin-right: 0.22rem;
+  vertical-align: sub;
+}
+.share .share-list {
+  /*display: grid;*/
+  /*grid-template-columns: 33.3% 33.3% 33.3%;*/
+  /*grid-template-rows: 2.1rem 2.1rem;*/
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: wrap;
+  padding: 0 1.5%;
+  box-sizing: border-box;
+  justify-content: space-around;
+}
+.share .share-list .item {
+  width: 2rem;
+  height: 2.1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: none !important;
+}
+.share .share-list .item .imgs {
+  width: 1.06rem;
+  height: 1.06rem;
+  overflow: hidden;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  align-items: center;
+}
+.share .share-list .item .imgs img {
+  display: block;
+  width: 24px;
+  margin: 0 auto;
+}
+.share .share-list .item p {
+  text-align: center;
+  font-size: 12px;
+  font-family: PingFang-SC-Regular;
+  font-weight: 400;
+  color: #333333;
+}
+.award {
+  margin: 0.26rem auto 0;
+  width: 100%;
+  height: 0.28rem;
+  text-align: center;
+  font-size: 0.28rem;
+  font-family: PingFang-SC-Regular;
+  font-weight: 400;
+  color: #666666;
+}
+.btn-tow {
+  width: 100%;
+  height: 1.74rem;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.btn-tow button {
+  width: 2.6rem;
+  height: 0.72rem;
+  line-height: 0.72rem;
+  background: #f5c615;
+  box-shadow: 0px 2px 3px 0px #cacaca;
+  border-radius: 17px;
+  font-size: 0.32rem;
+  font-family: PingFang-SC-Medium;
+  font-weight: 500;
+  color: #ffffff;
+}
+.rule {
+  width: 6.9rem;
+  /*height:2.34rem;*/
+  margin: 0 auto;
+  background-color: white;
+}
+.rule .rule-tit {
+  padding: 0 0.3rem;
+  height: 0.68rem;
+  line-height: 0.68rem;
+  font-size: 14px;
+  font-family: PingFang-SC-Regular;
+  font-weight: 400;
+  color: #333333;
+  border-bottom: 1px solid #eeeeee;
+}
+.rule .rule-tit span {
+  margin-right: 0.3rem;
+  display: inline-block;
+  width: 3px;
+  height: 0.28rem;
+  line-height: 0.28rem;
+  vertical-align: sub;
+  background: linear-gradient(90deg, #ff6100, #ffbb00);
+}
+.rule .rule-ul {
+  padding: 0 0.3rem;
+}
+.rule .rule-ul li {
+  margin: 0.2rem 0.5rem 0.2rem 0.5rem;
+  /*list-style-type: square;*/
+  list-style-type: none;
+  font-size: 13px;
+  font-family: PingFang-SC-Regular;
+  font-weight: 400;
+  color: #666666;
+}
+
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="paySuccess">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">拉新</div>
+        </div>
+        <div class="content">
+            <!--弹出层-->
+            <div v-if="isShow" @click.stop="popBox" id="pop-box">
+                <div class="pop-item">
+                <img id="qr-img" :src="data.pic" alt="我的二维码">
+                </div>
+            </div>
+            <!--banner-->
+            <img class="banner" src="../../image/choniceness/bj.png" alt="">
+            <!--收益-->
+            <div class="earnings">
+                <p><span>预估拉新收益(元): <span>{{data.prospect || 0.00}}</span></span></p>
+                <p><span>可提现拉新收益(元): <span>{{data.laxin_balance || 0.00}}</span></span>
+                <button
+                    @click="jumpToWith()">提现
+                </button>
+                </p>
+            </div>
+            <!--分享-->
+            <div class="share">
+                <p class="share-tit"><span class="share-sp"></span>赚钱攻略：分享好礼给亲友</p>
+                <div class="share-list">
+                <div class="item" @click="sharePnM(3)">
+                    <div class="imgs">
+                    <img src="../../image/choniceness/qq.png" alt="qq">
+                    </div>
+                    <p>分享QQ好友</p>
+                </div>
+                <div class="item" @click="sharePnM(1)">
+                    <div class="imgs">
+                    <img src="../../image/choniceness/weixin.png" alt="weixin">
+                    </div>
+                    <p>分享微信好友</p>
+                </div>
+                <div class="item" @click="sharePnM(2)">
+                    <div class="imgs">
+                    <img src="../../image/choniceness/pengyouquan.png" alt="pengyouquan">
+                    </div>
+                    <p>分享朋友圈</p>
+                </div>
+                <div class="item" @click="sharePnM(4)">
+                    <div class="imgs">
+                    <img src="../../image/choniceness/weibo.png" alt="weibo">
+                    </div>
+                    <p>分享微博</p>
+                </div>
+                <div class="item" @click="shareCopylink()">
+                    <div class="imgs">
+                    <img src="../../image/choniceness/lianjie.png" alt="链接">
+                    </div>
+                    <p>复制链接</p>
+                </div>
+                <div class="item" @click="shareScanning('面对面扫码')">
+                    <div class="imgs">
+                    <img src="../../image/choniceness/QR.png" alt="saoma">
+                    </div>
+                    <p>面对面扫码</p>
+                </div>
+                </div>
+            </div>
+          <!---->
+            <p class="award">
+            您本月成功邀请{{data.laxin_sum || 0}}人，获得{{data.award || 0}}元奖励
+            </p>
+            <div class="btn-tow">
+                <button @click="toDetail()">邀请明细</button>
+                <button @click="isGoTeam()">我的团队</button>
+            </div>
+            <!--活动规则-->
+
+            <div class="rule">
+                <p class="rule-tit"><span></span>活动要求</p>
+                <ul class="rule-ul" style="padding-bottom:0.05rem;margin-bottom:0.2rem;">
+                    <li v-if="isRuleMsg" v-html="ruleMsg"></li>
+                    <li v-else> 暂无活动！</li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js?i=1" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!-- <script src="../../js/mint-ui/index.js"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script> -->
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            isShare: false,
+            isShow: false,//弹出弹窗
+            data: {},
+            shareLink: '',
+            ruleMsg: '',
+            isRuleMsg: true,
+            QrImg: '',
+            tit: '',
+            miaoshu: '',
+            picture: '',
+            isGo: true
+        },
+        created: function() {
+            
+        },
+        
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            // 去明细
+            toDetail(){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/choiceness/informationDetailed.html',type: 'web'})
+            },
+            // 去我的团队
+            isGoTeam () {
+                if(this.isGo){
+                    dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/choiceness/myteam.html',type: 'web'})
+                }else{
+                    dsBridge.call('albcAuth', {url: this.data})
+                }
+            },
+            jumpToWith (){
+                if(this.isGo){
+                    dsBridge.call('toExtractCash')
+                }else{
+                    dsBridge.call('albcAuth', {url: this.data})
+                }
+            },
+            /*微信*/
+            sharePnM(type) {
+                // this.$vux.loading.show({text: 'Loading'});
+                var _this = this;
+                /*好友分享*/
+                let shareinfo = {
+                    title: _this.tit,
+                    description: _this.miaoshu,
+                    thumb: _this.picture,
+                    contentUrl: _this.shareLink,
+                    type: type
+                }
+
+                if(this.isGo){
+                    if (utils.isPhone()) {
+                        dsBridge.call("inviteShareUrl", shareinfo)
+                    }
+                    
+                }else{
+                    if (utils.isPhone()) {
+                       dsBridge.call('albcAuth', {url: this.data}) 
+                    } 
+                }
+            },
+            /* 复制链接 */
+            shareCopylink () {
+                if (this.isGo) {
+                    if (utils.isPhone()) {
+                        dsBridge.call('clipBoard', {value: this.shareLink})
+                    }
+                } else {
+                    if (utils.isPhone()) {
+                       dsBridge.call('albcAuth', {url: this.data}) 
+                    }
+                }
+            },
+
+            /*二维码弹出*/
+            shareScanning() {
+                let _this = this;
+                if(this.isGo){
+                    if (utils.isPhone()) {
+                        _this.isShow = true;
+                    }
+                }else{
+                    dsBridge.call('albcAuth', {url: this.data})
+                }
+            },
+            /*二维码消失*/
+            popBox() {
+                this.isShow = false;
+            },
+            
+        },
+        
+        mounted: function () {
+            let _this = this;
+            Http.post(Http.HOST+Http.API_URL.USERUSERNEW, {}, true).then(res => {
+                if (res.code === 0) {
+                    console.log("******************************************");
+                    console.log(res);
+                    _this.data = res.data;
+                    _this.ruleMsg = res.data.remark;
+                    _this.QrImg = res.data.pic;
+                    _this.shareLink = res.data.url;
+                    _this.picture = res.data.logo;
+                    _this.miaoshu = res.data.describe;
+                    _this.tit = res.data.title;
+                    _this.ruleMsg == null ? _this.isRuleMsg = false : _this.isRuleMsg = true;
+                } else if (res.code === 4){
+                    _this.isGo = false
+                    _this.data = res.data;
+                    dsBridge.call('albcAuth', {url: _this.data})
+                }
+            })
+        }
+        
+    })
+</script>
+
+</html>

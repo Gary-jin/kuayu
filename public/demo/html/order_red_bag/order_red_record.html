@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>次数记录</title>
+	<script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+  <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+  <link rel="stylesheet" href="../../css/common.css?i=1128">  
+	<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+    <style media="screen">
+		html,body{background:#f7f7f7}
+        #header {
+            position: relative; border-bottom: .1rem #f7f7f7 solid;
+            width: 100%;
+            height: 50px;
+			background:#fff
+        }
+
+        #header .left {
+          display: flex;align-items: center; justify-content: center;font-size: .36rem; color: #666; z-index: 1;
+            position: absolute;
+            bottom: 0;
+            left: .2rem;
+            height: 50px;
+        }
+
+        #header .center {
+            position: relative;
+			font-size: 16px;
+            width: 100%;
+            height: 50px;line-height: 50px;
+            text-align: center;
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+		.list .item { padding: .3rem .5rem; display: flex; align-items: center; justify-content: space-between; background: white;}
+		.list .item:not(:last-child) { border-bottom: 1px solid #eee; }
+		.list .item .left {display: flex; flex-direction: column; height: .7rem; justify-content: space-between;}
+		.list .item .left p { font-size: .3rem; font-weight:500; }
+		.list .item .left span { font-size: .24rem; color: #999;}
+		.list .item .right { font-size: .3rem; font-weight:bold; max-width: 3rem;}
+		.list .push-status { font-size: .26rem; color: #ccc; text-align: center;}
+		.blank { text-align: center; font-size: .3rem; color: #999; padding-top: .6rem; }
+		.blank img { width: 3rem;}
+		#mescroll{
+			width: 100%;
+			position: fixed;
+			top: .88rem;
+			bottom: 0;
+			height: auto;
+		}
+		.common-hight{height:50px}
+    </style>
+</head>
+
+<body>
+  <div id="vue-app" >
+    <div id="header">
+      <div class="left" @click="onBack()"><i class="iconfont icon-back"></i></div>
+        <div class="center">次数记录</div>
+    </div>
+	<div class='common-hight'></div>
+	<div class='common-warp mescroll' ref="mescroll" id="mescroll" v-cloak>
+		<div class="list"  id="d26">
+		  <div class="item" v-for="(item, index) in list" :key="index">
+			<div class="left">
+			  <p>{{item.title}}</p>
+			  <span>{{new Date(item.created_at*1000).toLocaleString('zh', {hour12: false})}}</span>
+			</div>
+			<div class="right text-overflow_1-xzh">{{item.content}}</div>
+		  </div>
+		</div>
+	</div>
+  </div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910112246"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+  //apiready = function(){
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+          grabNum: 0,
+		  page:{num: 0},
+          hasMore: true,
+          pageLimit: 10,
+          utils: utils,
+          list: [],
+          appName: '',
+		  mescroll: null
+        },
+        mounted: function(){
+		    this.appName = dsBridge.call("receiveParams", 'appName')
+			//this.getList();
+			this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+				down: {
+					auto: false,
+					callback: this.refresh
+				 },
+				up: {
+					callback: this.upCallback,
+					page: {
+					  num: 0
+					},
+					htmlNodata: '<p class="upwarp-nodata">—— 我也是有底线的 ——</p>',
+					noMoreSize: 5,
+					empty: {
+					  warpId: 'd26',
+					  icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+            tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+					}
+				}
+			});	
+        },
+        methods: {
+		 onBack: function(ret, err){
+			dsBridge.call('closeWin')
+		 },
+          upCallback: function(page, mescroll){
+            Http.post(Http.HOST+Http.API_URL.USERGRABCOUPONLOG,{page: page.num},true).then((res)=>{
+				if(res.code === 0){
+					let arr = res.data.lenght < 1 ? [] : res.data
+					if (page.num === 1) this.list = []
+					this.list = this.list.concat(arr)
+					this.$nextTick(() => {
+						mescroll.endSuccess(res.data.length, true)
+					})
+				}
+			})
+          },
+          getList: function(refresh) {
+            var that = this;
+            if (!this.hasMore) return;
+            if (refresh){
+              this.page = 1;
+            } else {
+              this.page++;
+            }
+            Http.post(Http.HOST+Http.API_URL.USERGRABCOUPONLOG,{page: this.page},true).then((res)=>{
+				if(res.code === 0){
+					this.list = res.data
+					let arr = res.data.lenght < 1 ? [] : res.data
+					if (page.num === 1) this.list = []
+					this.list = this.list.concat(arr)
+					this.$nextTick(() => {
+						mescroll.endSuccess(res.data.length, true)
+					})
+				}
+			})
+          }
+        }
+    })
+  //}
+</script>
+
+</html>

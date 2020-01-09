@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>商家中心-收支明细</title>
+    <script type="text/javascript">
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 750) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <!-- uint-ui -->
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body {
+            background: #f7f7f7;
+        }
+
+        .title {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            z-index: 9;
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .title_rig{
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+            margin-left: 1.8rem;
+        }
+        .szmx_core_box{
+            margin-top: .88rem;
+            overflow: hidden;
+            padding: .2rem .3rem;
+        }
+        .szmx_core_box .szmx_core_tit{
+            width: 100%;
+            height: 2.8rem;
+            border-radius: .1rem;
+            background: linear-gradient(-90deg, #FC4B2E,#FF970F);
+            overflow: hidden;
+        }
+        .szmx_core_tit .szmx_core_tit_top{
+            margin-top: .47rem;
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(255,255,255,1);
+            text-align: center;
+        }
+        .szmx_core_tit .szmx_core_tit_cen{
+            margin-top: .2rem;
+            text-align: center;
+            font-weight:bold;
+            color:rgba(255,255,255,1);
+        }
+        .szmx_core_tit .szmx_core_tit_cen >span:nth-child(1){
+            font-size: .32rem;
+        }
+        .szmx_core_tit .szmx_core_tit_cen >span:nth-child(2){
+            font-size: .48rem;
+        }
+        .szmx_core_tit .szmx_core_tit_bot{
+            width: 1.30rem;
+            /* height: .58rem; */
+            border: .01rem solid rgba(255,255,255,1);
+            border-radius: .1rem;
+            text-align: center;
+            line-height: .5rem;
+            color: rgba(255,255,255,1);
+            font-size: .32rem;
+            font-weight:500;
+            margin: .2rem auto 0;
+        }
+        /* earnings */
+        .szmx_core_box .szmx_core_earnings{
+            width: 100% ;
+            margin-top: .2rem;
+            background: #fff;
+            border-radius: .1rem;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .szmx_core_earnings .core_earnings_box{
+            width: 2.3rem;
+            height: 2.07rem;
+            box-sizing: border-box;
+            border-right: .01rem rgba(238,238,238,1) solid;
+            border-bottom: .01rem rgba(238,238,238,1) solid ;
+            /* border-right: .01rem red solid;
+            border-bottom: .01rem red solid ; */
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .szmx_core_earnings .core_earnings_box >div:nth-child(1){
+            font-size: .36rem;
+            font-weight:bold;
+            color:rgba(47,47,47,1);
+        }
+        .szmx_core_earnings .core_earnings_box >div:nth-child(2){
+            font-size: .3rems;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+            margin-top: .2rem;
+        }
+        .szmx_core_earnings>div:nth-child(3),
+        .szmx_core_earnings>div:nth-child(6),
+        .szmx_core_earnings>div:nth-child(9){
+            border-right: none;
+        }
+        .szmx_core_earnings>div:nth-child(7),
+        .szmx_core_earnings>div:nth-child(8),
+        .szmx_core_earnings>div:nth-child(9){
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="title">
+            <img src="./../../image/back.png" alt="" @click='onBack'>
+            <div class="title_text">收支明细</div>
+            <div class="title_rig" @click="detail()">明细</div>
+        </div>
+        <div class="szmx_core_box">
+            <div class="szmx_core_tit">
+                <div class="szmx_core_tit_top">可提现金额</div>
+                <div class="szmx_core_tit_cen"><span>￥</span><span>{{deposit.price}}</span></div>
+                <div class="szmx_core_tit_bot" @click="toWith()">提现</div>
+            </div>
+            <div class="szmx_core_earnings">
+                <div class="core_earnings_box" v-for="(item,index) in list" :key="index">
+                    <div>{{item.price}}</div>
+                    <div>{{item.title}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            deposit :'',
+            list :[]
+        },
+        mounted: function () {
+           this.getInfo()
+        },
+        methods: {
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            detail: function(){
+                dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/shopCenter/szmx_detail.html', type: 'web' })
+                 
+            },
+            toWith(){
+                dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/shopCenter/withdraw.html', type: 'web' })
+
+            },
+            getInfo(){
+                Http.post(Http.HOST+Http.API_URL.SZMXPROFIT,{},true).then((res)=>{
+                    this.deposit = res.data.priceInfo.slice(0,1)[0]
+                    this.list = res.data.priceInfo.slice(1)
+                    console.log(this.deposit,this.list)
+                })
+            }
+        }
+    })
+</script>
+
+</html>

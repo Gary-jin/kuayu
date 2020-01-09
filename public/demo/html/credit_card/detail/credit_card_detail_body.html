@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>卡片详情</title>
+    <script>
+      (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../../css/common.css?i=1128?i=20191012">
+    <link rel="stylesheet" href="../../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/libs/swiper_min.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css" />
+    <style>
+	#header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 50px;
+            border-bottom: 1px solid #eee;
+			background:#fff;
+			z-index: 9999;
+        }
+
+        #header .left {
+          display: flex;align-items: center; justify-content: center;font-size: .36rem; color: #666; z-index: 1;
+            position: absolute;
+            bottom: 0;
+            left: .2rem;
+            height: 50px;
+        }
+
+        #header .center {
+            position: relative;font-size: .34rem;
+            width: 5.0rem;
+            height: 50px;line-height: 50px;
+            text-align: center;
+			margin: 0 auto
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+		.common-hight{height:50px}
+		.common-warp{height:100%;-webkit-overflow-scrolling: touch;overflow-scrolling: touch;overflow: scroll;}
+      html, body { background: none; }
+      #vue-app { transition: opacity .3s; opacity: 1; padding-bottom: .5rem; padding-bottom: 1rem;height:100%}
+      #vue-app .banner { font-size: 0; line-height: 0; background: #eee; height: .4rem;position: relative}
+      #vue-app .banner img { width: 100%;}
+      #vue-app .title-top { position: absolute; top: .7rem; text-align: center; color: white; font-weight: bold; width: 100%; }
+      #vue-app .title-top .title { font-size: .4rem; }
+      #vue-app .title-top .commission { font-size: .3rem; margin-top:.6rem}
+      .card-item { border-radius:20px 10px 10px 10px; background: white; padding: .4rem .2rem; font-size: .34rem; margin: .2rem; }
+      .card-item .card-title { color:#A75E07; display: flex; align-items: center; font-weight: bold; }
+      .card-item .card-title::before {content: ''; display: block; width: .04rem; height: .24rem; margin-right: .03rem; background: #A75E07; }
+      .card-item>p { font-size: .3rem; color: #333; margin-top: .2rem; }
+      .card-item .base-item { margin-top: .2rem; font-size: .3rem; display: flex; align-items: center; }
+      .card-item .base-item p:first-child{color:#666; width: 1.5rem; }
+      .card-item .base-item p:last-child{color:#333; }
+      .card-item .cost-item { margin-top: .2rem; font-size: .3rem;}
+      .card-item .cost-item .cost-title { color: #333; font-size: .32rem; font-weight: bold; }
+      .tips-box { line-height: .44rem; color: white; position: fixed; bottom: 1.2rem; width: 100%; display: flex; align-items: center; justify-content: center; animation: hide 3s;animation-fill-mode: forwards;}
+      .tips-box div { background: #000; border-radius: .22rem; padding: 0 .5rem; font-size: .24rem;}
+      .bottom-btns { position: fixed; bottom: 0; left: 0; right: 0; display: flex;}
+      .bottom-btns>div { display: flex; flex-direction: column; align-items: center; justify-content: center; height: .9rem; }
+      .bottom-btns .home-btn { width: 1.26rem; background: white; color: #999;}
+      .bottom-btns .home-btn i { font-size: .3rem; }
+      .bottom-btns .home-btn p { font-size: .22rem; }
+      .bottom-btns .now-btn {flex: 1;background:linear-gradient(270deg,rgba(220,176,113,1),rgba(228,185,122,1),rgba(237,212,178,1)); color: white; font-size: .32rem; }
+      .bottom-btns .share-btn {flex:1; background: #434343; font-size: .32rem; color: white;}
+      @keyframes hide {
+        0% {opacity: 1;}
+        70% {opacity: 1;}
+        100% {opacity: 0;}
+      }
+    </style>
+</head>
+
+<body>
+  <div id="vue-app" v-cloak>
+	<div id="header">
+      <div class="left" @click="onBack"><i class="iconfont icon-back"></i></div>
+      <div class="center text-overflow_1-xzh">{{cardInfo.name}}</div>
+    </div>
+	
+	<div class='common-warp'> 
+		<div class='common-hight'></div>
+		<div class="banner" :style="{height:cardInfo.xiangqing?'auto': '4rem'}">
+			<img :src="cardInfo.xiangqing">
+			<div class="title-top">
+				<div class="title">{{cardInfo.name}}</div>
+				<div class="commission">下卡即返￥{{cardInfo.commission}}</div>
+			</div>
+		</div>
+		
+		<div class="card-item">
+		  <div class="card-title">专属权益</div>
+		  <p v-for="(item, index) in cardInfo.quanyi.split('\r\n')">{{item}}</p>
+		</div>
+		<div class="card-item">
+		  <div class="card-title">基础属性</div>
+		  <div class="base-item" v-for="(item, index) in cardInfo.base"><p>{{baseDesc[index]}}</p><p>{{item}}</p></div>
+		</div>
+		<div class="card-item" v-if="cardInfo.cost">
+		  <div class="card-title">用卡费用</div>
+		  <div class="cost-item" v-if="cardInfo.cost.nianfei">
+			<div class="cost-title">年费</div>
+			<p>{{cardInfo.cost.nianfei}}</p>
+		  </div>
+		  <div class="cost-item" v-if="cardInfo.cost.qxbl">
+			<div class="cost-title">取现比例</div>
+			<p>{{cardInfo.cost.qxbl}}</p>
+		  </div>
+		  <div class="cost-item" v-if="cardInfo.cost.qxfy">
+			<div class="cost-title">取现费用</div>
+			<p>{{cardInfo.cost.qxfy}}</p>
+		  </div>
+		  <div class="cost-item" v-if="cardInfo.cost.zdhk">
+			<div class="cost-title">最低还款</div>
+			<p>{{cardInfo.cost.zdhk}}</p>
+		  </div>
+		</div>
+		<div class="card-item">
+		  <div class="card-title">申卡资格及技巧</div>
+		  <p v-for="(item, index) in cardInfo.shenqing.split('\r\n')">{{item}}</p>
+		</div>
+		<div class="card-item">
+		  <div class="card-title">说明和备注</div>
+		  <p v-for="(item, index) in cardInfo.shuoming.split('\r\n')">{{item}}</p>
+		</div>
+		<div class='common-hight'></div>
+		<div class="bottom-btns">
+		  <div class="home-btn" @click="goBack">
+			<i class="iconfont icon-home"></i>
+			<p>首页</p>
+		  </div>
+		  <div class="now-btn" @click="doNow">立即办卡</div>
+		  <div class="share-btn" @click="toShare">分享赚钱</div>
+		</div>
+		<div class="tips-box">
+		  <div>刚刚的5分钟内已有{{Math.ceil(Math.random()*20)}}人正在平台申请办卡</div>
+		</div>
+	</div>
+  </div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910112205"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+  //apiready = function(){
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data:{
+          cardInfo: utils.storage.get('cardInfo'),
+          baseDesc: {
+            "level": '等级',
+            "zuzhi": '发卡组织',
+            "mianxi": '免息期限',
+            "jifen": '积分累计',
+            "jfqx": '积分期限',
+          }
+        },
+        mounted: function(){
+          // 初始化下拉刷新
+          //this.initRefresh();
+          this.getInfo();
+        },
+        methods: {
+			onBack: function(ret, err){
+				dsBridge.call('closeWin')
+			 },
+          goBack: function(){
+			      dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/credit_card/credit_card_main_body.html',type: 'web'})
+          },
+          toShare: function(){
+               // 判断是否绑定手机号
+            let userPhone = dsBridge.call("getUserPhone","")
+            let codeVersion = dsBridge.call('receiveParams', 'codeVersion')
+            if( userPhone === '' || userPhone === null && codeVersion >= 300){
+              dsBridge.call("toast", {msg: '您还未绑定手机号，请先去绑定！'})
+              setTimeout(function(){
+                dsBridge.call("openWin", '/judgemobile')
+              },1000)
+              return
+            }
+			      dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/credit_card/credit_card_share.html',type: 'web'})
+            
+          },
+          doNow: function(){
+               // 判断是否绑定手机号
+            let userPhone = dsBridge.call("getUserPhone","")
+            let codeVersion = dsBridge.call('receiveParams', 'codeVersion')
+            if( userPhone === '' || userPhone === null && codeVersion >= 300){
+              dsBridge.call("toast", {msg: '您还未绑定手机号，请先去绑定！'})
+              setTimeout(function(){
+                dsBridge.call("openWin", '/judgemobile')
+              },1000)
+              return
+            }
+            dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/credit_card/detail/credit_card_user_info_body.html',type: 'web'})
+          },
+          // 实现下拉刷新功能
+          initRefresh: function() {
+              api.setRefreshHeaderInfo({
+                  visible: true,
+                  loadingImg: 'widget://image/icon/credit_card.png',
+                  bgColor: '#fff',
+                  textColor: '#999',
+                  showTime: true,
+                  textDown: '下拉刷新(｡･∀･)ﾉﾞ',
+                  textUp: '松开查看(๑•̀ㅂ•́)و✧',
+                  textLoading: '刷新中(．． )…'
+              }, function(ret, err) {
+                  // 刷新数据
+                  vueObj.getInfo();
+              });
+          },
+          getInfo: function(refresh) {
+            var that = this;
+            Http.post(Http.HOST+Http.API_URL.HOMECARDDETAIL,
+              {id: this.cardInfo.id}, true).then((res)=>{
+				//api.refreshHeaderLoadDone();
+				this.cardInfo = res.data;
+			  })
+          }
+        }
+    })
+  //}
+</script>
+
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>支付结果</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css"> -->
+    <!-- <link rel="stylesheet" href="../../js/mint-ui/style.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" > -->
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .paySuccess .paySuccessImg {
+  text-align: center;
+}
+.paySuccess .paySuccessImg img {
+  width: 3.74rem;
+  margin-top: 1.52rem;
+}
+.paySuccess .paySuccessImg .successText {
+  width: 100%;
+  font-family: PingFang-SC-Medium;
+  font-size: 0.36rem;
+  line-height: 0.36rem;
+  color: #333;
+  font-weight: 500;
+}
+.paySuccess .paySuccessImg .descText {
+  font-size: 0.28rem;
+  font-weight: 500;
+  line-height: 0.28rem;
+  margin-top: 0.24rem;
+}
+.paySuccess .paySuccessImg .descText span {
+  color: #FF5847;
+}
+.paySuccess .yesBut {
+  width: 5.2rem;
+  height: 0.88rem;
+  margin: auto;
+  margin-top: 1.34rem;
+  border-radius: 0.44rem;
+  font-size: 0.36rem;
+  font-weight: 500;
+  line-height: 0.88rem;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(270deg, #ff5847, #ff9178);
+}
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="paySuccess">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">支付结果</div>
+        </div>
+        <div class="paySuccessImg">
+          <img src="../../image/clockIn/zfucg.png" alt="">
+          <p class="successText">支付成功</p>
+          <p class="descText">
+            记得早上
+            <span>{{startTime}}~{{endTime}}</span>
+            打卡哦~
+          </p>
+        </div>
+        <div class="yesBut" @click="jumpBack()">确定</div>
+        
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!-- <script src="../../js/mint-ui/index.js"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script> -->
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            startTime: '',
+            endTime: '',
+            content:''
+        },
+        created: function() {
+            this.getParameter()
+        },
+        
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            // 获取传参
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.startTime = Request['startTime']
+                this.endTime = Request['endTime']
+            },
+            jumpBack () {
+              dsBridge.call('closeWin')
+            }
+        },
+        
+        mounted: function () {
+            
+        }
+        
+    })
+</script>
+
+</html>

@@ -1,0 +1,970 @@
+.clockIn {
+  font-family: PingFang-SC-Regular;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: #fff;
+}
+.clockIn .headerConBox {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 8.5rem;
+  box-sizing: border-box;
+  background: url(../../image/clockIn/clockInBj.png) center center no-repeat;
+  background-size: 7.5rem 8.5rem;
+}
+.clockIn .headerConBox .header {
+  width: 100%;
+  height: 0.4rem;
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.clockIn .headerConBox .header .icon-back {
+  font-size: 0.36rem;
+  font-weight: bold;
+  margin-right: 2.63rem;
+}
+.clockIn .headerConBox .header .title {
+  font-size: 0.34rem;
+  font-weight: 500;
+  line-height: 0.4rem;
+}
+.clockIn .headerConBox .header .detailBut {
+  font-size: 0.28rem;
+  font-weight: 500;
+  line-height: 0.4rem;
+  margin-left: 1.6rem;
+}
+.clockIn .headerConBox .contentBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+}
+.clockIn .headerConBox .contentBox .conTitle {
+  width: 100%;
+  height: 0.3rem;
+  margin-top: 0.65rem;
+  font-size: 0.28rem;
+  font-weight: 500;
+  text-align: center;
+  line-height: 0.3rem;
+}
+.clockIn .headerConBox .contentBox .conNumber {
+  width: 100%;
+  font-size: 0.7rem;
+  font-weight: bold;
+  height: 0.7rem;
+  line-height: 0.7rem;
+  text-align: center;
+  margin-top: 0.2rem;
+  margin-bottom: 0.25rem;
+}
+.clockIn .headerConBox .contentBox .personsBox {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .headerConBox .contentBox .personsBox .photonBox {
+  display: flex;
+  margin-right: 0.38rem;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .headerConBox .contentBox .personsBox .photonBox .phoImg {
+  overflow: hidden;
+  width: 0.54rem;
+  height: 0.54rem;
+  margin-left: -0.1rem;
+  box-sizing: border-box;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  font-size: 0;
+}
+.clockIn .headerConBox .contentBox .personsBox .photonBox .phoImg img {
+  width: 100%;
+  height: 100%;
+}
+.clockIn .headerConBox .contentBox .personsBox .photoText {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.26rem;
+  font-weight: 500;
+  line-height: 0.3rem;
+  height: 0.3rem;
+}
+.clockIn .headerConBox .contentBox .personsBox .photoText .dot {
+  width: 0.08rem;
+  height: 0.08rem;
+  background: #fff;
+  margin-right: 0.08rem;
+  border-radius: 50%;
+}
+.clockIn .headerConBox .contentBox .personsBox .photoText .personsNumber {
+  color: #FFD647;
+}
+.clockIn .headerConBox .contentBox .regulation {
+  width: 100%;
+  height: 0.3rem;
+  margin-top: 0.23rem;
+  margin-bottom: 0.52rem;
+  font-size: 0.24rem;
+  font-weight: 500;
+  line-height: 0.3rem;
+  text-align: center;
+}
+.clockIn .headerConBox .contentBox .challenge {
+  position: relative;
+  height: 0.8rem;
+  border-radius: 0.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(270deg, #ff5847, #ff9178);
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
+}
+.clockIn .headerConBox .contentBox .challenge p {
+  margin-left: 1.26rem;
+  margin-right: 1.26rem;
+  font-size: 0.28rem;
+  line-height: 0.3rem;
+  height: 0.3rem;
+}
+.clockIn .headerConBox .contentBox .challenge .countDown {
+  margin-left: 0.55rem;
+  margin-right: 1.15rem;
+}
+.clockIn .headerConBox .contentBox .challenge .pricImg {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  top: -0.1rem;
+  right: -0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .headerConBox .contentBox .challenge .pricImg img {
+  position: absolute;
+  width: 100%;
+}
+.clockIn .headerConBox .contentBox .challenge .pricImg .numberBox {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin-left: 0.05rem;
+  font-family: PingFang-SC-Bold;
+  color: #FF8511;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .headerConBox .contentBox .challenge .pricImg .numberBox span {
+  height: 0.54rem;
+  font-size: 0.16rem;
+  line-height: 0.74rem;
+}
+.clockIn .headerConBox .contentBox .challenge .pricImg .numberBox .number {
+  font-size: 0.54rem;
+  line-height: 0.54rem;
+  font-weight: bold;
+}
+.clockIn .headerConBox .contentBox .invitationBox {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.58rem;
+}
+.clockIn .headerConBox .contentBox .invitationBox .invitation {
+  position: relative;
+  width: 1.35rem;
+  height: 0.52rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-top-left-radius: 0.26rem;
+  border-bottom-left-radius: 0.26rem;
+  background: linear-gradient(90deg, #ffe689, #ff5a49);
+}
+.clockIn .headerConBox .contentBox .invitationBox .invitation .mePhoto {
+  width: 0.46rem;
+  height: 0.46rem;
+  margin-left: 0.04rem;
+  margin-right: 0.08rem;
+}
+.clockIn .headerConBox .contentBox .invitationBox .invitation .invitationText {
+  font-size: 0.2rem;
+  font-weight: 500;
+  line-height: 0.22rem;
+}
+.clockIn .succeedFailure {
+  position: relative;
+  margin-top: -0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+.clockIn .succeedFailure .succeedBox {
+  position: relative;
+  width: 1.5rem;
+  margin-right: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.clockIn .succeedFailure .succeedBox .succeedImg {
+  width: 0.83rem;
+}
+.clockIn .succeedFailure .succeedBox .threeIcon {
+  width: 0;
+  height: 0;
+  margin-top: 0.14rem;
+  margin-bottom: 0.14rem;
+  border-left: 0.08rem solid rgba(0, 0, 0, 0);
+  border-right: 0.08rem solid rgba(0, 0, 0, 0);
+  border-bottom: 0.12rem solid #CF2661;
+}
+.clockIn .succeedFailure .succeedBox .succeedText {
+  font-size: 0.24rem;
+  height: 0.24rem;
+  line-height: 0.24rem;
+  color: #333;
+}
+.clockIn .succeedFailure .succeedBox .succeedText .succeed {
+  margin-right: 0.15rem;
+  font-weight: bold;
+}
+.clockIn .succeedFailure .succeedBox .succeedText .succeedNumber {
+  color: #FF5847;
+  font-weight: 500;
+}
+.clockIn .succeedFailure .failureBox {
+  position: relative;
+  width: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.clockIn .succeedFailure .failureBox .failureImg {
+  width: 0.83rem;
+}
+.clockIn .succeedFailure .failureBox .threeIcon {
+  width: 0;
+  height: 0;
+  margin-top: 0.14rem;
+  margin-bottom: 0.14rem;
+  border-left: 0.08rem solid rgba(0, 0, 0, 0);
+  border-right: 0.08rem solid rgba(0, 0, 0, 0);
+  border-bottom: 0.12rem solid #CF2661;
+}
+.clockIn .succeedFailure .failureBox .failureText {
+  font-size: 0.24rem;
+  height: 0.24rem;
+  line-height: 0.24rem;
+}
+.clockIn .succeedFailure .failureBox .failureText .failure {
+  margin-right: 0.15rem;
+  font-weight: bold;
+}
+.clockIn .succeedFailure .failureBox .failureText .failureNumber {
+  color: #35BEA0;
+  font-weight: 500;
+}
+.clockIn .logbuchBox {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+.clockIn .logbuchBox .logbucTitleBox {
+  width: 100%;
+  height: 0.61rem;
+  margin-top: 0.05rem;
+  display: flex;
+  align-items: center;
+  background: url(../../image/clockIn/logbuc.png) left center no-repeat;
+  background-size: 1.13rem 0.61rem;
+}
+.clockIn .logbuchBox .logbucTitleBox .title {
+  display: block;
+  width: 0.6rem;
+  font-size: 0.22rem;
+  line-height: 0.24rem;
+  font-weight: 500;
+  text-align: left;
+  margin-left: 0.24rem;
+}
+.clockIn .logbuchBox .despiteBox {
+  position: relative;
+  width: 100%;
+  height: 3.16rem;
+  background: url(../../image/clockIn/shan.png) center bottom no-repeat;
+  background-size: 7.5rem 2.22rem;
+  display: flex;
+  justify-content: center;
+}
+.clockIn .logbuchBox .despiteBox .despite {
+  position: relative;
+  width: 1.5rem;
+  margin-top: -0.95rem;
+  font-size: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .logbuchBox .despiteBox .despite .photoBox {
+  position: relative;
+}
+.clockIn .logbuchBox .despiteBox .despite .photoBox .icon {
+  position: absolute;
+  top: -0.16rem;
+  left: -0.18rem;
+  width: 0.42rem;
+}
+.clockIn .logbuchBox .despiteBox .despite .photoBox .photoImg {
+  width: 0.98rem;
+  height: 0.98rem;
+  border: 0.05rem solid rgba(0, 0, 0, 0);
+  border-radius: 50%;
+}
+.clockIn .logbuchBox .despiteBox .despite .photoBox .photoBoxOne {
+  border-color: #FFA323;
+}
+.clockIn .logbuchBox .despiteBox .despite .textBox {
+  width: 1.24rem;
+  height: 0.22rem;
+  padding: 0.04rem 0;
+  font-size: 0.22rem;
+  line-height: 0.22rem;
+  font-weight: 500;
+  margin-top: -0.18rem;
+  text-align: center;
+  border-radius: 0.15rem;
+  background: linear-gradient(-90deg, #ff461b, #ffa323);
+  z-index: 2;
+}
+.clockIn .logbuchBox .despiteBox .despite .textBoxLeft {
+  background: linear-gradient(-90deg, #377efd, #1dd7ff);
+}
+.clockIn .logbuchBox .despiteBox .despite .textBoxRight {
+  background: linear-gradient(-90deg, #7e34ff, #ce42ff);
+}
+.clockIn .logbuchBox .despiteBox .despite .userText {
+  font-size: 0.22rem;
+  font-weight: 500;
+  line-height: 0.3rem;
+  height: 0.3rem;
+  margin-top: 0.17rem;
+  margin-bottom: 0.08rem;
+  color: #333;
+}
+.clockIn .logbuchBox .despiteBox .despite .desc {
+  font-size: 0.24rem;
+  font-weight: 500;
+  line-height: 0.3rem;
+  color: #FF5847;
+}
+.clockIn .logbuchBox .despiteBox .despite .descAction {
+  font-size: 0.28rem;
+  font-weight: bold;
+  line-height: 0.3rem;
+}
+.clockIn .logbuchBox .despiteBox .despiteLeft {
+  margin-top: -0.45rem;
+  margin-right: 1rem;
+}
+.clockIn .logbuchBox .despiteBox .despiteRight {
+  margin-top: -0.45rem;
+  margin-left: 1rem;
+}
+.clockIn .logbuchBox .bottomBox {
+  width: 100%;
+  flex: 1;
+  background: #fff;
+}
+.clockIn .payPage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: PingFang-SC-Medium;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+}
+.clockIn .payPage .payNoBox {
+  position: relative;
+  flex: 1;
+  width: 100%;
+}
+.clockIn .payPage .payBox {
+  position: relative;
+  width: 100%;
+  background: #fff;
+  bottom: 0;
+  border-top-left-radius: 0.2rem;
+  border-top-right-radius: 0.2rem;
+}
+.clockIn .payPage .payBox .title {
+  width: 100%;
+  margin-top: 0.32rem;
+  font-size: 0.28rem;
+  font-weight: 500;
+  line-height: 0.42rem;
+  text-align: center;
+}
+.clockIn .payPage .payBox .partBox {
+  position: relative;
+  overflow: hidden;
+  margin-top: 0.2rem;
+  margin-bottom: 0.1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .payPage .payBox .partBox .partItem {
+  width: 3.2rem;
+  height: 1.4rem;
+  margin: 0.1rem 0.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 0.15rem;
+  box-sizing: border-box;
+  border: 0.01rem solid rgba(238, 238, 238, 0.1);
+  box-shadow: 0 0.01rem 0.04rem 0 rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.clockIn .payPage .payBox .partBox .partItem .numberBox {
+  font-weight: bold;
+  font-size: 0.28rem;
+  line-height: 0.28rem;
+}
+.clockIn .payPage .payBox .partBox .partItem .numberBox .number {
+  font-size: 0.48rem;
+  line-height: 0.48rem;
+}
+.clockIn .payPage .payBox .partBox .partItem .desc {
+  margin-top: 0.24rem;
+  font-size: 0.28rem;
+  line-height: 0.28rem;
+}
+.clockIn .payPage .payBox .partBox .partItemActive {
+  border-width: 0;
+  background: linear-gradient(-36deg, #ff5847, #ff9178);
+  color: #fff;
+}
+.clockIn .payPage .payBox .hint {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.22rem;
+  font-weight: 500;
+  line-height: 0.24rem;
+  height: 0.24rem;
+  margin-bottom: 0.3rem;
+  color: #FF5847;
+  padding-left: 0.5rem;
+}
+.clockIn .payPage .payBox .payTab {
+  position: relative;
+  overflow: hidden;
+  width: 7.1rem;
+  display: flex;
+  font-weight: 500;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  border-top: 0.01rem solid #EEEEEE;
+}
+.clockIn .payPage .payBox .payTab .payTabTitle {
+  width: 6.6rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0.18rem;
+  font-size: 0.28rem;
+  line-height: 0.28rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.clockIn .payPage .payBox .payTab .payTabTitle .payTitleIcon {
+  width: 0.22rem;
+  margin-right: 0.05rem;
+  margin-left: 0.04rem;
+}
+.clockIn .payPage .payBox .payTab .payTabItem {
+  width: 6.6rem;
+  height: 0.7rem;
+  border-bottom: 1px solid #EEEEEE;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .payPage .payBox .payTab .payTabItem .payIcon {
+  width: 0.4rem;
+  margin-left: 0.03rem;
+  margin-right: 0.16rem;
+}
+.clockIn .payPage .payBox .payTab .payTabItem .payItemText {
+  width: 5.48rem;
+  font-size: 0.28rem;
+  line-height: 0.28rem;
+}
+.clockIn .payPage .payBox .payTab .payTabItem .payItemText span {
+  color: #666666;
+  font-size: 0.26rem;
+  line-height: 0.26rem;
+  margin-left: 0.07rem;
+}
+.clockIn .payPage .payBox .payTab .payTabItem .paySelectBut {
+  width: 0.28rem;
+  height: 0.28rem;
+  /* img {
+                width: 100%;
+              } */
+  background: url(../../image/clockIn/tuoyuan.png) center center no-repeat;
+  background-size: 0.28rem 0.28rem;
+}
+.clockIn .payPage .payBox .payTab .payTabItemNo {
+  color: #BEBEBE;
+}
+.clockIn .payPage .payBox .payTab .payTabItemNo .payItemText {
+  width: 5.76rem;
+}
+.clockIn .payPage .payBox .payTab .payTabItemNo .payItemText span {
+  color: #BEBEBE;
+}
+.clockIn .payPage .payBox .payTab .payTabItemNo .paySelectBut {
+  display: none;
+}
+.clockIn .payPage .payBox .payTab .payTabItemCilck .paySelectBut {
+  background: url(../../image/clockIn/dhao.png) center center no-repeat;
+  background-size: 0.28rem 0.28rem;
+}
+.clockIn .payPage .payBox .payButBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .payPage .payBox .payButBox .noBut,
+.clockIn .payPage .payBox .payButBox .yesBut {
+  width: 2.8rem;
+  height: 0.66rem;
+  margin: 0.54rem 0.3rem;
+  border-radius: 0.1rem;
+  font-size: 0.28rem;
+  font-weight: 500;
+  line-height: 0.66rem;
+  text-align: center;
+}
+.clockIn .payPage .payBox .payButBox .noBut {
+  background: #EEEEEE;
+}
+.clockIn .payPage .payBox .payButBox .yesBut {
+  color: #fff;
+  background: linear-gradient(-90deg, #ff5847, #ff9178);
+}
+.clockIn .dapPage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+}
+.clockIn .dapPage .earlyYes {
+  position: relative;
+  width: 4.8rem;
+  height: 6.3rem;
+  background: #fff;
+  border-radius: 0.1rem;
+}
+.clockIn .dapPage .earlyYes .earlyImg {
+  position: absolute;
+  width: 4.8rem;
+  top: 0;
+  left: 0;
+}
+.clockIn .dapPage .earlyYes .hiddenBut {
+  position: absolute;
+  right: 0.33rem;
+  top: 0.31rem;
+  width: 0.28rem;
+  height: 0.28rem;
+  background: url(../../image/clockIn/guanbi.png) center center no-repeat;
+  background-size: 0.28rem 0.28rem;
+}
+.clockIn .dapPage .earlyYes .time {
+  position: relative;
+  width: 2.7rem;
+  height: 0.34rem;
+  margin: auto;
+  margin-top: 1.64rem;
+  font-size: 0.2rem;
+  font-weight: 500;
+  line-height: 0.34rem;
+  color: #005C9E;
+  box-sizing: border-box;
+  padding-left: 0.18rem;
+  border-radius: 0.14rem;
+  background: #fff;
+  z-index: 3;
+}
+.clockIn .dapPage .earlyYes .desc {
+  width: 100%;
+  height: 2.39rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-top: 0.53rem;
+  font-size: 0.26rem;
+  font-weight: bold;
+  line-height: 0.44rem;
+  text-align: center;
+}
+.clockIn .dapPage .earlyYes .shareBut {
+  width: 3.85rem;
+  height: 0.76rem;
+  margin: auto;
+  line-height: 0.76rem;
+  border-radius: 0.38rem;
+  font-size: 0.3rem;
+  font-weight: 500;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(-45deg, #ff5847, #ff9178);
+}
+.clockIn .lateBox {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+}
+.clockIn .remindBox {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: PingFang-SC-Medium;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+}
+.clockIn .remindBox .remind {
+  position: relative;
+  width: 6.1rem;
+  border-radius: 0.2rem;
+  background: #fff;
+  text-align: center;
+  color: #333;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .remindBox .remind .remindText {
+  padding-top: 0.57rem;
+  padding-bottom: 0.53rem;
+}
+.clockIn .remindBox .remind .remindText .title {
+  width: 100%;
+  font-size: 0.36rem;
+  line-height: 0.36rem;
+}
+.clockIn .remindBox .remind .remindText .content {
+  width: 100%;
+  margin-top: 0.36rem;
+  font-size: 0.32rem;
+  line-height: 0.32rem;
+  font-weight: 500;
+}
+.clockIn .remindBox .remind .butBox {
+  position: relative;
+  width: 100%;
+  height: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.34rem;
+  font-weight: 500;
+  line-height: 0.9rem;
+  border-top: 0.01rem solid #EEEEEE;
+}
+.clockIn .remindBox .remind .butBox .cancelBut {
+  flex: 1;
+  border-right: 0.01rem solid #EEEEEE;
+}
+.clockIn .remindBox .remind .butBox .confirmBut {
+  flex: 1;
+  color: #1C7EDE;
+}
+.clockIn .hintBox {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: PingFang-SC-Medium;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+}
+.clockIn .hintBox .hint {
+  width: 6.1rem;
+  background: #fff;
+  border-radius: 0.2rem;
+  text-align: center;
+}
+.clockIn .hintBox .hint .hintDesc {
+  width: 100%;
+  padding-top: 0.68rem;
+  padding-bottom: 0.62rem;
+  font-size: 0.32rem;
+  font-weight: 500;
+  line-height: 0.48rem;
+  color: #333;
+}
+.clockIn .hintBox .hint .hintBton {
+  width: 100%;
+  font-size: 0.34rem;
+  font-weight: 500;
+  line-height: 0.9rem;
+  color: #1C7EDE;
+  border-top: 0.01rem solid #EEEEEE;
+}
+.clockIn .inviteFriend {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: PingFang-SC-Medium;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+}
+.clockIn .inviteFriend .inviteImgBox {
+  position: relative;
+  width: 3.8rem;
+  height: 6.7rem;
+}
+.clockIn .inviteFriend .inviteImgBox .shutImg {
+  position: absolute;
+  top: -0.43rem;
+  right: -0.43rem;
+  width: 0.28rem;
+  height: 0.28rem;
+  background: url(../../image/clockIn/guanbi.png) center center no-repeat;
+  background-size: 0.28rem 0.28rem;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 0.1rem;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .inviteImg {
+  position: absolute;
+  width: 100%;
+  top: -0.02rem;
+  border-radius: 0.1rem;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .conTitle {
+  position: relative;
+  width: 100%;
+  height: 0.2rem;
+  margin-top: 0.84rem;
+  font-size: 0.18rem;
+  font-weight: 500;
+  text-align: center;
+  line-height: 0.2rem;
+  color: #fff;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .conNumber {
+  position: relative;
+  width: 100%;
+  font-size: 0.5rem;
+  font-weight: bold;
+  height: 0.5rem;
+  line-height: 0.5rem;
+  text-align: center;
+  margin-top: 0.25rem;
+  margin-bottom: 0.3rem;
+  color: #fff;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .personsBox {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .personsBox .photonBox {
+  display: flex;
+  margin-right: 0.19rem;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .personsBox .photonBox .phoImg {
+  overflow: hidden;
+  width: 0.26rem;
+  height: 0.26rem;
+  margin-left: -0.05rem;
+  box-sizing: border-box;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  font-size: 0;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .personsBox .photonBox .phoImg img {
+  width: 100%;
+  height: 100%;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .personsBox .photoText {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.18rem;
+  font-weight: 500;
+  line-height: 0.2rem;
+  height: 0.2rem;
+  color: #fff;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .personsBox .photoText .dot {
+  width: 0.04rem;
+  height: 0.04rem;
+  background: #fff;
+  margin-right: 0.04rem;
+  border-radius: 50%;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .personsBox .photoText .personsNumber {
+  color: #FFD647;
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .meDetail {
+  position: relative;
+  height: 0.34rem;
+  margin-top: 0.2rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+  border-radius: 0.17rem;
+  font-family: PingFang-SC-Medium;
+  font-size: 0.2rem;
+  font-weight: 500;
+  line-height: 0.34rem;
+  color: #005C9E;
+  background: rgba(255, 255, 255, 0.35);
+}
+.clockIn .inviteFriend .inviteImgBox .inviteImgCode .twoCode {
+  position: absolute;
+  /* overflow: hidden; */
+  width: 1.04rem;
+  height: 1.04rem;
+  left: calc(50% - 0.52rem);
+  bottom: 0.74rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .inviteFriend .inviteTitle {
+  width: 100%;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.28rem;
+  font-weight: 500;
+  line-height: 0.28rem;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .inviteFriend .inviteTitle span {
+  display: block;
+  width: 1.2rem;
+  height: 1px;
+  margin-left: 0.12rem;
+  margin-right: 0.12rem;
+  background: #fff;
+}
+.clockIn .inviteFriend .inviteButBox {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clockIn .inviteFriend .inviteButBox .item {
+  height: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0);
+  border: 0 solid rgba(0, 0, 0);
+}
+.clockIn .inviteFriend .inviteButBox .item img {
+  width: 0.88rem;
+}
+.clockIn .inviteFriend .inviteButBox .item p {
+  font-size: 0.24rem;
+  font-weight: 500;
+  line-height: 0.24rem;
+  margin-top: 0.18rem;
+  color: #fff;
+}

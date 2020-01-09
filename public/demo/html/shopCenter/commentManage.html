@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>商城评论</title>
+    <script>
+        (function(doc, win) {
+            var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function() {
+              var clientWidth = docEl.clientWidth;
+              if(!clientWidth) return;
+              if(clientWidth >= 750) {
+                docEl.style.fontSize = '100px';
+              } else {
+                docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+              }
+            };
+            if(!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+          })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=1">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../js/mint-ui/style.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body, html{
+            background:#F7F7F7
+        }
+     	#header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: .88rem;
+            border-bottom: 1px solid #eee;
+			background:#fff;
+			z-index: 9999;
+            line-height: .88rem;
+            display: flex;
+            align-items: center;
+        }
+        #header .left img{
+            width: .18rem;
+            padding-left: .3rem;
+        }
+        #header .left {
+            display: flex;align-items: center;
+            z-index: 1;
+            position: absolute;
+            left: 0;
+			top: .28rem
+        }
+
+        #header .center {
+            position: relative;font-size: .34rem;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+        .common-height{
+            height: 0.88rem;
+        }
+        .mall-comment .info{
+            padding: 0 .3rem;
+            background:#fff;
+            margin-top: .1rem;
+        }
+        .mall-comment .info .logo{
+            padding:.2rem 0 .16rem;
+            display:flex;
+            align-items:center;
+            font-size:.32rem;
+            color:#2f2f2f
+        }
+        .mall-comment .info .logo img{
+            width:.66rem;
+            height:.66rem;
+            border-radius:50%;
+            margin-right:.1rem
+        }
+        .mall-comment .info .property{
+            font-size:.24rem;
+            color:#999999;
+            margin-bottom:.1rem
+        }
+        .mall-comment .info .property img{
+            width: .18rem;
+            margin-right: .07rem;
+        }
+        .mall-comment .info .describe{
+            font-size:.28rem;
+            color:#2f2f2f;
+            font-weight:normal;
+            padding-bottom: .2rem;
+        }
+        .mall-comment .info .imgList{
+            padding:.2rem 0 .2rem;
+            font-size: 0;
+            display: flex;
+            align-items: center;
+            justify-content: normal;
+            flex-wrap: wrap;
+        }
+        .mall-comment .info .imgList .img{
+            width:2.1rem;
+            height:2.1rem;
+            margin: 0 .07rem .1rem;
+        }
+        .mall-comment .info .imgList .img img{
+            max-width: 100%;
+            max-height: 100%;
+            border-radius:0.05rem;
+        }
+        #mescroll{
+          width: 100%;
+          position: fixed;
+          top: 0.88rem;
+          bottom: 0;
+          height: auto;
+        }
+
+        .mall-comment .info .bottom{
+            display:flex;
+            align-items:center;
+            justify-content: space-between;
+            padding-bottom:.25rem
+        }
+        .mall-comment .info .bottom .time{
+            font-size:.24rem;
+            color:#999
+        }
+        .mall-comment .info .bottom .btn button{
+            width:1.56rem;
+            height:.56rem;
+            line-height:.56rem;
+            border:1px solid #999999;
+            border-radius:.28rem;
+            font-size:.28rem;
+            color:#999;
+            margin-left:.12rem
+        }
+        .mall-comment .info .bottom .btn button.active{
+            color:#D92121;
+            border:1px solid #DA2322
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="groupBooking" v-cloak>
+    <div id="header">
+        <div class="left" @click="onBack"><img src="../../image/group_booking/back.png"></div>
+        <div class="center">评价管理</div>
+      </div>
+      <div class="common-height"></div>
+      <div class="common-warp mescroll" ref="mescroll" id="mescroll">
+        <div class="mall-comment mall-common-title" id="d26">
+            <div class="info" v-for="(item, index) in commentList" :key="index">
+                <div class="logo">
+                    <img :src="item.userInfo.avatar" alt="">
+                    <span>{{item.userInfo.nickname}}</span>
+                </div>
+                <p class="property text-overflow_1-xzh">
+                    <img v-for="i in 5" :src=" i<=parseInt(item.score) ? '../../image/group_booking/start.png' : '../../image/group_booking/xx.png'" alt="">
+                </p>
+                <h3 class="describe text-overflow_2-xzh">{{item.info}}</h3>
+                <div class="imgList">
+                    <div class="img" v-for="(item, index) in item.thumbs" :key="index">
+                        <img :src="item" alt="">
+                    </div>
+                </div>
+                <div class="bottom">
+                    <span class="time">{{item.created_at | formatDate}}</span>
+                    <div class="btn">
+                        <button v-if="item.isDiscuss == 1" @click="toOrderDetails(item.orderId)">查看订单</button>
+                        <button class="active" v-if="item.status == 1" @click="checkOrder(item.id)">审核</button>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="../../js/libs/common.js"></script>
+<script src="../../js/mint-ui/index.js"></script>    
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: "#groupBooking",
+        data:{
+            commentList: '',
+            mescroll: null,
+            id: ''
+        },
+        filters: {
+			formatDate (time) {
+			  time = time * 1000
+			  var date = new Date(time)
+			  return formatDate(date, 'yyyy-MM-dd hh:mm')
+			}
+		  },
+        methods: {
+            onBack: function(){
+                dsBridge.call('closeWin')
+            },
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.id = Request['id']
+            },
+            upCallback(page,mescroll){
+                Http.post(Http.HOST+Http.API_URL.SHOPDISCUSSMANAGE,{page: page.num},true).then((res)=>{
+                    if(res.code == 0){
+                        this.info = res.data
+                        let arr = res.data.list === '' ? [] : res.data.list
+                        if (page.num === 1) this.commentList = []
+                        this.commentList = this.commentList.concat(arr)
+                        this.$nextTick(() => {
+                            mescroll.endSuccess(res.data.list.length, true)
+                        })
+                    }
+                })
+            },
+            checkOrder(id){
+                Http.post(Http.HOST+Http.API_URL.SHOPDISCUSSMANAGE,{id: id},true).then((res)=>{
+                    if(res.code == 0){
+                        this.$toast({message: res.msg});
+                        this.mescroll.optUp.page.num = 1
+                        this.upCallback(this.mescroll.optUp.page, this.mescroll)
+                    }else{
+                        this.$toast({message: res.msg});
+                    }
+                })
+            },
+            toOrderDetails(orderId){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/shopCenter/order_detail.html?orderId=' + orderId,type: 'web'})
+
+            }
+        },
+        mounted () {
+            this.getParameter()
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+                down: {
+                    auto: true,
+                    callback: this.downCallback,
+                },
+                up: {
+                    
+                callback: this.upCallback, //上拉加载的回调
+                //以下是一些常用的配置,当然不写也可以的.
+                page: {
+                    num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                    size: 10 //每页数据条数,默认10
+                },
+                htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+                noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+                empty: {
+                        warpId: 'd26',
+                        icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                        tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                    }
+                }
+            })
+        }
+      
+    })
+</script>
+
+</html>

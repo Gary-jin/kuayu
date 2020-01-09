@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>富文本</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <script src="../../js/global.js"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style media="screen">
+      html,body {background: #f7f7f7;font-family:PingFang SC;}
+      .header { color: black; position: relative; width: 100%; height: 0.88rem; line-height: 0.88rem; display: flex; align-items: center; justify-content: center; top: 0; left: 0; z-index: 1; background-color: white;}
+
+      .header .left {
+        display: flex;align-items: center; justify-content: center;
+          position: absolute;
+          bottom: 0;
+          left: .2rem;
+          height: 0.88rem;
+      }
+      .header .left .back { height: .32rem; width: .32rem; background-size: contain; background-image: url(../../image/back1.png); background-repeat: no-repeat; background-position: center;}
+      .header .center {font-size: 0.34rem;font-weight:bold;}
+      .header .right { position: absolute; bottom: 0; right: .29rem; height: 0.88rem; font-size: .3rem;}
+
+    </style>
+</head>
+<body>
+  <div id="vue-app" v-cloak :style="{ paddingBottom: bot + 'px'}">
+      <div class="header" :style="{paddingTop: statusH + 'rem'}">
+          <div  v-if='isShowBackBtn' class="left">
+              <div class="back" @click="onBack"></div>
+          </div>
+          <div class="center">{{title}}</div>
+      </div>
+      <div class="rich-text" v-html='richText'></div>
+  </div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script>
+  // 根据全局的debug配置来决定是否请求vue.js 还是 vue_min.js
+  !GlobalConfig.debug? ajaxFile('utils_js', `${window.location.origin}/uqWeb/js/utils.js`) : ajaxFile('utils_js', '../../js/utils.js');</script>
+<script>
+  // 根据全局的debug配置来决定请求哪里的http.js?i=201911211908
+  !GlobalConfig.debug? ajaxFile('http_js', `${window.location.origin}/uqWeb/js/http.js?i=201911211908`) : ajaxFile('http_js', '../../js/http.js?i=201911211908');
+</script>
+<script>
+    // 根据全局的debug配置来决定是否请求vue.js 还是 vue_min.js
+  !GlobalConfig.debug? ajaxFile('vue_js', `${window.location.origin}/uqWeb/js/libs/vue_min.js`) : ajaxFile('vue_js', '../../js/libs/vue.js');
+</script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+          // 富文本来源类型 0:本地存储（固定获取richTextInfo的值） TODO 通过id获取富文本内容
+          sourceType: utils.getQueryVariable('sourceType'),
+          richText: '',
+          title: '',
+          isShowBackBtn: isShowBackBtn,
+          utils: utils,
+        },
+        methods: {
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            /**
+             * 适配顶部底部安全区域
+            */
+            computeTopAndBottom() {
+              // 顶部安全区域
+              let safeArea = dsBridge.call('receiveParams', 'safeAreaTop') || 0
+              let size = (document.documentElement.clientWidth / 7.5)
+              this.statusH = (safeArea / size)
+
+              //ios底部安全区域
+              let saveBottom = (dsBridge.call("receiveParams", 'safeAreaBottom1')) || 0
+              if (saveBottom == '123'){
+                this.bot = 0
+              } else {
+                this.bot = saveBottom
+              }
+            }
+        },
+        created () {
+            this.computeTopAndBottom()
+        },
+        mounted () {
+          if (this.sourceType == 0) { //从本地获取数据
+            this.richText = utils.storage.get('richTextInfo').content;
+            this.title = utils.storage.get('richTextInfo').title
+          }
+        }
+        
+    })
+</script>
+
+</html>

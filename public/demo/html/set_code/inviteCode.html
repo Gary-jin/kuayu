@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>设置邀请码</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" href="../../js/mint-ui/style.css">  
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:bold;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+            position: absolute;
+            left: .2rem;
+            top: 0.28rem;
+        }
+        .code-box{
+            width:6.9rem;
+            height:4.4rem;
+            background:rgba(255,255,255,1);
+            border-radius:.2rem;
+            margin:0.2rem 0 0 0.3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .code-box .input{
+            margin: 0.86rem 0 0.36rem 0;
+        }
+        .code-box .input input{
+            height: 0.4rem;
+            line-height: 0.4rem;
+            width: 1.8rem;
+            font-size:.36rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+            outline:medium;
+            text-transform:uppercase;
+        }
+        .code-box .hr{
+            width:3.9rem;
+            height:.02rem;
+            background:rgba(216,216,216,1);
+        }
+        .message{
+            height:0.95rem;
+            font-size:.26rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+            line-height:0.95rem;
+        }
+        .btn{
+            width:5.7rem;
+            height:0.88rem;
+            background:linear-gradient(270deg,rgba(217,33,33,1),rgba(248,123,100,1));
+            border-radius:0.1rem;
+            line-height: 0.88rem;
+            text-align: center;
+            font-size:0.36rem;
+            font-weight:500;
+            color:rgba(255,255,255,1);
+            margin-top: 0.35rem;
+        }
+        .rule{
+            width:6.9rem;
+            margin:0.7rem 0 0 0.3rem;
+        }
+        .rule-title{
+            font-size:0.32rem;
+            font-weight:bold;
+            color:rgba(47,47,47,1);
+            line-height: 0.36rem;
+        }
+        .rule-con{
+            margin-top: 0.34rem;
+            font-size:0.28rem;
+            font-weight:400;
+            color:rgba(51,51,51,1);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app"  v-cloak>
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left" @click="onBack"></div>
+            <div class="center">设置邀请码</div>
+        </div>
+        <div class="code-box">
+            <div class="input">
+                <input type="text" :maxlength="length" class="text" v-model="code" placeholder="输入邀请码">
+            </div>
+            <p class="hr"></p>
+            <p class="message">温馨提示：自定义邀请码仅限设置一次，不可修改</p>
+            <div class="btn" @click="setCode">确定</div>
+        </div>
+        <div v-if="rule" class="rule">
+            <p class="rule-title">专属邀请码规则</p>
+            <p class="rule-con" v-html="rule"></p>
+        </div>
+
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910112216"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            code:'',
+            length:0,
+            rule:'',
+            id:''
+        },
+        created: function() {
+            var url = window.location.href
+            var info = url.match(/(^[a-z]|\\?|&)id=([0-9]*)/);
+            this.id = info[2]
+        },
+        mounted: function () {
+            this.getInviteInfo()
+        },
+        methods: {
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            goInvite:function () {
+                console.log('invite')
+            },
+            // 获取邀请码规则和长度
+            getInviteInfo: function () {
+                Http.post(Http.HOST+Http.API_URL.INVITEGETINFO,{id:this.id},true).then((res)=>{
+                    if (res.code === 0) {
+                        this.rule = res.data.rule
+                        this.length = res.data.length
+                    }
+                })
+            },
+            // 设置邀请码
+            getInviteList: function () {
+                var _this = this
+                Http.post(Http.HOST+Http.API_URL.INVITESETCODE,{id:this.id,code:this.code},true).then((res)=>{
+                    if (res.code === 0) {
+                        utils.storage.set('INVITE_CODE',this.code)
+                        this.$toast({
+                            message: res.msg,
+                            position: 'top',
+                            duration: 2000
+                        })
+                        // 设置邀请码成功，需要重新调取一下邀请海报接口，生成新的邀请海报。
+                        this.bill()
+                        // 设置成功返回
+                        setTimeout(function(){
+                            _this.onBack()
+                        },2000)
+                    } else {
+                        this.$toast({
+                            message: res.msg,
+                            position: 'top',
+                            duration: 2000
+                        })
+                    }
+                })
+            },
+            setCode: function () {
+                if (this.code.length < this.length) {
+                    this.$toast({
+                        message: '请输入正确的邀请码长度',
+                        position: 'top',
+                        duration: 2000
+                    });
+                    return
+                } else {
+                    this.getInviteList()
+                }
+                
+            },
+            //获取邀请海报,设置邀请码成功，需要重新调取一下邀请海报接口，生成新的邀请海报。
+            bill(){
+                Http.post(Http.HOST+Http.API_URL.INVITE,true).then((res)=>{
+                    if (res.code === 0) {
+
+                    }
+                })
+            },
+        }
+        
+    })
+</script>
+
+</html>

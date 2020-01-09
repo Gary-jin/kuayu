@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>邀请明细</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css"> -->
+    <!-- <link rel="stylesheet" href="../../js/mint-ui/style.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" > -->
+    <style media="screen">
+    html,body { background: #f7f7f7;font-family:PingFang SC;}
+    #vue-app{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .content{
+            flex: 1;
+            overflow-y: scroll;
+        }
+        .month {
+  width: 100%;
+  height: 1rem;
+  overflow: auto;
+  border-bottom: 0.02rem solid #cecece;
+}
+.month ul {
+  clear: both;
+  width: 9999px;
+}
+.month ul li {
+  float: left;
+  width: calc(375px / 3);
+  height: 1rem;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  align-items: center;
+}
+.month ul li:not(:last-child):after {
+  content: "|";
+  width: 0.02rem;
+  height: 0.26rem;
+  color: #999999;
+  position: relative;
+  left: 0.64rem;
+  top: -0.1rem;
+}
+.month ul li span {
+  display: block;
+  height: 100%;
+  line-height: 1rem;
+  font-size: 0.3rem;
+  font-family: PingFang-SC-Regular;
+  font-weight: 400;
+  color: #333333;
+}
+.month ul li .span-article {
+  font-size: 0.3rem;
+  font-family: PingFang-SC-Regular;
+  font-weight: 400;
+  color: #f76b04;
+  border-bottom: 2px solid #f76b04;
+  border-radius: 1px;
+  box-sizing: border-box;
+}
+.month-day {
+  height: calc(100% - 1rem);
+  padding: 0.4rem;
+  padding-bottom: 0;
+  /*overflow: hidden;*/
+}
+.month-day .day-ul {
+  border-left: 1px solid #ff6700;
+  margin: 0 15px;
+  box-sizing: border-box;
+}
+.month-day .day-ul .ul-li {
+  margin-bottom: 0.34rem;
+  position: relative;
+}
+.month-day .day-ul .ul-li:before {
+  content: "";
+  position: absolute;
+  left: -0.14rem;
+  top: 0px;
+  width: 0.24rem;
+  height: 0.24rem;
+  background: url("../../image/choniceness/mingxiyuan.png") no-repeat;
+  background-size: 100% 100%;
+}
+.month-day .day-ul li {
+  width: 100%;
+  display: flex;
+  display: -webkit-flex;
+}
+.month-day .day-ul li .left {
+  width: 1.8rem;
+  font-family: PingFang-SC-Medium;
+  font-weight: 500;
+  color: #363636;
+}
+.month-day .day-ul li .left p {
+  padding-left: 10px;
+}
+.month-day .day-ul li .left p:first-child {
+  font-size: 0.36rem;
+}
+.month-day .day-ul li .left p:last-child {
+  font-size: 0.24rem;
+}
+.month-day .day-ul li .zhong {
+  width: calc(100% - 1.8rem);
+  margin-top: 0.1rem;
+  position: relative;
+}
+.month-day .day-ul li .zhong ol {
+  margin: 0;
+}
+.month-day .day-ul li .zhong ol .li-dian {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between;
+  margin-top: -5px;
+}
+.month-day .day-ul li .zhong ol li {
+  clear: both;
+  height: 0.48rem;
+  font-size: 0.24rem;
+}
+.month-day .day-ul li .zhong ol li .txt {
+  color: #FF6700;
+  font-size: 0.24rem;
+}
+.month-day .day-ul li .zhong ol li .see-right {
+  float: right;
+  font-size: 0.22rem;
+  font-family: PingFang-SC-Regular;
+  font-weight: 400;
+  color: #363636;
+}
+.month-day .day-ul li .zhong ol:before {
+  content: "●";
+  color: #ff6700;
+  position: absolute;
+  left: -12px;
+  top: -5px;
+  font-size: 5px;
+}
+.month-day .day-ul li .zhong ol:nth-child(2) {
+  margin-top: 0.36rem;
+}
+
+
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="paySuccess">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">邀请明细</div>
+        </div>
+        <div class="content">
+            <div class="month">
+                <ul>
+                    <li @click="ajax_month(index,{y:T_year,m:item,d:T_days(T_year,item,index),pageSize:31})"
+                        v-for="(item,index) in T_month" :key="index">
+                    <!-- class="span-article" -->
+                    <span :class="{'span-article':indexActive === index}">{{item |number_cn}}月明细</span>
+                    </li>
+                </ul>
+            </div>
+            <!--每日-->
+            <div class="month-day">
+                <ul class="day-ul">
+                <!--列表-1-->
+                <li class="ul-li" v-for="(item,index) in day_list" :key="index">
+                    <!--left-->
+                    <div class="left">
+                        <p>{{item.time | time_formatting(1)}}-{{item.time | time_formatting(2)}}</p>
+                        <p>{{item.time | time_formatting(0)}}</p>
+                    </div>
+                    <!--中-->
+                    <div class="zhong">
+                    <!--金额-->
+                        <ol>
+                            <li class="li-dian seeMore">
+                                <span>预计总收益(元):<span class="txt">{{item.money_all}}</span></span>
+                                <span class="see-right" @click="toMore(item.time)">查看更多 ></span>
+                            </li>
+            
+                            <li>
+                            激活用户数(人):<span class="txt">{{item.jh_sum}}</span>
+                            </li>
+            
+                            <li>
+                            推荐奖励金(元):<span class="txt">{{item.prospect}}</span>
+                            </li>
+                        </ol>
+                    <!--人数-->
+                        <ol>
+                            <li class="li-dian">
+                                <span>首购用户数(人):<span class="txt">{{item.sg_sum}}</span></span>
+                            </li>
+                            <li>
+                                绑卡用户数(人):<span class="txt">{{item.bk_sum}}</span>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                </ul>
+                <p v-if="isShowTxt" style="text-align:center;">暂无数据明细~</p>
+            </div>
+        </div>
+        
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js?i=1" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!-- <script src="../../js/mint-ui/index.js"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script> -->
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            indexActive: 0,
+            day_list: [],
+            // month: 0,
+            total: new Date().getFullYear() + '-' + (new Date().getMonth() + 1),//现在日期
+            /*样式下标*/
+            index: 0,
+            isShowTxt: false,
+            callBack: false,
+            /*当前月份*/
+            T_month: [],
+            /*当前年份*/
+            T_year: new Date().getFullYear(),
+            /*当前天数*/
+            /**
+             * @return {number}
+             */
+            T_days: (year, item,index) => {
+                if(index==0){
+                return 0;
+                }else{
+                //(year%4==0 && year%100!=0)|| year%400==0?'该年是闰年':'该年的平年';
+                return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0 ? (item == 1 || item == 3 || item == 5 || item == 7 || item == 8 || item == 10 || item == 12 ? 31 : item == 2 ? 29 : 30) : item == 1 || item == 3 || item == 5 || item == 7 || item == 8 || item == 10 || item == 12 ? 31 : item == 2 ? 28 : 30;
+                }
+            }
+        },
+        created: function() {
+            
+        },
+        
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            // 查看更多
+            toMore(time){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/choiceness/invitationMssage.html?time=' + time,type: 'web'})
+            },
+            /*加载数据*/
+            ajax_month(index, param) {
+                let _this = this;
+                if ((index + 1) > _this.T_month[0]) {
+                    param.y = _this.T_year - 1;
+                }
+                _this.callBack = false;
+                // this.$vux.loading.show({
+                //     text: 'Loading'
+                // });
+                _this.index = index;
+                this.indexActive = index;
+                if(index == 0){
+                    Http.post(Http.HOST+Http.API_URL.USERAWARDLIST,{pageSize:31}, true).then(res => {
+                        if (res.code === 0) {
+                            // this.$vux.loading.hide();
+                            _this.callBack = true;
+                            if (res.data == [] || res.data.length == 0) {
+                            _this.isShowTxt = true;
+                            return;
+                            }
+                            _this.day_list = res.data;
+                        } else {
+                            dsBridge.call("toast", {msg: '加载失败！'})
+                            _this.callBack = false;
+                        }
+                    });
+                }else{
+                    Http.post(Http.HOST+Http.API_URL.USERAWARDLIST, param, true).then(res => {
+                        if (res.code === 0) {
+                            // this.$vux.loading.hide();
+                            _this.callBack = true;
+                            if (res.data == [] || res.data.length == 0) {
+                            _this.isShowTxt = true;
+                            return;
+                            }
+                            _this.day_list = res.data;
+                        } else {
+                            dsBridge.call("toast", {msg: '加载失败！'})
+                            _this.callBack = false;
+                        }
+                    });
+                }
+            },
+            
+        },
+        
+        mounted: function () {
+            var _this = this;
+            /*初始加载*/
+            _this.ajax_month(this.index,{pageSize:31});
+            /*加载月份*/
+            let mont = new Date().getMonth() + 1;
+            let num = 12;
+            for (var i = 0; i < 12; i++) {
+            mont--;
+            if (mont <= 0) {
+                mont = num--;
+            }
+            _this.T_month.push(mont);
+            }
+            _this.T_month.unshift(_this.T_month.pop());
+        },
+        filters: {
+            /*时间格式化*/
+            time_formatting(val, index) {
+                return val.trim().split('-')[index];
+            },
+            /*数字转中文*/
+            number_cn(val) {
+                switch (val % 12) {
+                    case 1:
+                    return "一";
+                    case 2:
+                    return "二";
+                    case 3:
+                    return "三";
+                    case 4:
+                    return "四";
+                    case 5:
+                    return "五";
+                    case 6:
+                    return "六";
+                    case 7:
+                    return "七";
+                    case 8:
+                    return "八";
+                    case 9:
+                    return "九";
+                    case 10:
+                    return "十";
+                    case 11:
+                    return "十一";
+                    case 0:
+                    return "十二";
+                }
+            }
+        },
+        
+    })
+</script>
+
+</html>

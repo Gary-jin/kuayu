@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>买单收款</title>
+    <script>
+        (function(doc, win) {
+            var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function() {
+              var clientWidth = docEl.clientWidth;
+              if(!clientWidth) return;
+              if(clientWidth >= 750) {
+                docEl.style.fontSize = '100px';
+              } else {
+                docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+              }
+            };
+            if(!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+          })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=1">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+     	#header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: .88rem;
+            border-bottom: 1px solid #eee;
+			background:#fff;
+			z-index: 9999;
+            line-height: .88rem;
+            display: flex;
+            align-items: center;
+        }
+        #header .left img{
+            width: .18rem;
+            padding-left: .3rem;
+        }
+        #header .left {
+            display: flex;align-items: center;
+            z-index: 1;
+            position: absolute;
+            left: 0;
+        }
+
+        #header .center {
+            position: relative;font-size: .34rem;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+        .common-height{
+            height: 0.88rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="shopCenter">
+    <div id="header">
+        <div class="left" @click="onBack"><img src="../../image/group_booking/back.png"></div>
+        <div class="center">买单收款</div>
+      </div>
+      <div class="common-height"></div>
+      <div  style="padding: 1rem .3rem 0;text-align: center;">
+        <img :src="info.qrcode" alt="">
+    </div>
+</div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="../../js/libs/common.js"></script> 
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: "#shopCenter",
+        data:{
+            info: '',
+            spid: ''
+        },
+        created () {
+            var Request = new Object();
+            Request = GetRequest();
+            this.spid = Request['spid']
+        },
+        methods: {
+            onBack: function(){
+                dsBridge.call('closeWin')
+            },
+            getInfo(){
+                Http.post(Http.HOST+Http.API_URL.SHOPQRCODE,{spid: this.spid},true).then((res)=>{
+                    if(res.code == 0){
+                        this.info = res.data
+                    }else{
+                        this.$toast({message: res.msg});
+                    }
+                })
+            }
+        },
+        mounted () {
+            this.getInfo()
+        }
+      
+    })
+</script>
+
+</html>

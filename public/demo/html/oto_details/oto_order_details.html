@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>oto订单详情</title>
+    <script type="text/javascript">
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 750) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <!-- uint-ui -->
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body {
+            background: #f7f7f7;
+        }
+
+        .title {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            z-index: 9;
+        }
+
+        .title>img:nth-child(1) {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+        }
+        .title>img:nth-child(3){
+            width: .44rem;
+            height: .4rem;
+            margin-left: 1.95rem;
+        }
+
+        .oto_details_core{
+            padding: 0 .3rem;
+            margin-top: .88rem;
+            height: 1.7rem;
+            overflow: hidden;
+        }
+        .oto_details_core .oto_top{
+            margin-top: .35rem;
+            font-size: .44rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+        }
+        .oto_details_core .oto_top_t{
+            margin-top: .13rem;
+            font-size: .32rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+        }
+        /* 配送中 */
+        .oto_datails{
+            height: 5.25rem;
+            margin-top: .88rem;
+            overflow: hidden;
+        }
+        .oto_datails .datails_code_tit{
+            font-size: .44rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+            margin: .3rem 0 .2rem .3rem;
+        }
+        .oto_datails .datails_code_core{
+            width: 100%;
+            height: 4rem;
+            position: relative;
+        }
+        .oto_datails .datails_code_core>img{
+            width: 3.8rem;
+            height: 4rem;
+            margin-left: 1.84rem;
+        }
+        .oto_datails .datails_code_core>div{
+            width: 3.8rem;
+            height: 4rem;
+            position: absolute;
+            top: 0;
+            left: 1.84rem;
+        }
+        .oto_datails .datails_code_core>div .datails_code_qu{
+            font-size: .24rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+            margin-top: .18rem ;
+            text-align:center ;
+        }
+        .oto_datails .datails_code_core>div .datails_code_num{
+            font-size: .48rem;
+            font-weight:bold;
+            color:rgba(217,33,33,1);
+            text-align:center ;
+            /* margin-top: .07rem; */
+        }
+        .oto_datails .datails_code_core>div .datails_code_pic{
+            width: 2.08rem;
+            height: 2.08rem;
+            background: #000;
+            margin: .5rem auto 0;
+        }
+        /* 配送中end */
+        .oto_details_coreed{
+            background: #fff;
+            padding: 0 .3rem;
+        }
+        .oto_details_core_box{
+
+        }
+        .oto_details_core_box_top{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: .88rem;
+            border-bottom:  .01rem rgba(255,255,255,1) solid;
+        }
+        .oto_details_core_box_top .core_top_l{
+            display: flex;
+            align-items: center;
+        }
+        .oto_details_core_box_top .core_top_l .oto_details_top_pic{
+            width: .42rem;
+            height: .42rem;
+            background: rebeccapurple;
+            margin-right: .1rem;
+        }
+        .oto_details_core_box_top .core_top_l .oto_details_top_name{
+            font-size: .32rem;
+            font-weight:bold;
+            color:rgba(47,47,47,1);
+            width: 5.88rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .oto_details_core_box_top >img{
+            width: .18rem;
+            height:  .32rem;
+        }
+
+        .order_core_center_box{
+            padding-top: .25rem;
+            display: flex;
+            box-sizing: border-box;
+        }
+        .order_core_center_box .order_center_pic{
+            width:1.74rem;
+            height:1.74rem;
+            background:rgba(252,102,33,1);
+            border-radius: .05rem;
+        }
+        .order_core_center_box .order_center_rig{
+            margin-left: .22rem;
+        }
+        .order_center_rig .order_text_top{
+            width:4.79rem;
+            font-size:.28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+            display: flex;
+            justify-content: space-between;
+        }
+        .order_center_rig .order_text_top >div:nth-child(1){
+            width: 3.1rem;
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+        }
+        .order_center_rig .order_text_top >div:nth-child(2){
+            font-size: .32rem;
+            font-weight:bold;
+            color:rgba(47,47,47,1);
+        }
+        .order_center_rig .order_text_cen{
+            font-size: .24rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+            margin-top: .12rem;
+        }
+        .order_center_rig .order_text_bot{
+            margin-top: .2rem;
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+        }
+        .order_core_center_button{
+            display: flex;
+            justify-content: flex-end;
+            margin-top: .02rem ;
+            border-bottom:  .01rem rgba(255,255,255,1) solid;
+        }
+        .order_core_center_button .pingjia {
+            height: .52rem;
+            padding: 0 .23rem;
+            border-radius: .26rem;
+            border:  .01rem solid rgba(217,33,33,1);
+            color: rgba(217,33,33,1) ;
+            line-height: .52rem;
+            margin-bottom: .2rem;
+        }
+        .order_core_center_button .tuikuan {
+            height: .52rem;
+            padding: 0 .23rem;
+            border-radius: .26rem;
+            border:  .01rem solid rgba(153,153,153,1);
+            color: rgba(153,153,153,1) ;
+            line-height: .52rem;
+            margin-bottom: .2rem;
+        }
+        .discount_coupon{
+            height: .88rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .discount_coupon div:nth-child(1){
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+        }
+        .discount_coupon div:nth-child(2){
+            font-size: .3rem;
+            font-weight:bold;
+            color:rgba(47,47,47,1);
+            border-bottom:  .01rem rgba(255,255,255,1) solid;
+        }
+        .summation{
+            height: 1.08rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .summation div:nth-child(1),div:nth-child(3){
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+        }
+        .summation div:nth-child(2){
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(217,33,33,1);
+            margin-right: .2rem;
+        }
+        .summation div:nth-child(4){
+            font-size: .44rem;
+            font-weight: bold;
+            color:rgba(47,47,47,1);
+        }
+        .call_hotel{
+            height: .75rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .call_hotel >img{
+            width: .28rem;
+            height:  .28rem;
+            margin-right: .1rem;
+        }
+        .call_hotel >div{
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+        }
+        /* order_core_bottom */
+        .order_core_bottom{
+            margin-bottom: .35rem;
+        }
+        .order_core_bottom .order_core_bottom_tit{
+            width: 100%;
+            height: .7rem;
+            border-bottom: .01rem rgba(238,238,238,1) solid;
+            box-sizing: border-box;
+            background: #fff;
+            display: flex;
+            align-items: center;
+        }
+        .order_core_bottom .order_core_bottom_tit div{
+            padding-left: .3rem;
+        }
+        .order_core_bottom .order_details{
+            widows: 100%;
+            /* height: 1.9rem; */
+            background: #fff;
+        }
+        .order_details .order_details_box{
+            padding: 0 .3rem;
+            /* height: 1.9rem; */
+            /* display: flex;
+            flex-direction: column;
+            justify-content: space-evenly; */
+            overflow: hidden;
+        }
+        .order_details_box .order_details_box_row{
+            margin-top: .2rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .order_details_box .order_details_box_row>div:nth-child(1){
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+        }
+        .order_details_box .order_details_box_row>div:nth-child(2){
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+        }
+        .order_details_box .order_details_box_row .order_box_row{
+            height: .37rem;
+            display: flex;
+            align-items: center;
+        }
+        .order_details_box .order_details_box_row .order_box_row img{
+            width: .66rem;
+            height: .3rem;
+            /* position: relative; */
+            /* bottom: -.02rem;  */
+        }
+        .order_details_box .order_details_box_site{
+            margin-top: .2rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .order_details_box .order_details_box_site>div:nth-child(1){
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+        }
+        .order_details_box .order_details_box_site>div:nth-child(2){
+            width: 3.5rem;
+            font-size: .28rem;
+            font-weight:500;
+            text-align: right;
+            color:rgba(102,102,102,1);
+            margin-bottom: .2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="title">
+            <img src="./../../image/back.png" alt="" @click='onBack'>
+            <div class="title_text">订单详情</div>
+            <img src="./../../image/oto_order_detaiols/nouncc.png" alt="">
+        </div>
+        <div v-show='false' class="oto_details_core">
+            <div class="oto_top">订单已完成</div>
+            <div class="oto_top_t">感谢您的光临！欢迎下次购买</div>
+        </div>
+        <!-- 配送中 -->
+        <div class="oto_datails">
+            <div class="datails_code_tit">订单配送中</div>
+            <div class="datails_code_core">
+                <img src="./../../image/oto_order_detaiols/code.png" alt="">
+                <div>
+                    <div class="datails_code_qu">取货码</div>
+                    <div class="datails_code_num">8E2K</div>
+                    <div class="datails_code_pic"></div>
+                </div>
+            </div>
+        </div>
+        <div class="oto_details_coreed">
+            <div class="oto_details_core_box">
+                <div class="oto_details_core_box_top">
+                    <div class="core_top_l">
+                        <div class="oto_details_top_pic"></div>
+                        <div class="oto_details_top_name">ANTA旗舰店（二七TA旗舰店（二七TA旗舰店（二七广场店...） 拷贝</div>
+                    </div>
+                    <img src="./../../image/bargain/new_address.png" alt="">
+                </div>
+                <div class="order_core_center_box">
+                    <div class="order_center_pic"></div>
+                    <div class="order_center_rig">
+                        <div class="order_text_top">
+                            <div>优享南极人简约风原味自然精选新疆纯 棉天然纯棉四件套</div>
+                            <div>￥258.00</div>
+                        </div>
+                        <div class="order_text_cen">海军蓝；M</div>
+                        <div class="order_text_bot">x2</div>
+                    </div>
+                </div>
+                <div v-if='1' class="order_core_center_button">
+                    <div class="pingjia">去评价</div>
+                </div>
+                <div  v-else class="order_core_center_button">
+                    <div class="tuikuan">申请退款</div>
+                </div>
+                <div class="discount_coupon">
+                    <div>商家代金券优惠</div>
+                    <div>-￥8.8</div>
+                </div>
+                <div class="summation">
+                    <div>已优惠:</div>
+                    <div>￥36</div>
+                    <div>合计:￥</div>
+                    <div>66.32</div>
+                </div>
+            </div>
+        </div>
+        <div class="call_hotel">
+            <img src="./../../image/oto_order_detaiols/call.png" alt="">
+            <div>致电商家</div>
+        </div>
+        <div class="order_core_bottom">
+                <div class="order_core_bottom_tit"><div>订单信息</div></div>
+                <div class="order_details">
+                    <div class="order_details_box">
+                        <div class="order_details_box_row">
+                            <div>自提订单</div>
+                            <div class="order_box_row">
+                                <div>2018102308717</div>&nbsp;
+                                <img src="./../../image/order_all/copy_id.png" alt="">
+                            </div>
+                        </div>
+                        <div class="order_details_box_row">
+                            <div>创建时间</div>
+                            <div>2019-01-01 12:52:59</div>
+                        </div>
+                        <div class="order_details_box_row">
+                            <div>支付方式</div>
+                            <div>余额支付</div>
+                        </div>
+                        <div class="order_details_box_site">
+                            <div>配送地址</div>
+                            <div>保利百合(4号楼1单元2907)小二15600364267</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</body>
+<script src="../../js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            
+        },
+        mounted: function () {
+           
+        },
+        methods: {
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+        }
+    })
+</script>
+
+</html>

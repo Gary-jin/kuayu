@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拉新奖励</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css"> -->
+    <!-- <link rel="stylesheet" href="../../js/mint-ui/style.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" > -->
+    <style media="screen">
+    html,body { background: #f7f7f7;font-family:PingFang SC;}
+    #vue-app{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .content{
+            flex: 1;
+            /* overflow-y: scroll; */
+            background: url("../../image/choniceness/Bg.png") no-repeat;
+            background-size: 100% 100%;
+        }
+        .top {
+  margin: 1.28rem auto 0;
+  width: 6.7rem;
+  /*height: 5.44rem;*/
+  height: 6rem;
+  background-color: white;
+  /*margin: 0 auto;*/
+  position: relative;
+}
+ .top:before,
+ .top:after {
+  content: '';
+  width: 0.82rem;
+  height: 0.82rem;
+  position: absolute;
+  bottom: -0.41rem;
+  border-radius: 50%;
+  background-color: #fc8614;
+}
+ .top:before {
+  left: -0.41rem;
+}
+ .top:after {
+  right: -0.41rem;
+}
+ .top .top-picture {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.4rem;
+  height: 1.4rem;
+  background: #ffd9ae;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  align-items: center;
+}
+ .top .top-picture img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%
+}
+ .top .top-phone {
+  padding-top: 1.1rem;
+  font-size: 0.3rem;
+  font-family: PingFang-SC-Regular;
+  font-weight: bold;
+  color: #333333;
+  text-align: center;
+}
+ .top #qr {
+  margin: 0.64rem auto 0;
+  width: 2.8rem;
+  height: 2.8rem;
+  border: 1px solid pink;
+  padding: 10px;
+  box-sizing: border-box;
+}
+ .top #qr img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+ .top .qr-tit {
+  margin-top: 0.14rem;
+  text-align: center;
+  font-size: 0.28rem;
+  font-family: PingFang-SC-Regular;
+  font-weight: bold;
+  color: #333333;
+  line-height: 28px;
+}
+ .bottom {
+  width: 6.7rem;
+  height: 2rem;
+  margin: 0.03rem auto 0;
+  padding-top: 0.3rem;
+  box-sizing: border-box;
+  /*display: grid;*/
+  /*grid-template-columns: 1fr 1fr 1fr;*/
+  /*grid-template-rows: 2.28rem;*/
+  /*grid-gap: 1px;*/
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  background-color: white;
+  /*.item:nth-child(1):before,*/
+  /*.item:nth-child(2):before{*/
+  /*  content: '';*/
+  /*  width:0.02rem;*/
+  /*  height:0.92rem;*/
+  /*  background-color:red;*/
+  /*  right:0px;*/
+  /*}*/
+}
+ .bottom .item {
+  width: 33.33%;
+  box-sizing: border-box;
+  height: 1rem;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: column;
+  align-content: space-around;
+  border-bottom: none;
+}
+ .bottom .item p {
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  font-family: 'PingFang-SC-Regular';
+  font-weight: 400;
+}
+ .bottom .item p:first-child {
+  font-size: 0.28rem;
+  color: #333333;
+}
+ .bottom .item p:last-child {
+  margin-top: 0.2rem;
+  font-size: 0.3rem;
+  color: #f76b04;
+}
+
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="paySuccess">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">我的团队</div>
+        </div>
+        <div class="content">
+            <!--上部分-->
+            <div class="top">
+
+                <div class="top-picture" >
+                    <img :src="avatar" alt="头像">
+                </div>
+        
+                <p class="top-phone">{{ moblie }}</p>
+        
+                <div id="qr">
+                    <img :src="scanImg" alt="qr">
+                </div>
+                <p class="qr-tit">扫码进团队</p>
+            </div>
+            <!--下部分-->
+            <div class="bottom">
+                <div class="item">
+                    <p>个人拉新总数</p>
+                    <p>{{dataList.num1 || 0}}</p>
+                </div>
+                <div class="item border-z">
+                    <p>团队拉新总数</p>
+                    <p>{{dataList.num3 || 0}}</p>
+                </div>
+                <div class="item">
+                    <p>团队总人数</p>
+                    <p>{{dataList.numAll || 0}}</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js?i=1" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!-- <script src="../../js/mint-ui/index.js"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script> -->
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            dataList:{},
+            scanImg:'',
+            moblie:'',
+            avatar:''
+        },
+        created: function() {
+            
+        },
+        
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            
+        },
+        
+        mounted: function () {
+            let _this = this;
+            Http.post(Http.HOST+Http.API_URL.USERLAXINSUN, {}, true).then(res => {
+                if (res.code === 0) {
+                    // console.log("*************我的团队**********");
+                    // console.log(res.data);
+                    _this.dataList = res.data;
+                }else{
+                    dsBridge.call("toast", {msg: '加载失败！'})
+                }
+            });
+            Http.post(Http.HOST+Http.API_URL.USERUSERNEW, {}, true).then(res => {
+                if (res.code === 0) {
+                    console.log(res.data)
+                    _this.scanImg = res.data.pic
+                    let avatar1 = dsBridge.call("receiveParams", 'avatar')
+                    if(avatar1 === '' || avatar1 === null){
+                        _this.avatar = res.data.logo;
+                    }else{
+                        _this.avatar = avatar1
+                    }
+                }
+            });
+            this.moblie = dsBridge.call("receiveParams", 'mobile')
+        }
+        
+    })
+</script>
+
+</html>

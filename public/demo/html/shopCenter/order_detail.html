@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>oto订单详情</title>
+    <script type="text/javascript">
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 750) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <!-- uint-ui -->
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body {
+            background: #fff;
+        }
+
+        .title {
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            border: .01rem solid rgba(255, 255, 255, 1);
+            position: fixed;
+            top: 0;
+            z-index: 999;
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .core_detail {
+            margin-top: .88rem;
+        }
+
+        .core_detail .content_status {
+            width: 100%;
+            height: 1.2rem;
+            background: url(./../../image/bargain/order_bg.png) 0 0 no-repeat;
+            background-size: 100% 1.2rem;
+            line-height: 1.2rem;
+        }
+
+        .core_detail .content_status .left {
+            font-size: .32rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 1);
+            margin-left: .3rem;
+        }
+
+        /* 地址 */
+        .order_core_site2 {
+            padding: 0 .45rem;
+            height: 1.8rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .order_core_site2 .order_core_site_left {
+            display: flex;
+        }
+
+        .order_core_site2 .order_core_site_left img {
+            width: 0.28rem;
+            height: 0.28rem;
+            margin-top: 0.36rem;
+        }
+
+        .order_core_site2 .order_core_site_left>div .site_name {
+            display: flex;
+            margin-top: 0.28rem;
+            margin-left: 0.12rem;
+        }
+
+        .order_core_site2 .order_core_site_left>div .site_name div:nth-child(1) {
+            max-width: 4.04rem;
+            font-size: 0.3rem;
+            font-weight: 500;
+            color: #2f2f2f;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .order_core_site2 .order_core_site_left>div .site_name div:nth-child(2) {
+            font-size: 0.3rem;
+            font-weight: 500;
+            color: #2f2f2f;
+            line-height: 0.5rem;
+            margin-left: 0.16rem;
+        }
+
+        .order_core_site2 .order_core_site_left>div .site_name_site {
+            width: 6.07rem;
+            height: 0.61rem;
+            font-size: 0.26rem;
+            margin-top: 0.1rem;
+            font-weight: 500;
+            color: #666666;
+        }
+        .core_detail .site_bg_h{
+            width: 100%;
+            height: .2rem;
+            background: #f7f7f7;
+        }
+        /* core */
+        .content_main{
+            width: 100%;
+        }
+        .order_core_center .order_core_center_box {
+            height: 2.34rem;
+            display: flex;
+            box-sizing: border-box;
+            padding: 0 .3rem;
+            border-bottom: 0.01rem #eeeeee solid;
+        }
+
+        .order_core_center .order_core_center_box .order_center_pic {
+            width: 1.74rem;
+            height: 1.74rem;
+            border-radius: 0.05rem;
+            margin-top: 0.3rem;
+        }
+
+        .order_core_center .order_core_center_box .order_center_rig {
+            margin-left: 0.22rem;
+            margin-top: 0.34rem;
+        }
+
+        .order_core_center .order_core_center_box .order_center_rig .order_text_top {
+            width: 4.79rem;
+            height: 0.67rem;
+            font-size: 0.28rem;
+            font-weight: 500;
+            color: #2f2f2f;
+            line-height: 0.36rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .order_core_center .order_core_center_box .order_center_rig .order_text_cen {
+            font-size: 0.24rem;
+            font-weight: 500;
+            color: #999999;
+            margin-top: 0.18rem;
+        }
+
+        .order_core_center .order_core_center_box .order_center_rig .order_text_bot {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.15rem;
+        }
+
+        .order_core_center .order_core_center_box .order_center_rig .order_text_bot span:nth-child(1) {
+            font-size: 0.32rem;
+            font-weight: bold;
+            color: #d92b24;
+        }
+
+        .order_core_center .order_core_center_box .order_center_rig .order_text_bot span:nth-child(2) {
+            font-size: 0.28rem;
+            font-weight: 500;
+            color: #999999;
+        }
+
+        .order_core_center .order_core_sum {
+            width: 100%;
+            height: 1.4rem;
+            border-bottom: 0.01rem #eeeeee solid;
+            box-sizing: border-box;
+        }
+
+        .order_core_center .order_core_sum .order_core_sum_box {
+            height: 1.4rem;
+            padding: 0 0.3rem;
+            /* display: flex;
+            flex-direction: column;
+            justify-content: space-evenly; */
+        }
+
+        .order_core_center .order_core_sum .order_core_sum_box .order_sum {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.3rem;
+        }
+
+        .order_core_center .order_core_sum .order_core_sum_box .order_sum>div {
+            font-size: 0.28rem;
+            font-weight: 500;
+            color: #2f2f2f;
+        }
+
+        .order_core_center .order_core_sum .order_core_sum_box .order_sum .order_discounts {
+            color: #d92b24;
+        }
+
+        .order_core_center .order_freight {
+            width: 100%;
+            height: 0.9rem;
+            border-bottom: 0.01rem #eeeeee solid;
+            box-sizing: border-box;
+        }
+
+        .order_core_center .order_freight .order_freight_box {
+            height: 0.9rem;
+            padding: 0 0.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order_core_center .order_freight .order_freight_box div {
+            font-size: 0.28rem;
+            font-weight: 500;
+            color: #2f2f2f;
+        }
+
+        .order_core_center .order_freight2 {
+            width: 100%;
+            height: 0.9rem;
+        }
+
+        .order_core_center .order_freight2 .order_freight_box {
+            height: 0.9rem;
+            padding: 0 0.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order_core_center .order_freight2 .order_freight_box div {
+            font-size: 0.28rem;
+            font-weight: 500;
+            color: #2f2f2f;
+        }
+
+        .order_core_bottom {
+            margin-bottom: 0.35rem;
+        }
+
+        .order_core_bottom .order_core_bottom_tit {
+            width: 100%;
+            height: 0.7rem;
+            border-bottom: 0.01rem #eeeeee solid;
+            box-sizing: border-box;
+            background: #fff;
+            display: flex;
+            align-items: center;
+        }
+
+        .order_core_bottom .order_core_bottom_tit div {
+            padding-left: 0.3rem;
+        }
+
+        .order_core_bottom .order_details {
+            widows: 100%;
+            height: 1.9rem;
+            background: #fff;
+        }
+
+        .order_core_bottom .order_details .order_details_box {
+            padding: 0 0.3rem;
+            /* display: flex;
+          flex-direction: column;
+          justify-content: space-evenly; */
+        }
+
+        .order_core_bottom .order_details .order_details_box .order_details_box_row {
+            margin-top: 0.2rem;
+            margin-bottom: 0.2rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .order_core_bottom .order_details .order_details_box .order_details_box_row>div:nth-child(1) {
+            font-size: 0.28rem;
+            font-weight: 500;
+            color: #666666;
+        }
+
+        .order_core_bottom .order_details .order_details_box .order_details_box_row>div:nth-child(2) {
+            font-size: 0.28rem;
+            font-weight: 500;
+            color: #2f2f2f;
+            height: 0.37rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .order_core_bottom .order_details .order_details_box .order_details_box_row>div:nth-child(2) img {
+            width: 0.66rem;
+            height: 0.3rem;
+            /* position: relative; */
+            /* bottom: -.02rem;  */
+        }
+        .refund{
+            width: 100%;
+            height: 1.16rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            border-bottom:  .01rem rgba(238,238,238,1) solid;
+        }
+        .refund .btns{
+            margin-right: .3rem;
+            width: 1.65rem;
+            height: .6rem;
+            background:rgba(217,33,33,1);
+            border-radius: .3rem;
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(255,255,255,1);
+            line-height: .57rem;
+            text-align: center;
+        }
+        .refund .btn1s{
+            margin-right: .3rem;
+            width: 1.65rem;
+            height: .6rem;
+            border-radius: .3rem;
+            font-size: .28rem;
+            font-weight:500;
+            line-height: .57rem;
+            text-align: center;
+            background:rgba(255,255,255,1);
+            border: .01rem solid rgba(153,153,153,1);
+            color: rgba(153,153,153,1);
+        }
+        .message_box{
+            
+        }
+        .message_box .message_box_top{
+            width: 100%;
+            height: .83rem;
+            margin-left: .3rem;
+            line-height: .83rem;
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+        }
+        .message_box .message_box_core{
+            padding: 0 .3rem;
+            font-size: .26rem;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+            margin-bottom: .3rem;
+        }
+
+
+
+
+        .list_bottom_isshow {
+            display: flex;
+            justify-content: flex-end;
+
+        }
+        .list_bottom_isshow span{
+            position: relative;
+            top: -0.02rem;
+        }
+        .list_bottom_isshow>div>div {
+            width: 1.58rem;
+            height: .52rem;
+            border-radius: .26rem;
+            text-align: center;
+            font-size: .28rem;
+            margin-top: .34rem;
+            margin-bottom: .03rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .list_bottom_isshow .isshow_button_c div {
+            border: 0.01rem #999 solid;
+            color: #999;
+        }
+
+        .list_bottom_isshow .isshow_button_d div {
+            border: 0.01rem #D92121 solid;
+            background: #D92121;
+            color: #fff;
+            margin-left: .28rem;
+            margin-right: .28rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="title">
+            <img src="./../../image/back.png" alt="" @click='onBack'>
+            <div class="title_text">订单详情</div>
+        </div>
+        <div class="core_detail">
+            <div class="content_status">
+                <div class="left">{{list.orderStatusInfo}}</div>
+            </div>
+            <!-- wayType ==1 配送 0 自提 -->
+            <div class="order_core_site2" v-if="list.wayType == 1"> 
+                <div class="order_core_site_left">
+                    <img src="./../../image/oto_order_detaiols/dizhi.png" alt="">
+                    <div>
+                        <div class="site_name">
+                            <div>{{list.username}}</div>
+                            <div>{{list.mobile}}</div>
+                        </div>
+                        <div class="site_name_site">{{list.province+list.city+list.district+list.address}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="site_bg_h" v-if="list.wayType != 0"></div>
+            <div class="content_main">
+                <div class="list">
+                    <div class="order_core_center">
+                        <div class="order_core_center_box">
+                            <div class="order_center_pic"
+                                :style="{background: `url(${goodsList.thumb})50% 50% / cover no-repeat`}"></div>
+                            <div class="order_center_rig">
+                                <div class="order_text_top">{{goodsList.goodsName}}</div>
+                                <div class="order_text_cen">{{goodsList.goodsField}}</div>
+                                <div class="order_text_bot">
+                                    <span>￥{{goodsList.goodsPrice}}</span><span>x{{goodsList.goodsNum}}</span></div>
+                            </div>
+                        </div>
+                        <div class="list_bottom_isshow">
+                            <div class="isshow_button_c">
+                                <div v-if="list.orderStatus == '-3'" @click="refuse(list.orderId)"><span>拒绝</span></div>
+                            </div>
+                            <div class="isshow_button_d">
+                                <div v-if="stockStatus =='1'&& list.wayType == '1'&& list.stockStatus == '0' && list.orderStatus == '0'"
+                                @click="offirm(list.orderId)"><span>确认订单</span></div>
+                                <!-- <div v-else-if="(list.wayType=='1'&& stockStatus =='0' && list.orderStatus == '0') || 
+                                (list.wayType=='1'&& stockStatus =='1' && list.stockStatus == '1' && list.orderStatus=='0') "><span>发货</span></div> -->
+                                <div v-else-if="list.orderStatus == '-3'" @click="refuseNo(list.orderId)"><span>确认退款</span></div>
+                            </div>
+                        </div>
+                        <div class="order_core_sum">
+                            <div class="order_core_sum_box">
+                                <div class="order_sum">
+                                    <div>商品金额</div>
+                                    <div>￥{{goodsList.goodsPrice}}</div>
+                                </div>
+                                <div class="order_sum">
+                                    <div>优惠</div>
+                                    <div class="order_discounts">-￥{{list.preferentialPrice}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="order_freight">
+                            <div class="order_freight_box">
+                                <div>运费</div>
+                                <div>￥{{list.postagePrice}}</div>
+                            </div>
+                        </div>
+                        <div class="order_freight2">
+                            <div class="order_freight_box">
+                                <div>实付金额</div>
+                                <div>￥{{list.payPrice}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="list.note">
+                <div class="site_bg_h"></div>
+                <div class="message_box" >
+                    <div class="message_box_top">买家留言</div>
+                    <div class="message_box_core">{{list.note}}</div>
+                </div>
+            </div>
+            <div class="site_bg_h"></div>
+            <div class="content_main">
+                <div class="list">
+                    <div class="order_core_bottom">
+                        <div class="order_core_bottom_tit">
+                            <div>订单信息</div>
+                        </div>
+                        <div class="order_details">
+                            <div class="order_details_box">
+                                <div class="order_details_box_row">
+                                    <div>取货方式</div>
+                                    <div v-if="list.wayType == 0 && list.model=='oto'">自提</div>
+                                    <div v-else>配送</div>
+                                </div>
+                                <div class="order_details_box_row">
+                                    <div>订单编号</div>
+                                    <div class="order_box_row">
+                                        <div> {{list.orderId}}</div>&nbsp;
+                                        <img src="./../../image/order_all/copy_id.png"
+                                            @click="onCopy(list.orderId)" alt="">
+                                    </div>
+                                </div>
+                                <div class="order_details_box_row">
+                                    <div>创建时间</div>
+                                    <div>{{list.paytime | formatDate}}</div>
+                                </div>
+                                <div class="order_details_box_row">
+                                    <div>支付方式</div>
+                                    <div>{{payTypeInfo[list.payType]}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="../../js/libs/common.js"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            isShow: false,
+            payStatus: '',
+            orderId: '',
+            list : [],
+            goodsList : [],
+            stockStatus : '',
+            payTypeInfo:''
+        },
+        filters: {
+			formatDate (time) {
+			  time = time * 1000
+			  var date = new Date(time)
+			  return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+			}
+		},
+        mounted: function () {
+            this.getParameter()
+        },
+        methods: {
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.orderId = Request['orderId']
+                console.log(this.orderId)
+                this.getinfo()
+            },
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            getinfo() {
+                Http.post(Http.HOST + Http.API_URL.QURRENDINGDAN, {
+                    orderId: this.orderId
+                }, true).then((res) => {
+                    if (res.code == '0') {
+                        this.isShow = true
+                        this.list = res.data.detail
+                        this.goodsList = this.list.goodsList[0]
+                        this.stockStatus = res.data.stockStatus
+                        this.payTypeInfo = res.data.payTypeInfo
+                        // this.obj = res.data
+                        // this.site = res.data.order
+                        // this.payStatus = res.data.order.payStatus
+                    //    优惠
+                    }
+                })
+            },
+            // 确认订单
+            offirm(orderid){
+                Http.post(Http.HOST+Http.API_URL.QURRENDINGDAN,{orderId: orderid,type:'save'},true).then((res)=>{
+                    if(res.code == '0'){
+                        this.$toast('确认成功')
+                        this.getinfo()
+                    }
+                })
+            },
+            // 拒绝
+            refuse(orderid){
+                Http.post(Http.HOST+Http.API_URL.QURRENDINGDAN,{orderId: orderid,type:'save', refuse: '1'},true).then((res)=>{
+                    if(res.code == '0'){
+                        this.$toast('拒绝退款成功')
+                        this.getinfo()
+                    }
+                })
+            },
+            //确认退款
+            refuseNo(orderid){
+                Http.post(Http.HOST+Http.API_URL.QURRENDINGDAN,{orderId: orderid,type:'save'},true).then((res)=>{
+                    if(res.code == '0'){
+                        this.$toast('退款成功')
+                        dsBridge.call('closeWin')
+                    }
+                })
+            },
+            onCopy(order_id){
+                dsBridge.call("clipBoard", {
+                    value: order_id
+                })
+            }
+        }
+    })
+</script>
+
+</html>

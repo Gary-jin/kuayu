@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=covers"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>订单红包</title>
+	<script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+	<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style media="screen">
+	html,body { background: #f7f7f7;}
+       #header {
+            position: relative;
+            width: 100%;
+            height: 50px;
+			background:#fff
+        }
+
+        #header .left {
+          display: flex;align-items: center; justify-content: center;font-size: .36rem; color: #666; z-index: 1;
+            position: absolute;
+            bottom: 0;
+            left: .2rem;
+            height: 50px;
+        }
+
+        #header .center {
+            position: relative;font-size: .34rem;
+            width: 100%;
+            height: 50px;line-height: 50px;
+            text-align: center;
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+        .head-bottom{background: #F45543; line-height: 35px; font-size:.28rem; color: white; display: flex; justify-content: space-between; padding: 0 .2rem;}
+        .head-bottom i { margin-right: .1rem; font-size: .28rem;}
+		.red-list { padding-bottom: .3rem; }
+      .red-item { padding-top:.54rem; }
+      .time-box { display: flex; justify-content: center; margin: 0 0 .2rem;}
+      .time-box div { background:#DDDDDD; color: white; font-size: .22rem; line-height: .44rem; padding:0 .21rem; border-radius: .44rem;}
+      .red-box { display: flex; margin-bottom: .4rem;}
+      .red-box .avatar { width: .84rem; height: .84rem; border-radius: 50%; margin-right: .36rem; }
+      .red-box .red-info { width: 5.26rem; position: relative;}
+      .red-box .red-info .arrow { width: .1rem; position: absolute; left: -.09rem; top: .4rem; }
+      .red-box .red-info .top { background:#F45543; display: flex; padding: .38rem 0 .3rem .4rem; border-radius: .1rem .1rem 0 0; overflow: hidden; align-items: center;}
+      .red-box .red-info .top img { width: .63rem; margin-right: .22rem; }
+      .red-box .red-info .top .texts { color: white;}
+      .red-box .red-info .top .texts .title { font-size: .3rem;}
+      .red-box .red-info .top .texts p {font-size: .24rem;}
+      .red-box .red-info .bottom { background: white; border-radius: 0 0 .1rem .1rem; height: .64rem; display: flex; padding: 0 .3rem; font-size: .26rem; align-items: center; justify-content: space-between; color: #666;}
+      .red-box .red-info .bottom img { width: .42rem; height: .42rem; border-radius: .07rem;}
+	.record { text-align:center; color: white; margin-bottom: .22rem; }
+	.record .record-content { background: #ddd;  border-radius: .38rem; height: .38rem; font-size: .2rem; padding: 0 .18rem;display:inline-block;line-height:.38rem}
+	.record img { height: .24rem; margin-right: .1rem; vertical-align:sub}
+      .record span:last-child { color: #FF5847; }
+	  #mescroll{
+		width: 100%;
+		position: fixed;
+		top: 85px;
+		bottom: 0;
+		height: auto;
+	}
+	.nodata{text-align: center;padding-top:0.5rem}
+	.nodata img{width:50%}
+	.nodata p{font-size:.28rem;color:#666}
+	/*提示框*/
+	#popup_red{
+	    position: absolute;
+		top: 0;
+		left: 0;
+		background: rgba(0,0,0,0.6);
+		right: 0;
+		bottom: 0;
+		display:none
+	}
+	#popup_red .warp{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		height:100%
+	}
+	.alert-content{ background: white; border-radius: .1rem; overflow: hidden;}
+      .alert-content .top { padding: 0 .65rem .45rem; font-size: .28rem; }
+      .alert-content .top img { width: 1.28rem; margin: .23rem 0;}
+      .alert-content .bottom {font-size: .28rem; display: flex; }
+      .alert-content .bottom button { flex: 1;}
+      .alert-content .bottom button:first-child{ background: #DDDDDD; line-height: .9rem;}
+      .alert-content .bottom button:last-child { color: white; background: #F45543;}
+	  /*获取红包*/
+	  #getRedBag{ position: absolute;
+		top: 0;
+		left: 0;
+		background: rgba(0,0,0,0.6);
+		right: 0;
+		bottom: 0;
+		display:none
+		}
+	  #getRedBag .warp{ height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;}
+      #getRedBag .content { border-radius: .2rem; width: 5.6rem; background: #F35D4C; }
+      #getRedBag .content .top { padding-top: 1.39rem; text-align: center; position: relative;}
+      #getRedBag .content .top .title { color: white; font-size: .32rem; margin-bottom: .46rem;}
+      #getRedBag .content .top .desc { color:#FFE2B1; font-size: .48rem; font-weight: bold; margin-bottom: 1.39rem;}
+      #getRedBag .content .top .red-bg { width: 100%; }
+      #getRedBag .content .top .kai { width: 1.6rem; height: 1.6rem; position: absolute; bottom: -0.3rem; left: calc(50% - 0.8rem);}
+      #getRedBag .content .bottom { color: #DB4130; font-size: .3rem; text-align: center;margin:2rem 0 .81rem; }
+      #getRedBag .close {width: .7rem; height: .7rem; border:.03rem solid #F3A84E; color: #F3A84E; display: flex; align-items: center; justify-content: center; border-radius: .7rem;margin-top: .61rem;}
+      #getRedBag .close i { font-size: .4rem;}
+    </style>
+</head>
+
+<body>
+  <div id="vue-app"  v-cloak>
+    <div id="header">
+      <div class="left" v-if='isShowBackBtn' @click="onBack"><i class="iconfont icon-back"></i></div>
+
+        <div class="center">抢红包</div>
+        <div class="right" tapmode @click="toRecord">次数记录</div>
+    </div>
+    <div class="head-bottom">
+      <span>可抢{{grabNum}}个红包</span>
+      <span @click='openRule'><i class="iconfont icon-wenhao"></i>如何获得更多红包</span>
+    </div>
+
+	<div class='common-warp mescroll' ref="mescroll" id="mescroll" >
+
+		<div class="red-list" id='d26'>
+		  <div class="red-item" v-for="(item, index ) in list" :key="index" id='aaaa'>
+			<div class="time-box"><div>{{new Date(item.created_at*1000).toLocaleString('zh', {hour12: false})}}</div></div>
+			<div class="red-box">
+			  <img class="avatar" :src="appLogo">
+			  <div class="red-info" @click="getRedDetail(item)">
+				<img class="arrow" src="../../image/icon/sanjiaoxing.png">
+				<div class="top">
+				  <img src="../../image/order_red_bag/yellow_bag.png">
+				  <div class="texts">
+					<div class="title text-overflow_2-xzh">{{item.title || '红包'}}</div>
+					<p>领取红包</p>
+				  </div>
+				</div>
+				<div class="bottom">
+				  <span>{{appName}}</span>
+				  <img :src="appLogo">
+				</div>
+			  </div>
+			</div>
+			<div class="record" v-for="(receiveItem, receiveIndex) in item.receivelist" :key="receiveIndex">
+			  <div class="record-content">
+				<img src="../../image/order_red_bag/red_bag_small.png">
+				<span>{{receiveItem}}</span><span>红包</span>
+			  </div>
+			</div>
+		  </div>
+
+		</div>
+	</div>
+	<div id='popup_red'>
+		<div class='warp'>
+			<div class="alert-content">
+				<div class="top">
+				  <img src="../../image/icon/red_bag_1.png">
+				  <p class="tips-title">亲，您的抢红包次数已用完</p>
+				  <p class="tips-content">邀请好友可再获取抢红包机会哦！</p>
+				</div>
+				<div class="bottom">
+				  <button @click="closePopup()">取消</button><button class="confirm-btn" @click="onConfirm()">前往邀请好友</button>
+				</div>
+		  </div>
+	  </div>
+	</div>
+	<div id='getRedBag'>
+		<div class='warp'>
+			<div class="content">
+			  <div class="top">
+				<div class="title">恭喜您获得一个红包</div>
+				<div class="desc">恭喜发财，大吉大利</div>
+				<img src="../../image/order_red_bag/red_bottom_bg.png" class="red-bg">
+				<img src="../../image/order_red_bag/kai.png" class="kai" @click="getRed">
+			  </div>
+			  <div class="bottom">
+				红包仅限于{{appName}}平台用户
+			  </div>
+			</div>
+			<div class="close" @click='closeMe'><i class="iconfont icon-close"></i></div>
+		</div>
+	</div>
+  </div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=1&v=201910112256"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+  //apiready = function(){
+    new Vue({
+        el: '#vue-app',
+        data: {
+		  page:0,
+          utils: utils,
+          list: [],
+          grabNum: 0,
+          appName: '',
+		  appLogo: '',
+		  mescroll: null,
+		  redId: '',
+		  btnType: ''
+        },
+        mounted: function(){
+			this.appName = dsBridge.call("receiveParams", 'appName');
+			this.appLogo = dsBridge.call("receiveParams", 'appLogo');
+			//this.getList();
+			this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+				down: {
+					auto: true,
+					callback: this.refresh,
+					page: {
+					  num: 0
+					},
+				}
+			});
+        },
+        methods: {
+			onBack: function(ret, err){
+				dsBridge.call('closeWin')
+			 },
+          toRecord: function(){
+		   dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/order_red_bag/order_red_record.html',type: 'web'})
+
+          },
+          openRule: function(){
+			dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/order_red_bag/order_red_rule.html',type: 'web'})
+          },
+		  onConfirm: function(){
+			this.closePopup();
+			if(this.btnType === 'bindWechat'){
+			  dsBridge.call("openWin", '/wxbind')
+			}else{
+			  dsBridge.call("openWin", '/invite')
+			}
+		  },
+		  closePopup: function(){
+			document.getElementById('popup_red').style.display = "none"
+		  },
+		  closeMe: function(){
+            document.getElementById('getRedBag').style.display = "none"
+          },
+		  getRed: function(){
+            var that = this;
+            // 领取红包
+            Http.post(Http.HOST+Http.API_URL.USERRECEIVERED,{id: this.redId},true).then((res)=>{
+			   this.closeMe();
+				if (res.code === 0) {
+					this.redInfo = res.data;
+					console.log('redInfo', res.data)
+					// 更新两个页面的用户可抢红包数
+					this.grabNum = this.grabNum - 1;
+
+					this.changeRedStatus(this.redId);
+
+					//utils.storage.set('redInfo', this.redInfo);
+					dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/order_red_bag/order_red_receive_detail.html',type: 'web'})
+
+				}else if (res.code == 4) {
+                   document.querySelector('.tips-title').innerText = '请绑定微信';
+                   document.querySelector('.tips-content').innerText = '绑定微信就可以抢红包了哦！';
+                   document.querySelector('.confirm-btn').innerText = '前去绑定';
+				   document.getElementById('popup_red').style.display = "block",
+				   this.btnType = 'bindWechat'
+                } else {
+				  dsBridge.call("toast", {msg: res.msg})
+                }
+			})
+          },
+
+           getRedDetail: function(item){
+			   // 判断是否绑定手机号
+			let userPhone = dsBridge.call("getUserPhone","")
+			let codeVersion = dsBridge.call('receiveParams', 'codeVersion')
+			if( userPhone === '' || userPhone === null && codeVersion >= 300){
+				dsBridge.call("toast", {msg: '您还未绑定手机号，请先去绑定！'})
+				setTimeout(function(){
+					dsBridge.call("openWin", '/judgemobile')
+				},1000)
+				return
+			}
+		    utils.storage.set('redInfo', item);
+            if (item.is_grab == 1) {
+              // 当已领过进入红包领取详情页
+			  dsBridge.call("toast", {msg: '您已领过该红包'})
+
+              setTimeout(function(){
+
+			   dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/order_red_bag/order_red_receive_detail.html',type: 'web'})
+                //api.openWin({
+                  //name: 'order_red_receive_detail',
+                  //url: 'order_red_receive_detail.html',
+                  //pageParam: {
+                    //redInfo: item
+                  //}
+                //})
+              }, 1000)
+            } else {
+              if (this.grabNum <= 0) {
+			    document.getElementById('popup_red').style.display = "block"
+
+              } else {
+			    this.redId = item.id
+			    document.getElementById('getRedBag').style.display = "block"
+
+              }
+            }
+          },
+          // 修改领取红包状态
+          changeRedStatus: function(redId){
+			var nickname = dsBridge.call("receiveParams", 'mobile')
+			console.log('nickname', nickname)
+            for(var i = 0, len = this.list.length; i<len; i++) {
+				console.log('222')
+              if(this.list[i].id == redId) {
+                this.list[i].is_grab = 1;
+                this.list[i].receivelist.push('用户'+nickname+'领取了');
+				console.log('receive',this.list[i].receivelist)
+              }
+            }
+          },
+	     refresh () {
+		   this.getList()
+		 },
+          // 实现下拉刷新功能
+          initRefresh: function() {
+              api.setRefreshHeaderInfo({
+                  visible: true,
+                  loadingImg: 'widget://image/order_red_bag/float_red_bag.png',
+                  bgColor: '#fff',
+                  textColor: '#F35D4C',
+                  showTime: true,
+                  textDown: '下拉获取更多红包(｡･∀･)ﾉﾞ',
+                  textUp: '松开查看更多红包(๑•̀ㅂ•́)و✧',
+                  textLoading: '搜索中(．． )…'
+              }, function(ret, err) {
+                  // 刷新数据
+                  vueObj.getList();
+              });
+          },
+          getList: function(refresh){
+            var that = this;
+            if (refresh){
+              this.page = 1;
+            } else {
+              this.page++;
+            }
+			Http.post(Http.HOST+Http.API_URL.USERREDLIST,{page: this.page},true,true).then((res)=>{
+				console.log('res',res.data)
+				//that.list = that.list.concat(res.data);
+				// 恢复下拉刷新的状态
+                //api.refreshHeaderLoadDone();
+
+				if (res.code === 0) {
+				    this.grabNum = res.info.grab_num;
+					 that.list = res.data.reverse().concat(that.list)
+					if (this.page === 1) {
+					  this.$nextTick(() => {
+					  var ele = document.getElementById('mescroll');
+				      ele.scrollTop = document.getElementById("d26").scrollHeight;
+				   })
+					}
+
+				}
+				this.$nextTick(() => {
+				  this.mescroll.endSuccess()// 结束下拉刷新,无参
+			   })
+
+                //that.list = res.data.reverse().concat(that.list)
+				console.log('res', res.data)
+                //if (that.page==1) {
+                  //setTimeout(function(){
+                      //api.pageDown({bottom: true})
+                  //}, 300)
+               // }
+                //that.grabNum = res.info.grab_num;
+                //api.execScript({
+                    //name: 'order_red_bag',
+                    //script: 'vueObj.grabNum='+that.grabNum
+                //});
+
+			})
+          }
+        }
+    })
+  //}
+</script>
+
+</html>

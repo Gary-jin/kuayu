@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>砍价商品列表</title>
+    <script type="text/javascript">
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 750) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <!-- uint-ui -->
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body {
+            background: #fff;
+        }
+
+        .title {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            z-index: 9;
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+        }
+
+        .core {
+            /* margin-top: .88rem; */
+            background: #fff;
+        }
+
+        .core .banner {
+            width: 100%;
+            height: 3rem;
+            overflow: hidden;
+        }
+
+        .core .banner img {
+            width: 100%;
+            height: 3rem;
+        }
+
+        .core .under_way {
+            padding: .3rem .3rem 0 .3rem;
+        }
+
+        .under_way_img {
+            width: 100%;
+            height: .78rem;
+        }
+
+        .under_way_img img {
+            width: 6.9rem;
+            height: .78rem;
+        }
+
+        .under_way_list_box {
+            width: 6.9rem;
+            /* height: 5.86rem; */
+            background: rgba(255, 255, 255, 1);
+            border: .01rem solid rgba(245, 219, 72, 1);
+            box-sizing: border-box;
+            border-top: none;
+            box-shadow: 0 .01rem .04rem 0 rgba(137, 137, 137, 0.2);
+            padding: 0 .23rem;
+        }
+
+        .under_way_list {
+            display: flex;
+            padding: .3rem 0;
+            border-bottom: .01rem rgba(238, 238, 238, 1) solid;
+        }
+
+        .under_way_list_img {
+            width: 2.3rem;
+            height: 2.3rem;
+            /* background: #D92121; */
+            border-radius: .05rem;
+            border: none;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .id_picture {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: .48rem;
+            background: rgba(0, 0, 0, 1);
+            opacity: 0.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .id_picture .id_picture_tit {
+            width: 1.8rem;
+            height: .48rem;
+            line-height: .48rem;
+            font-size: .26rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .under_way_list_box .list_core {
+            margin-left: .22rem;
+        }
+
+        .list_core .stocks {
+            margin-top: .09rem;
+            height: .32rem;
+            font-size: .28rem;
+            font-weight: 500;
+            color: rgba(47, 47, 47, 1);
+        }
+
+        .list_core .stocks span {
+            color: #D92B24;
+        }
+
+        .list_core .progress_bar_box {
+            width: 3.1rem;
+            height: .24rem;
+            background: rgba(255, 230, 230, 1);
+            border-radius: .12rem;
+            margin-top: .18rem;
+        }
+
+        .list_core .progress_bar_box .progress_bar {
+            /* width: 2.06rem; */
+            height: .24rem;
+            background: rgba(217, 43, 36, 1);
+            border-radius: .12rem;
+        }
+
+        .list_core .progress_bar_box .progress_bar .progress_bar_text {
+            height: .24rem;
+            line-height: .24rem;
+            float: right;
+            margin-right: .15rem;
+            font-size: .22rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+
+        }
+
+        .list_core .bargain_count_down {
+            margin-top: .33rem;
+            display: flex;
+        }
+
+        .list_core .bargain_count_down .time {
+            width: .36rem;
+            height: .36rem;
+            background: rgba(91, 91, 91, 1);
+            border-radius: .02rem;
+            font-size: .24rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            text-align: center;
+            line-height: .36rem;
+        }
+
+        .list_core .bargain_count_down .tt {
+            font-size: .24rme;
+            font-weight: 500;
+            color: rgba(102, 102, 102, 1);
+            margin-left: .1rem;
+            height: .36rem;
+            line-height: .36rem;
+        }
+
+        .list_core .under_way_button {
+            width: 3.92rem;
+            height: .6rem;
+            background: linear-gradient(-90deg, rgba(217, 33, 33, 1), rgba(248, 123, 100, 1));
+            border-radius: .05rem;
+            font-size: .28rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            text-align: center;
+            line-height: .6rem;
+            margin-top: .2rem;
+        }
+
+        .await_lsit {
+            width: 100%;
+            border-bottom: .01rem rgba(238, 238, 238, 1) solid;
+        }
+
+        .await_lsit>div {
+            padding: .3rem;
+            display: flex;
+        }
+
+        .await_lsit .await_img {
+            width: 2.3rem;
+            height: 2.3rem;
+            border-radius: .05rem;
+            overflow: hidden;
+            /* background: rebeccapurple; */
+        }
+
+        .await_lsit .await_core {
+            margin-left: .16rem;
+        }
+
+        .await_lsit .await_core .await_tit {
+            margin-top: .17rem;
+            width: 4.48rem;
+            height: .8rem;
+            font-size: .28rem;
+            font-weight: 500;
+            color: rgba(47, 47, 47, 1);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .await_lsit .await_core .await_sendout {
+            margin-top: .59rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .await_lsit .await_core .await_sendout div:nth-child(1) {
+            height: .56rem;
+            line-height: .56rem;
+            font-size: .28rem;
+            font-weight: 500;
+            color: rgba(217, 43, 36, 1);
+        }
+
+        .await_lsit .await_core .await_sendout div:nth-child(2) {
+            width: 1.74rem;
+            height: .56rem;
+            background: linear-gradient(-90deg, rgba(217, 33, 33, 1), rgba(248, 123, 100, 1));
+            border-radius: .05rem;
+            font-size: .28rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            text-align: center;
+            line-height: .56rem;
+        }
+
+        /* 收货地址 */
+        .address_box .mint-popup-bottom{
+            width: 100%;
+        }
+
+        .shipping_address_core {
+            width: 100%;
+            /* height: 75%; */
+            height: 9.82rem;
+            /* margin-top: 3.52rem; */
+            background: rgba(243, 243, 243, 1);
+            position: absolute;
+            bottom: 0;
+        }
+
+        .shipping_address_core_top {
+            height: .9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .shipping_address_core_top>div {
+            font-size: .32rem;
+            font-weight: 500;
+            color: rgba(47, 47, 47, 1);
+            margin-left: 2.8rem;
+        }
+
+        .shipping_address_core_top>img {
+            width: .28rem;
+            height: .28rem;
+            margin-right: .3rem;
+        }
+        .shipping_address_core .add_site_box{
+            height: 9.82rem;
+            overflow-y: scroll;
+        }
+        /* .shipping_address_core .add_site_box .site_list:nth-child(2){
+            display: block !important;
+        } */
+        .shipping_address_core .site {
+            padding: 0 .3rem;
+            background: #fff;
+            overflow: hidden;
+        }
+        .shipping_address_core .site:nth-child(1){
+            /* display: block !important; */
+        }
+        .shipping_address_core .site_name {
+            display: flex;
+            margin-top: .23rem;
+        }
+
+        .shipping_address_core .site_name div:nth-child(1) {
+            max-width: 4.04rem;
+            font-size: .32rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            /* margin-top: .31rem; */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-left: .46rem;
+        }
+
+        .shipping_address_core .site_name div:nth-child(2) {
+            font-size: .3rem;
+            font-weight: 500;
+            color: rgba(47, 47, 47, 1);
+            line-height: .5rem;
+            /* margin-top: .39rem; */
+            margin-left: .29rem;
+        }
+
+        .shipping_address_core .site_map {
+            display: flex;
+            justify-content: space-between;
+            /* margin-top: .14rem; */
+            border-bottom: .01rem rgba(238, 238, 238, 1) solid;
+        }
+
+        .shipping_address_core .site_map img:nth-child(1) {
+            width: .26rem;
+            height: .28rem;
+            margin-top: .08rem;
+        }
+
+        .shipping_address_core .site_map div:nth-child(2) {
+            width: 5.32rem;
+            font-size: .28rem;
+            font-weight: 500;
+            color: rgba(47, 47, 47, 1);
+            margin: 0 .76rem .28rem .2rem;
+
+        }
+
+        .shipping_address_core .site_map img:nth-child(3) {
+            width: .36rem;
+            height: .36rem;
+        }
+
+        .else_site {
+            height: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 0 .3rem;
+        }
+
+        .else_site>div {
+            font-size: .3rem;
+            font-weight: 500;
+            color: rgba(47, 47, 47, 1);
+        }
+
+        .else_site>img {
+            width: .31rem;
+            height: .18rem;
+        }
+
+        .else_site.new_address>img {
+            width: .18rem;
+            height: .32rem;
+        }
+
+        .site_name.site_false div:nth-child(1) {
+            margin-left: 0;
+            max-width: 4.5rem;
+        }
+
+        .site .site_map_f {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: .01rem rgba(238, 238, 238, 1) solid;
+        }
+
+        .site .site_map_f div:nth-child(1) {
+            width: 5.32rem;
+            font-size: .28rem;
+            font-weight: 500;
+            color: rgba(47, 47, 47, 1);
+            margin: 0 .76rem .28rem 0;
+        }
+
+        .site .site_map_f div:nth-child(2) {
+            width: .74rem;
+            height: .4rem;
+            background: rgba(255, 255, 255, 1);
+            border: .01rem solid rgba(153, 153, 153, 1);
+            border-radius: .05rem;
+            font-size: .26rem;
+            font-weight: 500;
+            color: rgba(102, 102, 102, 1);
+            text-align: center;
+            line-height: .42rem;
+        }
+
+        .shipping_address_core .await_lsits {
+            width: 100%;
+            margin-top: .2rem;
+            margin-bottom: 2.5rem;
+            background: #fff;
+        }
+
+        .await_lsits>div {
+            padding: .24rem .3rem;
+            display: flex;
+        }
+
+        .await_lsits .await_imgs {
+            width: 2rem;
+            height: 2rem;
+            border-radius: .05rem;
+            overflow: hidden;
+            background: rebeccapurple;
+        }
+
+        .await_lsits .await_cores {
+            margin-left: .16rem;
+        }
+
+        .await_lsits .await_cores .await_tits {
+            margin-top: .17rem;
+            width: 4.48rem;
+            height: .8rem;
+            font-size: .28rem;
+            font-weight: 500;
+            color: rgba(47, 47, 47, 1);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .shipping_address_core .await_txt {
+            margin-top: .6rem;
+            font-size: .28rem;
+            font-weight: 500;
+            color: rgba(102, 102, 102, 1);
+        }
+
+        .awai_start_box {
+            width: 100%;
+            height: 1.16rem;
+            position: fixed;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+
+        .awai_start {
+            width: 6.9rem;
+            height: .84rem;
+            background: linear-gradient(-90deg, rgba(217, 33, 33, 1) 0%, rgba(248, 123, 100, 1) 99%);
+            border-radius: .42rem;
+            font-size: .32rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            text-align: center;
+            line-height: .84rem;
+        }
+
+        #mescroll {
+            width: 100%;
+            position: fixed;
+            top: .88rem;
+            bottom: 0;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak >
+        <div class="title" >
+            <img src="./../../image/back.png" alt="" @click='onBack'>
+            <div class="title_text">砍价免费拿</div>
+        </div>
+        <div class="mescroll" ref="mescroll" id="mescroll">
+            <div>
+                <div class="core">
+                    <div class="banner">
+                        <!-- <img src="./../../image/bargain/banner.png" alt=""> -->
+                        <img :src="banner.thumb" alt="">
+                    </div>
+                    <!-- 正在进行中 -->
+                    <div class="under_way" v-if="activityList.length!=0" >
+                        <div class="under_way_img">
+                            <img src="./../../image/bargain/under_way.png" alt="">
+                        </div>
+                        <div class="under_way_list_box">
+                            <div class="under_way_list" v-for="(activ ,index) in activityList" :key="index">
+                                <div class="under_way_list_img" :style="{background: `url(${activ.orderInfo.thumb})50% 50% / cover no-repeat`}">
+                                    <div class="id_picture">
+                                        <div class="id_picture_tit">{{activ.orderInfo.goodsName}}</div>
+                                    </div>
+                                </div>
+                                <div class="list_core">
+                                    <div class="stocks">已砍<span>{{activ.dedPrice}}</span>元, 还差<span>{{activ.shengPrice}}</span>元</div>
+                                    <div class="progress_bar_box">
+                                        <div class="progress_bar" :style="{width:activ.speed + '%'}">
+                                            <div class="progress_bar_text" >{{activ.speed}}%</div>
+                                        </div>
+                                    </div>
+                                    <!-- 倒计时 -->
+                                    <div class="bargain_count_down" v-if="activityList.limittime != '0'">
+                                        <div class="hh time">{{activ.hh}}</div>&nbsp;:&nbsp;<div class="mm time">{{activ.mm}}</div>
+                                        &nbsp;:&nbsp;<div class="ss time">{{activ.ss}}</div>
+                                        <div class="tt">后结束</div>
+                                    </div>
+                                    <div class="under_way_button" @click='awaiStartgo(activ.orderId)'>继续砍价</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 待砍价列表 -->
+                <div class="await_lsit" v-for="(item , index) in list" :key="index" v-if='item.isBargain == 0'  @click="bargained(item)">
+                    <div>
+                        <div class="await_img" :style="{background: `url(${item.thumb})50% 50% / cover no-repeat`}">
+                        </div>
+                        <div class="await_core">
+                            <div class="await_tit">{{item.goodsName}}</div>
+                            <div class="await_sendout">
+                                <div>已送出{{item.sales}}件</div>
+                                <div>砍价免费拿</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 确认收货地址 -->
+        <div class="address_box">
+            <mt-popup v-model= 'address' position="bottom">
+                    <div class="shipping_address_core">
+                            <div class="shipping_address_core_top">
+                                <div>确认收货地址</div>
+                                <img @click="cancel()" class="cancel" src="./../../image/bargain/cancel.png" alt="">
+                            </div>
+                            <div class="add_site_box">
+                            <div class="site_list" v-for='(site,index) in siteList' :key='index'>
+                                <div class="site" v-if='site.isdefault == 1'>
+                                    <div class="site_name">
+                                        <div>{{site.username}}</div>
+                                        <div>{{site.mobile}}</div>
+                                    </div>
+                                    <div class="site_map">
+                                        <img src="./../../image/bargain/site.png" alt="">
+                                        <div>{{site.province+site.city+site.district+site.address}}</div>
+                                        <img src="./../../image/bargain/pitch.png" alt="">
+                                    </div>
+                                </div>
+                                <div class="site" v-if='site.isdefault == 0' >
+                                    <div class="site_name site_false">
+                                        <div>{{site.username}}</div>
+                                        <div>{{site.mobile}}</div>
+                                    </div>
+                                    <div class="site_map_f">
+                                        <div>{{site.province+site.city+site.district+site.address}}</div>
+                                        <div @click="checkdefault(index,site.id)"><span>使用</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="site_list" v-for="(sitemor,index) in siteListmore" :key="index" v-show="other_site_list">
+                                <div class="site" v-if='sitemor.isdefault == 0'>
+                                    <div class="site_name site_false">
+                                        <div>{{sitemor.username}}</div>
+                                        <div>{{sitemor.mobile}}</div>
+                                    </div>
+                                    <div class="site_map_f">
+                                        <div>{{sitemor.province+sitemor.city+sitemor.district+sitemor.address}}</div>
+                                        <div @click="checkdefault(index,sitemor.id)"><span>使用</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="else_site" v-show="other_site" @click='otherSite()'>
+                                <div>选择其他收货地址</div>
+                                <img src="./../../image/bargain/pull_down_list.png" alt="">
+                            </div>
+                            <div class="else_site new_address" v-show="new_site" @click="addsite()">
+                                <div>添加新收货地址</div>
+                                <img src="./../../image/bargain/new_address.png" alt="">
+                            </div>
+                            <div class="else_site new_address" v-show="no_site" @click="addsite()">
+                                <div>您还没有收货地址，请去添加收货地址</div>
+                                <img src="./../../image/bargain/new_address.png" alt="">
+                            </div>
+                            <div class="await_lsits" >
+                                <div>
+                                    <div class="await_imgs" :style="{background: `url(${addressAommodity.thumb})50% 50% / cover no-repeat`}"></div>
+                                    <div class="await_cores">
+                                        <div class="await_tits">{{addressAommodity.goodsName}}</div>
+                                        <div class="await_txt">已选择该商品，砍到0元拿</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="awai_start_box">
+                                <div class="awai_start" @click='awaiStart(addressAommodity.id , isdefault)'>开始砍价</div>
+                            </div>
+                        </div>
+                        </div>
+            </mt-popup>
+        </div>
+    </div>
+</body>
+<script src="../../js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            banner: [],
+            mescroll: null, 
+            list: [], //砍价商品列表
+            activityList: [], //正在砍价的商品
+            address: false, //收货地址弹窗
+            addressAommodity: [], //收货地址的商品
+            siteList: [],//收货地址
+            siteListmore: [],
+            other_site_list: false,//其他地址列表
+            other_site : false, //其他地址 
+            no_site: false, //没有收货地址
+            new_site: false,//添加新收货地址
+            siteLength: '',
+            isdefault:'',//默认地址
+            bot: 0
+        },
+        mounted: function () {
+            this.bannerPic();
+            this.countDown();
+            this.redraw();
+            this.mescroll = new MeScroll(this.$refs
+            .mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+                down: {
+                    use: true
+                },
+                up: {
+                    callback: this.upCallback, //上拉加载的回调
+                    //以下是一些常用的配置,当然不写也可以的.
+                    page: {
+                        num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                        size: 20 //每页数据条数,默认10
+                    },
+                    htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+                    noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+                }
+            });
+        },
+        methods: {
+            redraw: function()  {
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                    // "页面被挂起"
+                    } else {
+                        this.mescroll.setPageNum(1);
+                        this.mescroll.resetUpScroll();
+                        this.getinfo(this.addressAommodity)
+                        this.address = false
+                    }
+                })
+            },
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            upCallback(page) {
+                //联网请求
+                Http.post(Http.HOST + Http.API_URL.BARGAINLIST, {
+                    page: page.num
+                }, true).then((response) => {
+                    let arr = response.data.list; //砍价商品
+                    let actlist = response.data.activityList; //正在进行中的砍价
+                    //如果是第一页需手动置空列表
+                    if (page.num == 1) this.dataList = [];
+                    //把请求到的数据添加到列表
+                    this.dataList = this.dataList.concat(arr);
+                    this.list = this.dataList
+                    this.activityList = actlist
+                    // console.log(this.list)
+                    // console.log(this.activityList)
+                    //数据渲染成功后,隐藏下拉刷新的状态
+                    this.$nextTick(() => {
+                        this.mescroll.endSuccess(arr.length);
+                    })
+                }).catch((e) => {
+                    //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                    this.mescroll.endErr();
+                })
+
+            },
+
+            // 砍价免费拿
+            bargained: function (item) {
+                this.address = true;
+                this.getinfo(item)
+            },
+            getinfo(item){
+                Http.post(Http.HOST + Http.API_URL.ADDRESSLIST, {}, true).then((res) => {
+                    console.log(res,"长",res.data.list.length)
+                    this.siteLength = res.data.list.length
+                    this.addressAommodity = item;
+                    console.log("是否选择地址",this.isdefault)
+                    if(res.data.list.length == 0){
+                        console.log("长度0")
+                        // jumpTo('/mall/addAddress')
+                        this.new_site = false;
+                        this.other_site = false;
+                        this.no_site = true;
+                    }
+                    if(res.data.list.length == 1){
+                        this.siteList = res.data.list;
+                        this.other_site = true;
+                        this.new_site = false;
+                        this.no_site = false;
+                    }
+                    if(res.data.list.length == 2){
+                        this.siteList = res.data.list;
+                        this.other_site = true;
+                        this.new_site = false;
+                        this.no_site = false;
+                    }
+                    if(res.data.list.length > 2){
+                        this.siteList = res.data.list.slice(0,2);
+                        this.siteListmore = res.data.list.slice(2)
+                        // console.log(this.siteList,'******',this.siteListmore)
+                        this.other_site = true;
+                        this.new_site = false;
+                        this.no_site = false;
+                    }
+                    if(res.data.list.length != 0){
+                    this.isdefault = res.data.list[0]['isdefault']
+                    }
+                })
+            },
+            //选择其他地址
+            otherSite: function(){
+                if(this.siteLength == 1 || this.siteLength == 2){
+                    this.other_site = false;
+                    this.new_site = true;
+                    this.no_site = false;
+                    this.$toast({
+                        message: '没有更多的地址了，请去添加',
+                        position: 'center',
+                        duration: 1000
+                    });
+                }
+                if(this.siteLength > 2){
+                    this.other_site = false;
+                    this.new_site = true;
+                    this.no_site = false;
+                    this.other_site_list = true;
+                }
+            },
+            // 设置默认地址
+            checkdefault: function(index,id){
+                Http.post(Http.HOST + Http.API_URL.ADDRESSDEFAULT, {id:id}, true).then((res) => {
+                    this.$toast({
+                        message: '使用成功',
+                        position: 'center',
+                        duration: 1000
+                    });
+                    Http.post(Http.HOST + Http.API_URL.ADDRESSLIST, {}, true).then((res) => {
+                        // this.siteList = res.data.list
+                        this.isdefault = res.data.list[0]['isdefault']
+                        this.siteList = res.data.list.slice(0,2);
+                        this.siteListmore = res.data.list.slice(2)
+                    })
+                })
+            },
+            // 继续砍价
+            awaiStartgo: function(id){
+                console.log(id)
+                Http.post(Http.HOST + Http.API_URL.BARGAINCREATE, {goodsId:id}, true).then((res) => {
+                    dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/bargain/bargain.html?orderId='+id, type: 'web' })
+                    // window.location.href = 'http://172.16.1.239:3000/uqWeb/html/bargain/bargain.html?orderId='+id
+                })
+            },
+            //开始砍价
+            awaiStart: function(id,defaultiono){
+                console.log(id)
+                if(defaultiono == 1){
+                    Http.post(Http.HOST + Http.API_URL.BARGAINCREATE, {goodsId:id}, true).then((res) => {
+                        console.log(res.data.orderId)
+                        let orderId =  res.data.orderId
+                        dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/bargain/bargain.html?orderId='+orderId, type: 'web' })
+                        // window.location.href = 'http://172.16.1.239:3000/uqWeb/html/bargain/bargain.html?orderId='+orderId
+                    })
+                }else{
+                    this.$toast({
+                        message: '您还没有选择收货地址，请选择使用',
+                        position: 'center',
+                        duration: 1000
+                    });
+                }
+                
+            },
+            // 添加地址
+            addsite: function(){
+                dsBridge.call('openWin','/mall/addAddress')
+            },
+            // 取消弹窗
+            cancel:function(){
+                this.address = false
+            },
+            // 计时器
+            timeFormat: function (param) {
+                return param < 10 ? '0' + param : param;
+            },
+            countDown: function (it) {
+                var TT = setInterval(() => {
+                    for (let key in this.activityList) {
+                        let limittime = this.activityList[key]["limittime"]-1;
+                        this.$set(this.activityList[key], 'limittime', limittime)
+                        // console.log(limittime)
+                        let time = limittime;
+                        var obj ; 
+                    if (limittime > 0) {
+                        let dd = parseInt(time / (60 * 60 * 24));
+                        let hh = parseInt(time % (60 * 60 * 24) / 3600);
+                        let mm = parseInt(time % (60 * 60 * 24) % 3600 / 60);
+                        let ss = parseInt(time % (60 * 60 * 24) % 3600 % 60);
+                        obj = {
+                            dd: this.timeFormat(dd),
+                            // hh: this.timeFormat(hh),
+                            hh: hh,
+                            mm: this.timeFormat(mm),
+                            ss: this.timeFormat(ss)
+                        };
+                        if (limittime == 0) {
+                            clearInterval(TT)
+                            return
+                        }
+                    } else {
+                        obj = {
+                            dd: '00',
+                            hh: '00',
+                            mm: '00',
+                            ss: '00'
+                        };
+                    }
+                    this.$set(this.activityList[key], 'hh', obj.hh) //下单倒计时
+                    this.$set(this.activityList[key], 'mm', obj.mm)
+                    this.$set(this.activityList[key], 'ss', obj.ss)
+                    let overtime = obj.hh + ":"+obj.mm+":"+obj.ss 
+                    if(overtime=='00:00:00'){
+                        this.activityList.splice(key,1)
+                    }
+                    }
+                }, 1000)
+
+            },
+            // 计时器结束
+            // banner
+            bannerPic: function () {
+                Http.post(Http.HOST + Http.API_URL.BARGAIN, {}, true).then((res) => {
+                    this.banner = res.data.slide[0]
+                })
+            }
+        }
+    })
+</script>
+
+</html>

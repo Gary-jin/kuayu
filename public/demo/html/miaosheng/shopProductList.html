@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>活动专区</title>
+    <meta name="description" content="U券_淘宝客系统">
+    <meta name="keywords" content="U券_淘宝客系统">
+    <meta name="apple-mobile-web-app-capable" content="yes" /> <!-- apple devices fullscreen -->
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    
+    <style>
+        html, body{
+            background: #ffffff;
+            height: 100vh;
+        }
+        .title {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            border-bottom:.02rem #f2f2f2 solid  ;
+            display: flex;
+            align-items: center;
+            z-index: 9;
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+            text-align: center;
+        }  
+        .warp{
+            width: 100%;
+            position: fixed;
+            top: .88rem;
+            bottom: 0;
+            height: auto;
+            display: flex;
+        }
+        .warp .productlist_l{
+            width: 25%;
+            height: 100%;
+            background: #f2f2f2;
+        }
+        .warp .productlist_r{
+            width: 75%;
+            height: 100%;
+        }
+        .warp .productlist_l .productlist_l_box{
+            width: 100%;
+            height: .9rem;
+            font-size: .26rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        .warp .productlist_l .productlist_l_box p{
+            width: 100%;
+            height: .4rem;
+        }
+        .warp .productlist_l .productlist_l_box.tabclass {
+            background: #ffffff;
+        }
+        .warp .productlist_l .productlist_l_box.tabclass p{
+            border-left: .06rem #D92121 solid ;
+            color: #D92121;
+        }
+        .warp .productlist_r .productlist_r_box{
+            width: 33%;
+            height: 2.4rem;
+            font-size: .26rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .warp .productlist_r .productlist_r_box .productlist_r_box1{
+            width: 100%;
+            height: 100%;
+            /* display: flex;
+            flex-wrap: wrap; */
+            /* align-items: center;
+            justify-content: center; */
+        }
+        .warp .productlist_r .productlist_r_box .productlist_r_pic{
+            width: 100%;
+            height: 1.75rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .warp .productlist_r .productlist_r_box .productlist_r_pic img{
+            width: 1.12rem;
+            height: 1.4rem;
+        }
+        .warp .productlist_r .productlist_r_box  .productlist_r_tit{
+            height: .65rem;
+            text-align: center;
+            line-height: .65rem;
+        }
+    </style>
+</head>
+
+<body>
+       
+    <div id="prefecture" v-cloak >
+        <div class="title">
+            <img src="./../../image/back.png" alt="" @click='onBack'>
+            <div class="title_text">分类</div>
+        </div>
+        <div class="warp" >
+            <div class="productlist_l">
+                <div class="productlist_l_box" v-for="(item,index) in list" @click="tabindex(index)" :class="{ tabclass:index==current}" :key="index">
+                    <p>{{item.title}}</p>
+                </div>
+            </div>
+            <div class="productlist_r">
+                <div class="productlist_r_box" v-for="(int,ind) in sonList" :key="ind">
+                    <div class="productlist_r_box1" @click="getclass(int.id,int.title)">
+                        <div class="productlist_r_pic">
+                            <img :src="int.thumb" alt="">
+                        </div>
+                        <div class="productlist_r_tit">{{int.title}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=201910112231"></script> -->
+<script src="../../js/http.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: "#prefecture",
+        data:{
+            list: [],
+            current: 0,
+            sonList: []
+        },
+        mounted(){
+            this.getList()
+        },
+        methods: {
+			onBack: function(){
+				dsBridge.call('closeWin')
+            },
+            getList () {
+                Http.post(Http.HOST+Http.API_URL.AREAGOODSCATEGORY,{},true).then((response )=>{
+                    if (response.code === 0) {
+                        this.list = response.data
+                        this.sonList = this.list[0].sonList
+                    }
+                })
+            },
+            tabindex  (index) {
+                this.current = index
+                this.sonList = this.list[index].sonList
+            },
+            getclass (id,titi) {
+                console.log(id)
+                dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/miaosheng/activityList.html?classId='+id+'&title='+titi, type: 'web' })
+                // window.location.href = 'http://172.16.1.239:3000/uqWeb/html/miaosheng/activityList.html?classId=' + id+'&title='+titi
+            }
+        },
+        
+    })
+</script>
+
+</html>

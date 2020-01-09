@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <title>福利团</title>
+    <script>
+            (function(doc, win) {
+              var docEl = doc.documentElement,
+              resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+              recalc = function() {
+                var clientWidth = docEl.clientWidth;
+                if(!clientWidth) return;
+                if(clientWidth >= 750) {
+                  docEl.style.fontSize = '100px';
+                } else {
+                  docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                }
+              };
+              if(!doc.addEventListener) return;
+              win.addEventListener(resizeEvt, recalc, false);
+              doc.addEventListener('DOMContentLoaded', recalc, false);
+            })(document, window);
+          </script>
+
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=1">
+    <link rel="stylesheet" href="../../css/group_booking/group.css?i=20191122">
+    <link rel="stylesheet" type="text/css" href="../../js/mint-ui/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    
+    <style>
+        html, body{
+            background: #F3F3F3;
+			height:100vh
+        }
+        #header{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            height: .88rem;
+            padding: 0 .3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #header .left img{
+            width: .48rem;
+            height: .48rem;
+            vertical-align: text-bottom;
+        }
+        #header .title{
+            text-align: center;
+            font-size: .34rem;
+            color: #2F2F2F;
+            padding-left: .6rem;
+        }
+        #header .right img{
+            width: .34rem;
+            height: .34rem;
+        }
+        .seamless-warp{
+            height: 2.3rem;
+            overflow: hidden;
+        }
+        .mint-popup{
+            width: 100%;
+            border-radius: .2rem .2rem 0 0;
+        }
+        .pop-warp{
+            width:100%;
+            
+        }
+        .pop-warp .header .goodsImg img{
+            width:2.1rem;
+            height:2.1rem;
+            margin-right: .22rem;
+            border-radius: .05rem;
+        }
+        
+        .pop-warp .header{
+            padding: .3rem;
+            display:flex;
+            -webkit-box-align: end;
+            -ms-flex-align: end;
+            align-items: flex-end;
+        }
+
+        .pop-warp .header .select span{
+            color:#D92B24;
+            font-size:.4rem
+        }
+        .pop-warp .header .select span i{
+            font-size:.28rem;
+            font-style:normal
+        }
+        .pop-warp .header .select p{
+            font-size:.28rem;
+            color:#2f2f2f;
+            margin: .2rem 0 .18rem;
+        }
+        .pop-warp .info {
+            padding: 0 .3rem;
+            max-height: 5rem;
+            overflow: scroll;
+        }
+        .pop-warp .info .common h3{
+            font-size:.28rem;
+            color:#2F2F2F;
+            font-weight:normal
+        }
+        .pop-warp .info .common{
+            padding:.1rem 0 .28rem;
+            border-bottom:1px solid #EEEEEE
+        }
+        .pop-warp .info .common ul li{
+            float:left;
+            height:.54rem;
+            line-height:.54rem;
+            padding:0 .15rem;
+            background-color:#F7F7F7;
+            font-size:.26rem;
+            color:#666;
+            margin-right:.22rem;
+            border-radius:.05rem;
+            margin: .28rem .22rem 0 0;
+            box-sizing: border-box;
+            min-width: 1.2rem;
+            text-align: center;
+        }
+        .pop-warp .info .common ul li.active{
+            background: #FFF3F3;
+            border: 1px solid #D92B24;
+            color: #D92B24;
+        }
+        .pop-warp .number{
+            display:flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .3rem 0
+        }
+        .pop-warp .number .left{
+            font-size:.28rem;
+            color:#2F2F2F
+        }
+        .pop-warp .number .select-num{
+            /* background-color:#F7F7F7 */
+            display: flex;
+            align-items: center;
+        }
+        .pop-warp .number .select-num i{
+            display:inline-block;
+            font-style:normal;
+            font-size:.48rem;
+            width:.54rem;
+            color:#999999;
+            background: #f7f7f7;
+            border: 1px solid #D6D6D6;
+            height: .54rem;
+            line-height: .54rem;
+            text-align: center;
+        }
+        .pop-warp .number .select-num i.minus{
+            border-right: 0;
+            border-radius: .05rem 0 0 .05rem;
+        }
+        .pop-warp .number .select-num i.add{
+            border-left: 0;
+            border-radius: 0 .05rem .05rem 0;
+        }
+        .pop-warp .number .select-num span{
+            background-color:#fff;
+            display: inline-block;
+            width: .86rem;
+            text-align: center;
+            border: 1px solid #D6D6D6;
+            height: .54rem;
+            line-height: .54rem;
+            font-size: .3rem;
+            color: #2f2f2f;
+        }
+        .pop-warp .buyBtn button{
+            width: 100%;
+            height:.98rem;
+            line-height: .98rem;
+            text-align: center;
+            font-size: .34rem;
+            color: #fff;
+            background:linear-gradient(270deg,rgba(217,33,33,1),rgba(248,123,100,1));
+        }
+        .pop-warp .closeBtn{
+            position: absolute;
+            top: .32rem;
+            right: .3rem;
+        }
+        .pop-warp .closeBtn img{
+            width: .34rem;
+        }
+        .mint-toast{
+            z-index: 999999;
+        }
+         /* 分享弹框 */
+         .share-platform .mint-popup-bottom{
+            width:100%;
+            border-radius:.2rem .2rem 0 0
+        }
+        .share-platform .shareType h3{
+            font-size:.3rem;
+            color:#2F2F2F;
+            text-align:center;
+            line-height:.9rem;
+            font-weight:normal;
+            border-bottom:1px solid #eee
+        }
+        .share-platform .shareType ul{
+            display:flex;
+            align-items:center;
+            justify-content: space-around;
+        }
+        .share-platform .shareType ul li{
+            padding:.32rem 0;
+            text-align:center
+        }
+        .share-platform .shareType ul li img{
+            width:.98rem
+        }
+        .share-platform .shareType ul li p{
+            font-size:.24rem;
+            color:#333;
+            margin-top:.15rem
+        }
+        #mescroll{
+          width: 100%;
+          position: fixed;
+          top: 0;
+          bottom: 0;
+          height: auto;
+        }
+        .seamless-warp .anim{
+            transition: all 0.5s;
+            margin-top: -2.3rem;
+        }
+        /* 返回顶部 */
+        .mescroll-totop{
+            bottom: 3rem;
+            right: 0.14rem;
+            width: 1.05rem;
+            height: 1.05rem;
+            z-index: 990 !important;
+        }
+    </style>
+</head>
+
+<body >
+
+<div id="groupBooking" v-cloak >
+    <div id="header" ref="header" :style="{paddingTop: statusH + 'rem'}">
+        <div class="left" @click="onBack()"><img src="../../image/group_booking/backRound.png" alt=""></div>
+        <span class="right" @click="shareType = !shareType"><img src="../../image/group_booking/share.png" alt=""></span>
+    </div>
+    <!-- <div class="yujiazai" v-if="yujiazai">
+        <div class="top"></div>
+        <div class="middle" v-for="x in 20"></div>
+    </div> -->
+    <div class="common-warp mescroll" ref="mescroll" id="mescroll">    
+        <div style="margin-bottom: 2rem;">
+            <div class="goods-top">
+                <div class="swiper-container goodsBanner" style="height: 6.9rem;" >
+                    <swiper :options="swiperOption" ref="mySwiper" style="height:100%;">
+                        <swiper-slide v-for="(img, index) in groupInfo.thumbs" :key="index">
+                            <img  :src="img"  alt="" width="100%">
+                        </swiper-slide>
+                    </swiper>
+                    <div class="swiper-pagination" slot="pagination"></div>
+                </div>
+                <div class="info">
+                    <h3 class="title text-overflow_2-xzh">{{groupInfo.goodsName}}</h3>
+                    <div class="price">
+                        <p ><i>¥</i>{{collage.price || '0.00'}}<del v-if="Number(groupInfo.marketprice) > 0">¥{{groupInfo.marketprice}}</del></p>
+                        <span class="num">{{groupInfo.sales}}已拼</span>
+                    </div>
+                </div>
+            </div>
+            <div class="group-people" v-if="collageList && collageList.length > 0">
+                <h4 class="tit">选择下面的小伙伴，快速参团</h4>
+                <div class="seamless-warp">
+                    <ul class="scroll-content"  :class="{anim:animate}">
+                        <li v-for="(item, index) in collageList" :key="index">
+                            <div class="left">
+                                <img :src="item.user.avatar" alt="">
+                                <span class="text-overflow_1-xzh">{{item.user.nickname}}</span>
+                            </div>
+                            <div class="right">
+                                <div class="time">
+                                    <p>还差{{item.countNum}}人拼成</p>
+                                    <!-- <span>剩余{{setTime(item.limittime)}}</span> -->
+                                    <span>剩余{{item.dd}}:{{item.hh}}:{{item.mm}}:{{item.ss}}</span>
+                                </div>
+                                <button @click="toBuy('group', item.activityId)">立即参团</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="group-rule">
+                <div class="instru" @click="toGroupRule()">
+                    <p>拼团规则说明</p>
+                    <img src="../../image/group_booking/right.png" alt="">
+                </div>
+                <div class="abstract">
+                    <span><i>1</i>邀请/加入</span><img src="../../image/group_booking/right.png" alt="">
+                    <span><i>2</i>支付订单</span><img src="../../image/group_booking/right.png" alt="">
+                    <div class="right"><span><i>3</i>满员发货</span><p>(不满自动退款)</p></div>
+                </div>
+                <div class="coupons">
+                    <img src="../../image/group_booking/note.png" alt="">
+                    不支持使用优惠券
+                </div>
+            </div>
+            <div class="shop-info" v-if="shopInfo">
+                <div class="logo"><img :src="shopInfo.logo" alt=""></div>
+                <div class="info">
+                    <div class="top">
+                        <h3>{{shopInfo.title}}</h3>
+                        <button @click="toShop(groupInfo.spid)">进店逛逛</button>
+                    </div>
+                    <div class="bottom">
+                        <p v-for="(item, index) in shopInfo.scoreInfo" :key="index">宝贝描述<span :class="{'low': Number(item) < 4}">{{item}}</span><i v-if="Number(item) >= 4">高</i><i v-else-if=" 2 < Number(item) < 4" class="low">平</i><i v-else class="low">低</i></p>
+                    </div>
+                </div>
+            </div>
+            <div class="goods-details common-title" v-if="groupInfo.info">
+                <h3 class="detail-title">宝贝详情</h3>
+                <div class="count" v-html="groupInfo.info"></div>
+            </div>
+            <div class="group-more common-title goods-list" v-if="goodsList.length > 0">
+                <h3 class="detail-title">更多拼团</h3>
+                <div class="list" id="d26">
+                    <ul>
+                        <li class="flex" v-for="(item, index) in goodsList" :key="index">
+                            <div class="left"><img :src="item.thumb" alt=""></div>
+                            <div class="right flex_1">
+                                <h3 class="title text-overflow_1-xzh">{{item.goodsName}}</h3>
+                                <div class="num"><span class="postage">{{item.freeShippingInfo}}</span><span class="piece">已拼{{item.sales}}件</span></div>
+                                <div class="btm">
+                                    <div class="price">
+                                        <p><span>{{item.collageNum}}人拼团</span><b>¥{{item.collagePrice}}</b></p>
+                                        <span class="single">单人价¥{{item.spe_price}}</span>
+                                    </div>
+                                    <button @click="toGroupDetail(item.id)">去拼团</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="details-footer" :style="{paddingBottom: bot + 'rem'}">
+        <div class="timeEnd">距离拼团结束还剩：<span>{{time.dd}}</span>天<span>{{time.hh}}</span>时<span>{{time.mm}}</span>分<span>{{time.ss}}</span>秒</div>
+        <div class="btm">
+            <div class="left" @click="onBack()">
+                <img src="../../image/group_booking/shouye.png" alt="">
+                <p>首页</p>
+            </div>
+            <div class="single" @click="toBuy('single')">
+                <p>¥{{groupInfo.spe_price || '0.00'}}</p>
+                <span>单独购买</span>
+            </div>
+            <div class="group" @click="toBuy('group')">
+                <p>¥{{collage.price || '0.00'}}</p>
+                <span>{{collage.num || 0}}人成团</span>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="back_top" ref="backTop" >
+        <img src="../../image/group_booking/backTop.png" alt="">
+    </div> -->
+    <mt-popup
+        v-model="popupVisible"
+        position="bottom">
+        <div class="pop-warp" :style="{paddingBottom: bot + 'rem'}">
+            <div class="header">
+                <div class="goodsImg">
+                    <img src="http://native.youquanyun.com/uploads/image/1/0/2019/05/5eb6cfa7bc1acda849fe0ef3d9877180.jpg" alt="">
+                </div>
+                <div class="select">
+                    <span v-if="active1 != 0 || active2 != 0"><i>¥</i>{{price}}</span>
+                    <span v-if="active1 == 0 && active2 == 0 && buyType == 'single'"><i>¥</i>{{groupInfo.spe_price}}</span>
+                    <span v-if="active1 == 0 && active2 == 0 && buyType == 'group'"><i>¥</i>{{collage.price}}</span>
+                    <p v-if="selectTitle">已选：{{selectTitle}}</p>
+                    <p v-else>请选择</p>
+                </div>
+            </div>
+            <div class="info">
+                <div class="color common" v-if="groupInfo.attrList" v-show="groupInfo.field1">
+                    <h3>{{groupInfo.field1}}</h3>
+                    <ul class="clr">
+                        <li v-for="(item,index) in groupInfo.attrList.color" :key="index" :class="active1 === item ? 'active' : ''" @click="handClick(index,item)">{{item}}</li>
+                    </ul>
+                </div>
+                <div class="size common" v-if="groupInfo.attrList" v-show="groupInfo.field2">
+                    <h3>{{groupInfo.field2}}</h3>
+                    <ul class="clr">
+                        <li v-for="(item,index) in groupInfo.attrList.size" :key="index" @click="selected(index,item.price,item.total,item.id,item.field_2)" :class="{'active':index===iid}">{{item.field_2}}</li>
+                    </ul>
+                </div>
+                <div class="number">
+                    <span class="left">数量</span>
+                    <div class="select-num">
+                        <i class="minus" @click="reduce()">－</i>
+                        <span>{{buyNum}}</span>
+                        <i class="add" @click="add()">＋</i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="buyBtn" @click="nowBuy()">
+                <button>立即购买</button>
+            </div>
+            <div class="closeBtn" @click="popupVisible = !popupVisible">
+                <img src="../../image/group_booking/close.png" alt="">
+            </div>
+        </div>
+    </mt-popup>
+    <div class="share-platform">
+        <mt-popup
+        v-model="shareType"
+        position="bottom">
+            <div class="shareType">
+                <h3>分享到</h3>
+                <ul>
+                    <li @click="shareFri(1)">
+                        <img src="../../image/group_booking/wechat.png" alt="">
+                        <p>微信</p>
+                    </li>
+                    <li @click="shareFri(2)">
+                        <img src="../../image/group_booking/wCircle.png" alt="">
+                        <p>朋友圈</p>
+                    </li>
+                    <li @click="shareFri(3)">
+                        <img src="../../image/group_booking/QQ.png" alt="">
+                        <p>QQ</p>
+                    </li>
+                    <li @click="shareFri(5)">
+                        <img src="../../image/group_booking/Qzone.png" alt="">
+                        <p>QQ空间</p>
+                    </li>
+                </ul>
+            </div>
+        </mt-popup>
+       </div>
+    
+</div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js" charset="utf-8"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<!-- <script src="../../js/libs/vue-seamless-scroll.min.js" charset="utf-8"></script> -->
+<script src="../../js/mint-ui/index.js" charset="utf-8"></script>
+<script src="../../js/libs/common.js"></script>
+<script type="text/javascript">
+    Vue.use(window.VueAwesomeSwiper)
+    
+    var vueObj = new Vue({
+        el: "#groupBooking",
+        data:{
+            yujiazai: true,
+            dialog: false,
+            active1: 0,
+            active2: 0,
+            swiperOption: {
+                autoplay: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                    type: 'fraction'
+                },
+            },
+            ticker: null,
+            time:{dd: '0', hh: '0', mm: '0', ss: '0'},
+            isEnd:false,//倒计时是否结束
+            popupVisible: false,
+            buyNum: 1,
+            id: '',
+            groupInfo: '',
+            goodsList: '',
+            collage: '',
+            shopInfo: '',
+            activityInfo: '',
+            shareType: false,
+            iid: '',
+            price: '',
+            total: '',
+            attrId: '',
+            buyType: '',
+            selectTitle: '',
+            selectSize: '',
+            statusH: '',
+            mescroll: null,
+            collageList: '',
+            intNum: undefined,
+            animate:false,
+            activityId: '',
+            device: '',
+			bot: ''
+        },
+        created(){
+            // 沉浸式
+			let bodyHeight = document.body.clientHeight
+			let safeArea = dsBridge.call('receiveParams', 'safeAreaTop')
+			let size = (document.documentElement.clientWidth / 7.5)
+            this.statusH = (safeArea / size)
+            dsBridge.register('deviceType', (type) => {
+                this.device = type
+            })
+			let saveBottom = (dsBridge.call('receiveParams', 'safeAreaBottom1'))
+            if (saveBottom == '123'){
+               this.bot = 0
+            } else {
+               this.bot = (saveBottom/size)
+            }
+        },
+        methods: {
+            onBack: function(){
+                dsBridge.call('closeWin')
+            },
+            // 循环滑动
+            ScrollUp() {
+                this.intNum = setInterval(() => {
+                    this.animate=true;// 向上滚动的时候需要添加css3过渡动画
+                    setTimeout(()=>{
+                        this.collageList.push(this.collageList[0]);// 将数组的第一个元素添加到数组的
+                        this.collageList.shift(); //删除数组的第一个元素
+                        this.collageList.push(this.collageList[0]);// 将数组的第一个元素添加到数组的
+                        this.collageList.shift(); //删除数组的第一个元素
+                        this.animate=false;
+                    },500)
+                }, 5000);
+            },
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.id = Request['id']
+            },
+            handleScroll(){
+                let that = this
+                var headerTop= document.getElementById('mescroll').scrollTop
+                if (headerTop > 0) {
+                    that.$refs.header.style.backgroundColor = `rgba(255, 255, 255, 1)`
+                }else{
+                    that.$refs.header.style.backgroundColor = `rgba(255, 255, 255, 0)`
+                }
+                if (headerTop > 260) {
+                    that.$refs.backTop.style.display = 'block'
+                }else{
+                    that.$refs.backTop.style.display = 'none'
+                }
+            },
+            // 返回顶部
+            // backTop () {
+            //     let body = document.getElementById('mescroll')
+            //     let time = ''
+            //     time = setInterval(() => {
+            //         let scroll = body.scrollTop
+            //         let speed = Math.floor(scroll / 10)
+            //         if (speed <= 5) {
+            //             body.scrollTop = 0
+            //             clearInterval(time)
+            //         } else {
+            //             body.scrollTop = scroll - speed
+            //         }
+            //     }, 10)
+            // },
+            getList: function() {
+                Http.post(Http.HOST+Http.API_URL.RIGHTERINDEX,{},true).then((res)=>{
+                    this.yujiazai = false
+                    if(res.code === 0) {
+                        this.info = res.data;
+                    }
+                })
+            },
+            // 循环倒计时
+            beginTimer(collageList) { //这个计时器是每秒减去数组中指定字段的时  
+                this.ticker = setInterval(() => {
+                    console.log('date', 2)
+                    for (let i = 0, len = collageList.length; i < len; i++) {
+                        const item = collageList[i];
+                        if (item.limittime > 0) {
+                            item.limittime = item.limittime - 1;
+                        }
+                    }
+                }, 1000);
+            },
+            setTime(time) { //这个函数是每秒把时间重新计算下
+                console.log('ime', time)
+                if (time >= 0) {
+                    let d = Math.floor(time / 60 / 60 / 24);
+                    let h = Math.floor((time / 60 / 60) % 24);
+                    let m = Math.floor((time / 60) % 60);
+                    let s = Math.floor((time) % 60);
+                    if(d == 0){
+                        return h+':'+m+':'+s;
+                    }else{
+                        return d+':'+h+':'+m+':'+s;
+                    }
+                }else{
+                    return 0+':'+0+':'+0;
+                }
+            },
+            
+            timeFormat: function (param) {
+                return param < 10 ? '0' + param : param;
+            },
+            countDown: function (it) {
+                var TT = setInterval(() => {
+                    for (let key in this.collageList) {
+                        let limittime = this.collageList[key]["limittime"]-1
+                        this.$set(this.collageList[key], 'limittime', limittime)
+                        // console.log(limittime)
+                        let time = limittime;
+                    if (limittime > 0) {
+                        let dd = parseInt(time / (60 * 60 * 24));
+                        let hh = parseInt(time % (60 * 60 * 24) / 3600);
+                        let mm = parseInt(time % (60 * 60 * 24) % 3600 / 60);
+                        let ss = parseInt(time % (60 * 60 * 24) % 3600 % 60);
+                        obj = {
+                            dd: this.timeFormat(dd),
+                            // hh: this.timeFormat(hh),
+                            hh: hh,
+                            mm: this.timeFormat(mm),
+                            ss: this.timeFormat(ss)
+                        };
+                        console.log('dd', limittime)
+                        if (limittime == 0) {
+                            clearInterval(TT)
+                            return
+                        }
+                    } else {
+                        obj = {
+                            dd: '00',
+                            hh: '00',
+                            mm: '00',
+                            ss: '00'
+                        };
+                    }
+                    this.$set(this.collageList[key], 'hh', obj.hh) //下单倒计时
+                    this.$set(this.collageList[key], 'mm', obj.mm)
+                    this.$set(this.collageList[key], 'ss', obj.ss)
+                    // if(djs=='00:00'){
+                    //     // this.list[key].statusInfo = '已取消'
+                    // }
+                    // console.log(this.hh,this.mm,this.ss)
+                    }
+                }, 1000)
+            
+            },
+            
+            // 商品倒计时
+            setEndTime(limittime){
+                var that = this;
+                var interval = setInterval(function timestampToTime(){
+                    var date = limittime --; //剩余的秒数
+                    if(date <= 0){
+                        that.isEnd = true;
+                        clearInterval(interval)
+                    }else{
+                        that.time.dd = parseInt(date / 60 / 60 / 24 , 10);
+                        that.time.hh = parseInt(date / 60 / 60 % 24 , 10);
+                        if(that.time.hh < 10){
+                            that.time.hh = "0" +　that.time.hh
+                        }
+                        that.time.mm = parseInt(date / 60 % 60, 10);//计算剩余的分钟
+                        if(that.time.mm < 10){
+                            that.time.mm = "0" +　that.time.mm
+                        } 
+                        that.time.ss = parseInt(date % 60, 10);//计算剩余的秒数 
+                        if(that.time.ss < 10){
+                            that.time.ss = "0" +　that.time.ss
+                        }
+                    }
+                },1000);
+            },
+             // 去拼团
+             toGroupDetail(id){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/goodsDetails.html?id=' + id,type: 'web'})
+            },
+            // 购买弹窗
+            toBuy(type, id){
+                this.active1 = 0
+                this.active2 = 0
+                this.iid = ''
+                this.selectTitle = ''
+				this.attrId = ''
+                this.buyType = type
+                if(type == 'group'){
+                    if(id){
+                        this.activityId = id
+                    }else{
+                        this.activityId = this.activityInfo.activityId
+                    }
+                }else if(type == 'single'){
+                    this.activityId = ''
+                }
+                this.popupVisible = true
+            },
+            // 减少
+            reduce(){
+                if(this.buyNum <= this.groupInfo.goodsNumMin){
+                    this.$toast({
+                        message: '不能再少了哦~',
+                        position: 'bottom',
+                        duration: 2000
+                    });
+                    return
+                }else{
+                    this.buyNum --
+                }
+            },
+            // 增加
+            add(){
+                this.buyNum ++
+            },
+            // 商品详情
+            getInfo(){
+                Http.post(Http.HOST+Http.API_URL.GROUPGOODSDETAIL,{goodsId: this.id},true).then((res)=>{
+                    this.yujiazai = false
+                    if(res.code === 0){
+                        this.groupInfo = res.data.detail;
+                        this.activityInfo = res.data.detail.activityInfo;
+                        // this.activityId = res.data.detail.activityInfo.activityId;
+                        this.collage = res.data.detail.activityInfo.collage;
+                        this.collageList = res.data.detail.activityInfo.collageList
+                        this.shopInfo = res.data.detail.shopInfo
+                        this.buyNum = this.groupInfo.goodsNumMin
+                        // 商品倒计时
+                       
+                        this.$nextTick(() => {
+                            this.setEndTime(this.activityInfo.limittime)
+                            // this.beginTimer(this.collageList)
+                            this.countDown();
+                            if(this.collageList && this.collageList.length > 2){
+                                this.ScrollUp()
+                            }
+                        })
+                    }else{
+                        this.$toast({message: res.msg});
+                    }
+                })
+            },
+            getList(){
+                Http.post(Http.HOST+Http.API_URL.GROUPGOODSLIST,{},true).then((res)=>{
+                    if (res.code === 0) {
+                        this.goodsList = res.data.list
+                    }
+                })
+            },
+            // 选择尺寸
+            selected (i, price, total, itemId, size) {
+                this.iid = i
+                if(this.buyType == 'single'){
+                    this.price = parseFloat(this.groupInfo.addPrice) + parseFloat(price)
+                }else if(this.buyType == 'group'){
+                    this.price = parseFloat(this.activityInfo.addPrice) + parseFloat(price)
+                }
+                this.total = total
+                this.attrId = itemId
+                this.selectSize = size
+                this.selectTitle = this.active1 + '; ' + this.selectSize;
+            },
+            // 选择颜色
+            handClick (index, item) {
+                this.iid = 0
+                this.active1 = item
+                console.log('size', this.groupInfo.attrList.size)
+                this.selectTitle = item + '; ' + this.groupInfo.attrList.size[0].field_2;
+                let id = this.groupInfo.attrList.field[index].id
+                this.selectIn(id)
+            },
+            selectIn (key) {
+                Http.post(Http.HOST+Http.API_URL.GROUPATTRLIST,{attrId: key},true).then((res)=>{
+                    this.groupInfo.attrList.size = res.data.list
+                    if(this.buyType == 'single'){
+                        this.price = parseFloat(res.data.list[0].price) + parseFloat(this.groupInfo.addPrice)
+                    }else if(this.buyType == 'group'){
+                        this.price = parseFloat(res.data.list[0].price) + parseFloat(this.activityInfo.addPrice)
+                    }
+                    this.attrId = res.data.list[0].id
+                   
+                })
+            },
+            nowBuy (){
+                console.log('id',this.activityId)
+                if (this.groupInfo.field1) {
+                    if (this.attrId === '') {
+                        this.$toast({
+                            message: '请选择规格',
+                            position: 'bottom',
+                            duration: 2000
+                        });
+                        return
+                    }
+                }
+                Http.post(Http.HOST+Http.API_URL.GROUPCARDINTERIM,{goodsId: this.id, goodsNum: this.buyNum, attrId: this.attrId, activityId: this.activityId},true).then((res)=>{
+                    if(res.code == 0){
+                        dsBridge.call('openWin', '/mall/firmOrder?data='+ res.data)
+                        this.popupVisible = false
+                    }else{
+                        this.$toast({message: res.msg});
+                    }
+                })    
+                
+            },
+            // 规则
+            toGroupRule(){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/groupRule.html',type: 'web'})
+            },
+            upCallback (page,mescroll) {
+                Http.post(Http.HOST+Http.API_URL.GROUPGOODSLIST,{page: page.num, cid: this.cid},true).then((res)=>{
+                    if (res.code === 0) {
+                        let arr = res.data.list === '' ? [] : res.data.list
+                        if (page.num === 1) this.goodsList = []
+                        this.goodsList = this.goodsList.concat(arr)
+                        this.$nextTick(() => {
+                            mescroll.endSuccess(res.data.list.length, true)
+                        })
+                    }
+                })
+            },
+        // 分享
+        shareFri (type) {
+            let that = this
+            if (that.userPhone === '' || that.userPhone === null){
+                this.$vux.toast.text('您还未绑定手机号，先去绑定吧！')
+                setTimeout(function () {
+                dsBridge.call("openWin", '/judgemobile')
+                }, 2000)
+                return
+            }
+            let link = ''
+            if (this.device === 'iOS') {
+                link = that.groupInfo.shareInfo.link.ios
+            } else {
+                link = that.groupInfo.shareInfo.link.android
+            }
+            let info = {
+                title: that.groupInfo.shareInfo.title,
+                description: that.groupInfo.shareInfo.desc,
+                url: that.groupInfo.shareInfo.thumb,
+                contentUrl: that.groupInfo.shareInfo.url || link || that.groupInfo.shareInfo.link.merge,
+                type: type
+            }
+            dsBridge.call("inviteShare", info, function(ret){
+                if (ret === 'success') {
+                    
+                } else {
+                    
+                }
+            })
+            },
+            // 进店逛逛
+            toShop(spid){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/mall/mallShop.html?spid=' + spid,type: 'web'})
+            },
+        },
+        mounted(){
+            this.getParameter()
+            this.getInfo()
+            window.addEventListener('scroll', this.handleScroll, true);
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+                isLock: true,
+            },
+            up: {
+                lazyLoad: {
+		        	use: true, // 是否开启懒加载,默认false
+			        attr: 'imgurl', // 网络地址的属性名 (图片加载成功会移除该属性): <img imgurl='网络图  src='占位图''/>
+			        showClass: 'mescroll-lazy-in', // 图片加载成功的显示动画: 渐变显示,参见mescroll.css
+			        delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
+			        offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
+                },
+                toTop: {
+                    //回到顶部按钮
+                    src: "../../image/group_booking/backTop.png", //图片路径,默认null,支持网络图
+                    offset: 1000 //列表滚动1000px才显示回到顶部按钮	
+                },
+              callback: this.upCallback, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 10 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+              noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+              empty: {
+                    warpId: 'd26',
+                    icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                    tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                }
+            }
+          })
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>我的积分</title>
+    <meta name="description" content="U券_淘宝客系统">
+    <meta name="keywords" content="U券_淘宝客系统">
+    <meta name="apple-mobile-web-app-capable" content="yes" /> <!-- apple devices fullscreen -->
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <link rel="stylesheet" href="../../js/tab/style.css">
+    <style>
+        body {
+            background: #ffffff;
+        }
+        .title_core{
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 9;
+        }
+        .title {
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .title_rig{
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+            margin-left: 1.4rem;
+        }
+        .tit_banner{
+            width:100%;
+            height:2.2rem;
+            background:linear-gradient(-90deg,rgba(217,33,33,1),rgba(255,101,73,1));
+            text-align: center;
+            overflow: hidden;
+        }
+        .tit_banner .tit_banner_num{
+            font-size: .48rem;
+            font-weight:bold;
+            color:rgba(255,255,255,1);
+            margin-top: .6rem;
+            margin-bottom: .2rem;
+        }
+        .tit_banner .tit_banner_txt{
+            font-size: .24rem;
+            font-weight:500;
+            color:rgba(255,255,255,1);
+        }
+/* nav start */
+        .nav_tab_box{
+            width: 100%;
+            height: 1rem;
+            background: #ffffff;
+            position: relative;
+            border-bottom: .01rem rgba(255,255,255,1) solid;
+            /* border-bottom: .01rem red solid; */
+        }
+        .nav_tab_box .vux-tab-wrap{
+            width: 100%;
+            position: absolute;
+            top: 0;
+            padding-top: 0;
+        }
+        .nav_tab_box .vux-tab-container{
+            height: .9rem;
+        }
+        .nav_tab_box .vux-tab-container .vux-tab{
+            height: .9rem;
+        }
+        .vux-tab .vux-tab-item{
+            line-height: .9rem;
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+        }
+        .vux-tab .vux-tab-item.vux-tab-selected{
+            font-size: .3rem;
+            font-weight:bold;
+            color:rgba(217,33,33,1);
+        }
+        .nav_tab_box .vux-tab .vux-tab-item{
+            background: none;
+        }
+        .nav_tab_box .nav_tab_cen{
+            position: absolute;
+            left: 50%;
+            top: .3rem;
+            width:1px;
+            height:50px;
+            background:rgba(238,238,238,1);
+        }
+        /* nav end */
+        .szmx_core_box{
+            /* margin-top: 4.08rem; */
+            overflow: hidden;
+            /* padding: .2rem .3rem; */
+        }
+        .szmx_core_box .goods_list{
+            padding:  0 .3rem;
+            height: 2.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: .01rem rgba(238,238,238,1) solid;
+        }
+        .goods_list .goods_list_pic{
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: .05rem;
+            overflow: hidden;
+        }
+        .goods_list_pic img{
+            width: 100%;
+            height: auto;
+        }
+        .goods_list .goods_list_tit{
+            width: 5.05rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(51,51,51,1);
+        }
+        .goods_list_jifen_box{
+            display: flex;
+            justify-content: space-between;
+            margin-top: .3rem;
+        }
+        .goods_list_jifen span:nth-child(2){
+            font-size: .32rem;
+            font-weight:bold;
+            color:rgba(217,33,33,1);
+        }
+        .goods_list_jifen span:nth-child(1),
+        .goods_list_jifen span:nth-child(3){
+            font-size: .22rem;
+            font-weight: 500;
+            color:rgba(217,33,33,1);
+        }
+        .goods_list_jifen_box .goods_list_num{
+            font-size: .22rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+        }
+
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: 4.08rem;
+            bottom: 0;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="title_core">
+            <div class="title">
+                <img src="./../../image/back.png" alt="" @click='onBack'>
+                <div class="title_text">我的积分</div>
+                <div class="title_rig" @click="detail()">积分明细</div>
+            </div>
+            <div class="tit_banner">
+                <div class="tit_banner_num">{{jifenNum}}</div>
+                <div class="tit_banner_txt">我的积分</div>
+            </div>
+            <div class="nav_tab_box">
+                <tab :line-width="3" custom-bar-width=".4rem" active-color="#D92121" 
+                default-color="#333" v-model="type" class="resultTab" >
+                    <tab-item @on-item-click="resetTab(2)">已发货</tab-item>
+                    <tab-item @on-item-click="resetTab(1)">待发货</tab-item>
+                </tab>
+                <div class="nav_tab_cen"></div>
+            </div>
+        </div>
+        <div class="szmx_core_box">
+            <div class="common-warp mescroll" ref="mescroll" id="mescroll" >
+                <div class="warp" id="d26">
+                    <div class="goods_list" v-for="(item,index) in goodsList" :key="index">
+                        <div class="goods_list_pic">
+                            <img :imgurl="item.thumb" alt="">
+                        </div>
+                        <div>
+                            <div class="goods_list_tit">{{item.title}}</div>
+                            <div class="goods_list_jifen_box">
+                                <div class="goods_list_jifen"><span>返</span><span>{{item.send_points}}</span><span>积分</span></div>
+                                <div class="goods_list_num">*{{item.goods_num}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=201910112231"></script> -->
+<script src="../../js/http.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<script src="../../js/tab/index.js"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            type: 0,/* 点击的标题的index */
+            mescroll: null,
+            goodsList :[],
+            jifenNum: '',
+            tabclass: '2' //2已发货 1待发货
+        },
+        mounted(){
+            // window.addEventListener('scroll', this.handleScroll, true);
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+                isLock: false,
+            },
+            up: {
+                lazyLoad: {
+		        	use: true, // 是否开启懒加载,默认false
+			        attr: 'imgurl', // 网络地址的属性名 (图片加载成功会移除该属性): <img imgurl='网络图  src='占位图''/>
+			        showClass: 'mescroll-lazy-in', // 图片加载成功的显示动画: 渐变显示,参见mescroll.css
+			        delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
+			        offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
+                },
+                toTop: {
+                    //回到顶部按钮
+                    src: "../../image/group_booking/backTop.png", //图片路径,默认null,支持网络图
+                    offset: 1000 //列表滚动1000px才显示回到顶部按钮	
+                },
+              callback: this.upCallback, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 10 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">已显示全部订单</p>',
+              noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+              empty: {
+                    warpId: 'd26',
+                    icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                    tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                }
+            }
+          })
+        },
+        methods: {
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            resetTab (index){
+               this.tabclass = index
+               this.reset()
+            },
+            reset(){
+            this.goodsList = []
+            this.mescroll.setPageNum(1);
+            this.mescroll.resetUpScroll()
+            },
+            upCallback (page,mescroll) {
+                Http.post(Http.HOST+Http.API_URL.ORDERLIST,{page: page.num,order_status:this.tabclass},true).then((res)=>{
+                    if (res.code === 0) {
+                        let arr = res.data.data === '' ? [] : res.data.data
+                        if (page.num === 1) this.goodsList = []
+                        this.jifenNum = res.data.credit1
+                        this.goodsList = this.goodsList.concat(arr)
+                        this.$nextTick(() => {
+                            mescroll.endSuccess(res.data.data.length, true)
+                        })
+                    }
+                })
+            },
+            detail () {
+                dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/miaosheng/szmx_detail.html', type: 'web' })
+                // window.location.href = 'http://172.16.1.239:3000/uqWeb/html/miaosheng/szmx_detail.html'
+            }
+        }
+    })
+</script>
+
+</html>

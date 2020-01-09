@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>活动专区</title>
+    <meta name="description" content="U券_淘宝客系统">
+    <meta name="keywords" content="U券_淘宝客系统">
+    <meta name="apple-mobile-web-app-capable" content="yes" /> <!-- apple devices fullscreen -->
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    
+    <style>
+        html, body{
+            background: #f2f2f2;
+            height: 100vh;
+        }
+        .title {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            z-index: 9;
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .swiper_prefecture{
+            background: #f2f2f2;
+        }
+        .swiper_prefecture .swiper-slide{
+            display: flex;
+            justify-content: center;
+        }
+        .swiper_prefecture img{
+            width: 95%;
+            height: 3.08rem;
+        }
+        .swiper-pagination.swiper-pagination-bullets{
+            bottom: 26px;
+            left: 0;
+            width: 100%;
+            background: none;
+        }
+        .swiper-pagination .swiper-pagination-bullet {
+            background: #ffffff;
+            width: .12rem;
+            height: .12rem;
+            opacity: .8;
+            margin-right: .12rem;
+        }
+        .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active{
+            width: .12rem;
+            height: .12rem;
+            background: #D92121;
+        }
+        /* prefecture_tit_box */
+        .prefecture_tit_box{
+            width: 100%;
+            height: 1.5rem;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+        }
+        .prefecture_tit_box .prefecture_tit_pic{
+            width: 1.03rem;
+            height: 1.03rem;
+            margin-left: .33rem;
+            margin-right: .22rem;
+        }
+        .prefecture_tit_box .integral_box{
+            width: 49%;
+        }
+        .prefecture_tit_box .center_box{
+            width: 2%;
+            width: .01rem;
+            height: .68rem;
+            background:rgba(220,220,220,1);
+            border-radius: .1rem;
+        }
+        .integral_box{
+            display: flex;
+            align-items: center;
+        }
+        .integral_box .integral_tit1{
+            font-size: .34rem;
+            font-weight:bold;
+            color:rgba(51,51,51,1);
+        }
+        .integral_box .integral_tit2{
+            font-size: .24rem;
+            font-weight:400;
+            color:rgba(51,51,51,1);
+            margin-top: .1rem;
+        }
+        .prefecture_goods_tit{
+            width: 100%;
+            height: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .prefecture_goods_tit{
+            width: 100%;
+            background: #ffffff;
+            overflow: hidden;
+        }
+        .prefecture_goods_tit >div:nth-child(1){
+            margin-left: .3rem;
+            margin-right: .15rem;
+            width: .05rem;
+            height: .32rem;
+            background: #D92121;
+            border-radius: .02rem;
+        }
+        .prefecture_goods_tit >div:nth-child(2){
+            font-size: .32rem;
+            font-weight:800;
+            color:rgba(51,51,51,1);
+        }
+        .prefecture_goods_core{
+            padding: 0 .25rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: .25rem;
+        }
+        .prefecture_goods_core .prefecture_goods_box{
+            width: 3.4rem;
+            height: 4.9rem;
+            border-radius: .1rem;
+            background: #ffffff;
+            margin-bottom: .25rem;
+            overflow: hidden;
+        }
+        .prefecture_goods_box .prefecture_goods_pic{
+            width: 100%;
+            height: 3.4rem;
+            overflow: hidden;
+        }
+        .prefecture_goods_pic img{
+            width: 100%;
+            height: 100%;
+        }
+        .prefecture_goods_box .prefecture_goods_titi{
+            font-size: .26rem;
+            font-weight:500;
+            color:rgba(51,51,51,1);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            padding: 0 .14rem;
+            min-height: .7rem;
+        }
+        .prefecture_goods_box .prefecture_goods_price{
+            display: flex;
+            margin-top: .15rem;
+        }
+        .prefecture_goods_price .prefecture_goods_price1 span:nth-child(1){
+            font-size: .24rem;
+            font-weight:500;
+            color:rgba(217,33,33,1);
+            margin-left: .1rem;
+            margin-right: .03rem;
+        }
+        .prefecture_goods_price .prefecture_goods_price1 span:nth-child(2){
+            font-size:.32rem;
+            font-weight:500;
+            color:rgba(217,33,33,1);
+            margin-right: .2rem;
+        }
+        .prefecture_goods_price .prefecture_goods_price2{
+            font-size: .3rem;
+            font-weight:500;
+            text-decoration:line-through;
+            color:rgba(153,153,153,1);
+        }
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: .88rem;
+            bottom: 0;
+            height: auto;
+        }
+        .order_title_top_inp.bg{
+            background: #fff;
+        }
+        .order_title_top_inp {
+    display: flex;
+    align-items: center;
+    height: .88rem;
+    padding: 0 .3rem;
+    border-bottom: 1px solid #eee;
+}
+.order_title_top_inp div{
+    width: .6rem;
+    height: .6rem;
+    background: #f2f2f2;
+}
+.order_title_top_inp div:nth-child(1){
+    
+    border-radius: .3rem 0 0 .3rem;
+}
+.order_title_top_inp div:nth-child(3){
+    border-radius: 0 .3rem .3rem 0;
+}
+.order_title_top_inp div img{
+    width: .32rem;
+    height: .32rem;
+    margin: .14rem;
+}
+.order_title_top_inp input{
+    width: 4.5rem;
+    height: .6rem;
+    background: #f2f2f2;
+    font-size: .26rem;
+    /* -webkit-appearance: none; */
+    border-radius: 0;
+    outline:none;
+}
+.order_title_top_inp span{
+    width: 1rem;
+    height: .6rem;
+    font-size: .26rem;
+    line-height: .6rem;
+    text-align: center;
+    margin-left: .2rem;
+}
+    </style>
+</head>
+
+<body>
+       
+    <div id="prefecture" v-cloak >
+        <div class="title">
+            <img src="./../../image/back.png" alt="" >
+            <div class="title_text">活动专区</div>
+        </div>
+        <div class="common-warp mescroll" ref="mescroll" id="mescroll" >
+            <div class="warp" id="d26">
+                <div class="swiper-container gallery-thumbs swiper-nav">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide pr">标题1</div>
+                    <div class="swiper-slide pr">标题2</div>
+                    <div class="swiper-slide pr">标题3</div>
+                    <div class="swiper-slide pr">标题4</div>
+                  </div>
+                </div>
+                <div class="swiper-container gallery-top swiper-cont">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide">内容1</div>
+                    <div class="swiper-slide">内容2</div>
+                    <div class="swiper-slide">内容3</div>
+                    <div class="swiper-slide">内容4</div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=201910112231"></script> -->
+<script src="../../js/http.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<script src="../../js/libs/common.js"></script>
+<script type="text/javascript">
+    var galleryThumbs = new Swiper('.gallery-thumbs', {
+        spaceBetween: 3,
+        slidesPerView: 3,
+        freeMode: true,
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        
+      });
+      var galleryTop = new Swiper('.gallery-top', {
+        spaceBetween: 3,
+        autoplay:false,//自动轮播关闭
+        autoHeight: true,//高度自适应
+   
+         pagination: {
+          el: '.swiper-pagination-h',
+          clickable: true,
+        },
+        thumbs: {
+          swiper: galleryThumbs,
+        }
+      })
+        
+</script>
+
+</html>

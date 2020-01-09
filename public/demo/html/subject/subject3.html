@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>专题3</title>
+    <script>
+      (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style media="screen">
+	  html,body { background: #f7f7f7;}
+        #vue-app{
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+          }
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:bold;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .list{
+          width: 100%;
+        }
+        .list .banner{
+          width: 100%;
+          height: 5.82rem;
+        }
+        .list .banner img{
+          height: 100%;
+          width: 100%;
+        }
+        .list-top{
+          width: 100%;
+        }
+        .top-title{
+          height: 1.5rem;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .top-title img{
+          width: 3.67rem;
+          height: 0.81rem;
+        }
+        .list-top .top-con{
+          width: 100%;
+        }
+        .list-top .top-con li{
+          width:6.2rem;
+          height:2.7rem;
+          background:rgba(255,255,255,1);
+          border-radius:0.1rem;
+          margin: 0 auto;
+          padding: 0.35rem 0.35rem;
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 0.2rem;
+        }
+        /* .list-top .top-con li:first-child{
+          margin-bottom: 0.2rem;
+        } */
+        .list-top .top-con li img{
+          width:2.68rem;
+          height:2.7rem;
+          border-radius:0.1rem;
+          /* background: skyblue; */
+        }
+        .list-top .top-con li .goods-info{
+          width: 3.21rem;
+          height: 2.7rem;
+          /* background: cyan; */
+          display: flex;
+          flex-direction: column;
+        }
+        .list-top .top-con li .goods-info h3{
+          width:2.6rem;
+          height:0.8rem;
+          font-size:0.3rem;
+          font-weight:bold;
+          color:rgba(47,47,47,1);
+          padding-left: 0.12rem;
+          line-height: 0.4rem;
+        }
+        .list-top .top-con li .goods-info .ticketBox{
+          height: 0.44rem;
+          padding-left: 0.12rem;
+          margin: 0.3rem 0 0.34rem 0;
+          display: flex;
+        }
+        .list-top .top-con li .goods-info .ticketBox .quan{
+          height: 0.44rem;
+          width: 1.15rem;
+          background:rgba(169,54,247,1);
+          border-radius:0.03rem;
+          font-size:0.22rem;
+          font-weight:500;
+          color:rgba(255,255,255,1);
+          line-height:0.44rem;
+          text-align: center;
+          position: relative;
+        }
+        .ticketBox .quan P:first-child{
+          width: 0.1rem;
+          height: 0.2rem;
+          position: absolute;
+          left: 0;
+          top: 0.12rem;
+          background: #FFFFFF;
+          border-radius:0 0.1rem 0.1rem 0;
+        }
+        .ticketBox .quan P:last-child{
+          width: 0.1rem;
+          height: 0.2rem;
+          position: absolute;
+          right: 0;
+          top: 0.12rem;
+          background: #FFFFFF;
+          border-radius:0.1rem 0 0 0.1rem;
+        }
+        .list-top .top-con li .goods-info .ticketBox .zhuan{
+          width: 1.5rem;
+          height: 0.4rem;
+          border: 0.02rem solid rgba(169,54,247,1);
+          border-radius: 0.03rem;
+          margin-left: 0.14rem;
+          font-size:0.22rem;
+          font-weight:500;
+          color:rgba(169,54,247,1);
+          line-height:0.4rem;
+          text-align: center;
+        }
+        .price-box{
+          width:3.21rem;
+          height:0.7rem;
+          background:linear-gradient(90deg,rgba(198,15,222,1),rgba(98,50,246,1));
+          box-shadow:0 0.05rem 0.05rem 0 rgba(0, 0, 0, 0.19);
+          border-radius: 0.1rem;
+          position: relative;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+        }
+        .price-box-left{
+          width:0.56rem;
+          height:0.9rem;
+          background:rgba(255,242,116,1);
+          position: absolute;
+          left: 0.11rem;
+          top: -0.12rem;
+          text-align: center;
+          font-size:0.26rem;
+          font-weight:bold;
+          color:rgba(120,31,229,1);
+          line-height: 0.3rem;
+          padding-top: 0.04rem;
+        }
+        .active-price{
+          font-size:0.4rem;
+          font-weight:500;
+          color:rgba(255,255,255,1);
+        }
+        .active-price span{
+          font-size: 0.24rem;
+        }
+        .buyBtn{
+          width:1rem;
+          height:0.32rem;
+          background:rgba(59,10,150,1);
+          border-radius:0.16rem;
+          font-size:0.16rem;
+          font-weight:bold;
+          color:rgba(255,255,255,1);
+          line-height:0.32rem;
+          margin:0 0.07rem;
+          text-align: center; 
+        }
+        .list-bottom{
+          width: 100%;
+        }
+        .list-bottom .bottom-con{
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          /* justify-content: center; */
+        }
+        .bottom-con li{
+          height: 5.2rem;
+          width: 3.35rem;
+          background:rgba(255,255,255,1);
+          border-radius:0.1rem;
+        }
+        .bottom-con li:nth-child(odd){
+          margin: 0 0.2rem 0.2rem 0.3rem;
+        }
+        .bottom-con li img{
+          width:3.35rem;
+          height:3.35rem;
+          border-radius:0.1rem 0.1rem 0 0;
+        }
+        .bottom-con li h3{
+          width:3.1rem;
+          height:0.66rem;
+          font-size:0.26rem;
+          font-weight:500;
+          color:rgba(47,47,47,1);
+          line-height:0.66rem;
+          padding-left: 0.09rem;
+        }
+        .bottom-con li .ticketBox{
+          height: 0.38rem;
+          display: flex;
+          margin-bottom: 0.2rem;
+          padding-left: 0.1rem;
+        }
+        .bottom-con li .ticketBox .quan{
+          height: 0.38rem;
+          width: 1rem;
+          font-size:0.18rem;
+          font-weight:500;
+          color:rgba(255,255,255,1);
+          line-height:0.38rem;
+          text-align: center;
+          position: relative;
+          background:rgba(169,54,247,1);
+          border-radius:0.03rem;
+          
+        }
+        .bottom-con li .ticketBox .quan p:first-child{
+          width: 0.08rem;
+          height: 0.16rem;
+          position: absolute;
+          left: 0;
+          top: 0.11rem;
+          background: #FFFFFF;
+          border-radius:0 0.08rem 0.08rem 0;
+        }
+        .bottom-con li .ticketBox .quan P:last-child{
+          width: 0.08rem;
+          height: 0.16rem;
+          position: absolute;
+          right: 0;
+          top: 0.11rem;
+          background: #FFFFFF;
+          border-radius:0.08rem 0 0 0.08rem;
+        }
+        .bottom-con li .ticketBox .zhuan{
+          width:1rem;
+          height:0.36rem;
+          border:1px solid rgba(169,54,247,1);
+          border-radius:0.05rem;
+          margin-left: 0.21rem;
+          font-size:0.2rem;
+          font-weight:500;
+          color:rgba(169,54,247,1);
+          line-height:0.36rem;
+          text-align: center;
+        }
+        .goods-price{
+          height: 0.4rem;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          line-height: 0.4rem;
+        }
+        .goods-price .price{
+          font-size:0.24rem;
+          font-weight:bold;
+          color:rgba(169,54,247,1);
+          margin-left: 0.1rem;
+        }
+        .goods-price .price span{
+          font-size: 0.4rem;
+        }
+        .goods-price .yishou{
+          font-size:0.22rem;
+          font-family:PingFang SC;
+          font-weight:500;
+          color:rgba(153,153,153,1);
+          margin-right: 0.23rem;
+        }
+        #mescroll{
+        width: 100%;
+        position: fixed;
+        top: 0.88rem;
+        bottom: 0;
+        height: auto;
+      }
+
+    </style>
+</head>
+
+<body>
+  <div id="vue-app"  v-cloak>
+    <div class="header">
+      <div  v-if='isShowBackBtn' class="left">
+          <div class="back" @click="onBack"></div>
+      </div>
+      <div class="center">{{styleInfo.title}}</div>
+    </div>
+    <div class='common-warp mescroll' ref="mescroll" id="mescroll" :style="{background:styleInfo.bgcolor}"> 
+      <div class="list">
+        <div class="banner">
+          <img :src="styleInfo.url">
+        </div>
+        <div class="list-top">
+          <div class="top-title">
+            <img src="../../image/subject/baokuan.png">
+          </div>
+          <ul class="top-con">
+            <li>
+              <img :imgurl="goods1.thumb" @click="toDetail(goods1)">
+              <div class="goods-info">
+                <h3 class="text-overflow_2-xzh">
+                  {{ goods1.title }}
+                </h3>
+                <div class="ticketBox">
+                  <div class="quan">{{goods1.coupon_money}}元券<p></p><p></p></div>
+                  <div class="zhuan">预估赚￥{{goods1.commission_money}}</div>
+                </div>
+                <div class="price-box">
+                  <div class="price-box-left">活</br>动</br>价</div>
+                  <div class="active-price">{{goods1price1}}.<span>{{goods1price2}}</span></div>
+                  <div class="buyBtn" @click="toDetail(goods1)">点击购买</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              
+              <div class="goods-info">
+                <h3 class="text-overflow_2-xzh">
+                    {{ goods2.title }}
+                </h3>
+                <div class="ticketBox">
+                  <div class="quan">{{goods2.coupon_money}}元券<p></p><p></p></div>
+                  <div class="zhuan">预估赚￥{{goods2.commission_money}}</div>
+                </div>
+                <div class="price-box">
+                  <div class="price-box-left">活</br>动</br>价</div>
+                  <div class="active-price">{{goods2price1}}.<span>{{goods2price2}}</span></div>
+                  <div class="buyBtn" @click="toDetail(goods2)">点击购买</div>
+                </div>
+              </div>
+              <img :imgurl="goods2.thumb" @click="toDetail(goods2)">
+            </li>
+          </ul>
+        </div>
+        <div class="list-bottom">
+          <div class="top-title">
+            <img src="../../image/subject/haohuo.png">
+          </div>
+          <ul class="bottom-con">
+            <li v-for="(item, index) in goodsList" :key="index"  @click="toDetail(item)">
+              <img :imgurl="item.thumb">
+              <h3 class="text-overflow_1-xzh">{{item.title}}</h3>
+              <div class="ticketBox">
+                <div class="quan">{{item.coupon_money}}元券<p></p><p></p></div>
+                <div class="zhuan">赚{{item.commission_money}}</div>
+              </div>
+              <div class="goods-price">
+                <p class="price">￥<span>{{item.coupon_price}}</span></p>
+                <p class="yishou">已售{{item.volume}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+	</div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js"></script>
+<!-- 线上路径，线上需开启 -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<!-- 本地调试路径 -->
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+          type:'', //商品源类型
+          materialId:'', //分类id
+          dataList: [],
+          mescroll: null,
+          goodsList:[],
+          goodsListHeader:[],
+          id:'',
+          styleInfo:'',
+          goods1:'',
+          goods2:'',
+          goods1price1:'',
+          goods1price2:'',
+          goods2price1:'',
+          goods2price2:'',
+          tabList:[],
+        },
+        created: function() {
+          // 获取专题模板id
+          this.getParameter()
+        },
+        mounted: function(){
+          // 获取自定义样式
+          this.getStyle()
+          this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+              
+            },
+            
+            up: {
+              callback: this.upCallback, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 10 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+              htmlLoading: '',
+              noMoreSize: 5,
+              toTop: {
+                src: '../../image/back_top.png',
+                offset: 1000
+              },
+              empty: {
+                warpId: 'empty',
+                icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                 tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+              },
+              lazyLoad: {
+                  use: true, // 是否开启懒加载,默认false
+                  attr: 'imgurl', // 网络地址的属性名 (图片加载成功会移除该属性): <img imgurl='网络图  src='占位图''/>
+                  showClass: 'mescroll-lazy-in', // 图片加载成功的显示动画: 渐变显示,参见mescroll.css
+                  //delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
+                  //offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
+              }
+            }
+          });
+        },
+        methods: {
+          // 获取传参
+          getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.id = Request['id']
+                console.log(this.id)
+            },
+          // 返回
+          onBack: function (ret, err) {
+            dsBridge.call('closeWin')
+          },
+          reset () {
+            this.goodsList = []
+            // this.mescrollUp.page.num = 1
+            this.mescroll.setPageNum(1);
+            this.mescroll.resetUpScroll()
+          },
+          upCallback(page){
+            if (this.type == 1) {
+                //联网请求
+              Http.post(Http.HOST+Http.API_URL.APPREPAIRDATA,{style_id: this.id, page:page.num},true,true).then((response)=> {
+                //请求的列表数据
+                let arr = response.data;
+                //如果是第一页需手动置空列表
+                if (page.num == 1) this.dataList = [];
+                //把请求到的数据添加到列表
+                this.dataList = this.dataList.concat(arr);
+                //数据渲染成功后,隐藏下拉刷新的状态
+                this.goodsListHeader = this.dataList.slice(0,2)
+                this.goodsList = this.dataList.slice(2)
+                this.goods1 = this.goodsListHeader[0]
+                this.goods2 = this.goodsListHeader[1]
+                console.log(this.goodsListHeader)
+                // 上边列表的价格显示数据转换。
+                var sp1 = String(Number(this.goods1.coupon_price).toFixed(2))
+                var sp2 = String(Number(this.goods2.coupon_price).toFixed(2))
+                this.goods1price1 = (sp1.split('.'))[0]
+                this.goods1price2 = (sp1.split('.'))[1]
+                this.goods2price1 = (sp2.split('.'))[0]
+                this.goods2price2 = (sp2.split('.'))[1]
+                this.$nextTick(() => {
+                  this.mescroll.endSuccess(arr.length);
+                })
+              }).catch((e)=> {
+                //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                this.mescroll.endErr();
+              })
+            } else if (this.type == 2) {
+              Http.post(Http.HOST+Http.API_URL.APPREPAIRDATA,{style_id: this.id, material_id: this.materialId, page:page.num},true,true).then((response)=> {
+                //请求的列表数据
+                let arr = response.data;
+                //如果是第一页需手动置空列表
+                if (page.num == 1) this.dataList = [];
+                //把请求到的数据添加到列表
+                this.dataList = this.dataList.concat(arr);
+                //数据渲染成功后,隐藏下拉刷新的状态
+                this.goodsListHeader = this.dataList.slice(0,2)
+                this.goodsList = this.dataList.slice(2)
+                this.goods1 = this.goodsListHeader[0]
+                this.goods2 = this.goodsListHeader[1]
+                // 上边列表的价格显示数据转换。
+                var sp1 = String(Number(this.goods1.coupon_price).toFixed(2))
+                var sp2 = String(Number(this.goods2.coupon_price).toFixed(2))
+                this.goods1price1 = (sp1.split('.'))[0]
+                this.goods1price2 = (sp1.split('.'))[1]
+                this.goods2price1 = (sp2.split('.'))[0]
+                this.goods2price2 = (sp2.split('.'))[1]
+                // console.log(sp1.split('.'))
+                this.$nextTick(() => {
+                  this.mescroll.endSuccess(arr.length);
+                })
+              }).catch((e)=> {
+                //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                this.mescroll.endErr();
+              })
+            }
+          },
+          
+          // 获取自定义样式
+          getStyle:function(){
+            Http.post(Http.HOST+Http.API_URL.APPREPAIRSOURCE,{style_id: this.id},true,true).then((res)=>{
+              if(res.code == 0){
+                this.styleInfo = res.data.info
+                this.tabList = res.data.category
+                if (this.tabList == null) {
+                  this.type = 1
+                  this.reset()
+                } else {
+                  this.type = 2
+                  this.materialId = this.tabList[0].value
+                  this.reset()
+                }
+              }
+            })
+          },
+          // 跳转详情
+          toDetail: function(item){
+            console.log(item)
+            dsBridge.call('openGood', item)
+          },
+        }
+        
+    })
+</script>
+
+</html>

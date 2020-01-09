@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>双十一预售会场</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:bold;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .active-red{
+            height: 100%;
+            width: 100%;
+        }
+        .red-con{
+            height: calc(100% - 0.89rem);
+            /* height: calc(100% - 2.115rem); */
+            width: 100%;
+            background: red;
+            overflow: hidden;
+            background: url(../../image/active_red/bj.jpg) no-repeat;
+            background-size: 100% 100%;
+        }
+        .content{
+            height: 4rem;
+            width: 6.9rem;
+            background: #fff;
+            z-index: 99;
+            border-radius: 0.2rem;
+            margin: 7.44rem auto 0rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size:.28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+            line-height: 0.4rem;
+            border:0.02rem solid rgba(252,207,114,1);
+        }
+        .content .title{
+            margin-top: 0.6rem;
+        }
+        .content .btn{
+            margin-top: 0.59rem;
+            width:3.6rem;
+            height:0.8rem;
+            background:linear-gradient(90deg,rgba(234,89,87,1),rgba(179,41,171,1));
+            border-radius:0.4rem;
+            text-align: center;
+            line-height: 0.8rem;
+            color:rgba(255,255,255,1);
+            font-size:0.3rem;
+            font-weight: 500;
+        }
+        .content .share{
+            margin-top: 0.3rem;
+            font-weight:500;
+            color:rgba(217,33,33,1);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="active-red" v-cloak>
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">双十一预售会场</div>
+        </div>
+        <div class="red-con">
+            <div class="content">
+                <p class="title" v-text="title"></p>
+                <p class="tkl" v-text="tkl"></p>
+                <div class="btn" @click="copy">复制淘口令</div>
+                <p class="share">复制分享口令给好友，好友下单即可得佣金！</br>（需先进行淘宝授权）</p>
+            </div>
+        </div>
+        
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            tkl:'',
+            title:'天猫预售会场，复制淘口令去淘宝，定金最高抵2倍',
+            copyCon:'',
+            auth:false,
+            authUrl:''
+        },
+        methods: {
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            getTkl (){
+                Http.post(Http.HOST+Http.API_URL.TAOBAOCHAOJI, {}, true).then(res => {
+                    if(res.code == 0){
+                        if (res.data !== '') {
+                            this.auth = true
+                            this.tkl = res.data
+                            this.copyCon = this.title + this.tkl
+                        }
+                    }else if (res.code == 2) {
+                        this.authUrl = res.data
+                        this.tkl = res.info
+                        this.copyCon = this.title + this.tkl
+                        // 当还没有渠道授权时
+                        dsBridge.call('albcAuth', {url: res.data})
+                    }
+                })
+            },
+            copy(){
+                if (this.auth) {
+                    dsBridge.call("clipBoard", {value: this.copyCon})
+                    // utils.copyText(this.copyCon)
+                    console.log(this.copyCon)
+                } else {
+                    dsBridge.call('albcAuth', {url: this.authUrl})
+                }
+                
+            }
+            
+        },
+        mounted () {
+            this.copyCon = this.title + this.tkl
+            this.getTkl()
+            document.addEventListener("visibilitychange", () => { 
+                if(document.hidden) {
+                    // 页面被挂起
+                }
+                else {
+                    // 页面呼出
+                    this.getTkl()
+                }
+            })
+        }
+        
+    })
+</script>
+
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>红包领取详情</title>
+    <script>
+      (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+  <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+  <link rel="stylesheet" href="../../css/common.css?i=1128">  
+    <style >
+      html,body { background: #f7f7f7; height: 100%; }
+      #header {
+          position: relative; background: #F35D4C; color: white;
+          width: 100%;
+          height: 50px;
+      }
+      #header .left {
+        display: flex;align-items: center; justify-content: center;font-size: .36rem; z-index: 1;
+          position: absolute;
+          bottom: 0;
+          left: .2rem;
+          height: 50px;
+      }
+      #header .center {
+          position: relative;font-size: .34rem;
+          width: 100%;
+          height: 50px;line-height: 50px;
+          text-align: center;
+      }
+
+      #header .right {
+          position: absolute; font-size: .3rem; color: #666;
+          bottom: 0;
+          right: .26rem; line-height: 50px;
+      }
+      #vue-app .top { display: flex; flex-direction: column; align-items: center; position: relative; padding-bottom: .3rem;}
+      #vue-app .top .bottom-bg {width: 100%; position: absolute; left: 0; top: 0px;}
+      #vue-app .top .logo { width: 1.6rem; height: 1.6rem; border-radius: .2rem; margin-bottom: .4rem; position: relative; z-index: 1;}
+      #vue-app .top .title { font-size: .32rem; font-weight:bold;}
+      #vue-app .top .get { font-size: .3rem;font-weight:bold; }
+      #vue-app .top .get span { color: #E1604C; }
+	  .list .item { padding: .32rem .5rem; display: flex; align-items: center; justify-content: space-between;}
+    .list .item:not(:last-child) { border-bottom: 1px solid #eee; }
+    .list .item .left { display: flex; align-items: center;}
+    .list .item .left img { width: .84rem; height: .84rem; border-radius: .1rem; margin-right: .2rem;}
+    .list .item .left .name-box { height: .84rem; display: flex; flex-direction: column; justify-content: space-between;}
+    .list .item .left .name-box p { font-size: .32rem; max-width: 2.7rem;}
+    .list .item .left .name-box span { font-size: .26rem; color: #999;}
+    .list .item .right { font-size: .3rem; }
+    .list .item .right span {font-size: .34rem; color: #FF453A;}
+	#mescroll{
+		width: 100%;
+		position: fixed;
+		top: 4rem;
+		bottom: 0;
+		height: auto;
+		background:#fff
+	}
+	[v-cloak]{
+            display: none
+        }
+    </style>
+</head>
+
+<body>
+  <div id="vue-app" v-cloak>
+    <div id="header">
+      <div class="left" @click="onBack"><i class="iconfont icon-back"></i></div>
+      <div class="center">红包详情</div>
+    </div>
+    <div class="top">
+      <img src="../../image/order_red_bag/red_bottom_bg.png" class="bottom-bg" >
+      <img :src="appLogo" class="logo">
+      <div class="title">{{redInfo.title}}</div>
+      <div class="get">您抢了<span>{{receivedMoney}}</span>元</div>
+    </div>
+	<div class='common-warp mescroll' ref="mescroll" id="mescroll">
+		<div class="list">
+		  <div class="item" v-for="(item, index) in list" :key="index">
+			<div class="left">
+			  <img :src="item.avatar || appLogo">
+			  <div class="name-box">
+				<p class="text-overflow_1-xzh">{{item.nickname}}</p>
+				<span>{{new Date(item.re_time*1000).toLocaleString('zh', {hour12: false})}}</span>
+			  </div>
+			</div>
+			<div class="right">
+			  <span class="price">{{item.credit}}</span>元
+			</div>
+		  </div>
+		</div>
+	</div>
+  </div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910112246"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+  //apiready = function(){
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data:{
+          utils: utils,
+          redInfo: utils.storage.get('redInfo'),
+		  page:0,
+		  list:[],
+		  appLogo: '',
+		  receivedMoney: ''
+        },
+        mounted: function(){
+			console.log('money', utils.storage.get('token'))
+          // 实现沉浸式状态栏效果
+          //var header = $api.byId('header');
+          //$api.fixStatusBar(header);
+		  this.appLogo = dsBridge.call("receiveParams", 'appLogo');
+		  this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+				down: {
+					auto: false,
+					callback: this.refresh
+				 },
+				up: {
+					callback: this.upCallback,
+					page: {
+					  num: 0
+					},
+					htmlNodata: '<p class="upwarp-nodata">—— 我也是有底线的 ——</p>',
+					noMoreSize: 5,
+					empty: {
+					  warpId: 'd26',
+					  icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+            tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+					}
+				}
+			});	
+        },
+        methods: {
+          onBack: function(){
+			dsBridge.call('closeWin')
+		 },
+          upCallback: function(page, mescroll){
+            Http.post(Http.HOST+Http.API_URL.USERREDINFO,{page: page.num, id: this.redInfo.id },true,true).then((res)=>{
+				if(res.code === 0){
+				    this.receivedMoney = res.data.userRed.credit
+					this.list = res.data.redlist
+					let arr = res.data.redlist.lenght < 1 ? [] : res.data.redlist
+					if (page.num === 1) this.list = []
+					this.list = this.list.concat(arr)
+					this.$nextTick(() => {
+						mescroll.endSuccess(res.data.redlist.length, true)
+					})
+				}
+			})
+          },
+		  getList: function(refresh) {
+            var that = this;
+            if (refresh){
+              this.page = 1;
+            } else {
+              this.page++;
+            }
+            Http.post(Http.HOST+Http.API_URL.USERREDINFO,{page: this.page, id: this.redInfo.id },true,true).then((res)=>{
+			  //api.refreshHeaderLoadDone();
+                if (refresh) {
+                  that.list = [];
+                }
+                that.list = that.list.concat(res.data.redlist);
+				this.receivedMoney = res.data.userRed.credit
+			})
+          }
+        }
+    })
+  //}
+</script>
+
+</html>

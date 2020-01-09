@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>订单跟踪</title>
+    <script type="text/javascript">
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 750) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <!-- uint-ui -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body {
+            background: #f7f7f7;
+            width: 100%;
+            height: 100%;
+        }
+        .title {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: .98rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            z-index: 9;
+        }
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+        .title_text {
+            width: 1.68rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+        }
+        .course_core {
+            margin-top: 1.18rem;
+            padding: 0 .2rem;
+        }
+        .course_core .course_commodity {
+            width: 7.1rem;
+            height: 1.9rem;
+            background: rgba(255, 255, 255, 1);
+            border-radius: .1rem;
+            display: flex;
+        }
+        .course_commodity .course_commodity_pic {
+            width: 1.6rem;
+            height: 1.6rem;
+            background: rgba(247, 247, 247, 1);
+            border-radius: .1rem;
+            margin: .15rem .19rem 0 .15rem;
+        }
+        .course_commodity .course_status {
+            height: .42rem;
+            font-size: .32rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            margin-top: .4rem;
+        }
+        .course_commodity .course_logistics {
+            font-size: .28rem;
+            font-weight: 500;
+            color: rgba(102, 102, 102, 1);
+            height: .36rem;
+            display: flex;
+            align-items: center;
+            margin-top: .3rem;
+        }
+        .course_commodity .course_logistics div {
+            max-width: 4.1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .course_commodity .course_logistics img {
+            width: .66rem;
+            height: .3rem;
+            margin-left: .12rem;
+        }
+        /* 物流信息 */
+        .order_course_box {
+            width: 7.1rem;
+            /* height: 7.1rem; */
+            margin-top: .2rem;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+        }
+        .order_course_box .order_course {
+            overflow: hidden;
+        }
+        .timeLine {
+            margin: .45rem 0 0 .29rem;
+        }
+        .timeLine li {
+            background: url(./../../image/bargain/back.png) repeat-y 1.18rem 0;
+            padding-bottom: .3rem;
+            display: flex;
+        }
+        .timeLine li:last-child {
+            background: none !important;
+        }
+        .timeLine li .time {
+            /* background: url(./../../image/bargain/icon1.png) no-repeat .99rem 0; */
+            display: inline-block;
+            width: .77rem;
+            text-align: right;
+            padding-right: .89rem;
+        }
+        .timeLine li .time1 {
+            background: url(./../../image/bargain/icon1.png) no-repeat .99rem 0;
+            background-size: .38rem .38rem;
+            display: inline-block;
+            width: .77rem;
+            text-align: right;
+            padding-right: .89rem;
+        }
+        .timeLine li .time div:nth-child(1){
+            width: .77rem;
+            font-size: .26rem;
+            font-weight:500;
+            color:#666666;
+        }
+        .timeLine li .time div:nth-child(2){
+            font-size: .24rem;
+            font-weight:500;
+            color:#999999;
+        }
+        .timeLine li .con1{
+            width: 3.92rem;
+            height: .7rem;
+            font-size: .24rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+             overflow: hidden;
+            /* text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; */
+        }
+        .timeLine li .con{
+            width: 3.92rem;
+            font-size: .24rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+            overflow: hidden;
+            /* text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; */
+        }
+        .ico0{
+            background: url(./../../image/bargain/icon2.png) no-repeat .99rem 0;
+            background-size: .38rem .38rem;
+        }
+        .ico1{
+            background: url(./../../image/bargain/icon3.png) no-repeat .99rem 0;
+            background-size: .38rem .38rem;
+        }
+        .ico2{
+            background: url(./../../image/bargain/icon4.png) no-repeat .99rem 0;
+            background-size: .38rem .38rem;
+        }
+        .ico3{
+            background: url(./../../image/bargain/icon5.png) no-repeat .99rem 0;
+            background-size: .38rem .38rem;
+        }
+        .ico4{
+            background: url(./../../image/bargain/icon5.png) no-repeat .99rem 0;
+            background-size: .38rem .38rem;
+        }
+        .time.iconx{
+            background: url(./../../image/bargain/icon7.png) no-repeat .99rem 0;
+            background-size: .38rem .38rem;
+        }
+        .timeLine li:nth-child(2) .time{
+            background: url(./../../image/bargain/icon2.png) no-repeat .99rem 0;
+            background-size: .38rem .38rem;
+        }
+        .timeLine li:last-child .time{
+            background: url(./../../image/bargain/icon6.png) no-repeat .99rem 0;
+            background-size: .38rem .38rem;
+        }
+        .order_course_more{
+            height: 1.04rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .order_course_more div{
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(153,153,153,1)
+        }
+        .order_course_more img{
+            width: .3rem;
+            height: .3rem;
+            margin-left: .08rem;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="title">
+            <img src="./../../image/back.png" alt="" @click='onBack'>
+            <div class="title_text">订单跟踪</div>
+        </div>
+        <div class="course_core">
+            <div class="course_commodity">
+                <div class="course_commodity_pic" :style="{background: `url(${sitecommod.thumb})50% 50% / cover no-repeat`}"></div>
+                <div class="course_commodity_text">
+                    <div class="course_status">{{nowstatus}}</div>
+                    <div class="course_logistics">
+                        <div>{{siteinfo.expressName}}：{{siteinfo.expressNo}}</div>
+                        <img @click="expressCopy(siteinfo.expressNo)" src="./../../image/order_all/copy_id.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <!-- 物流信息 -->
+            <div class="order_course_box">
+                <div class="order_course">
+                    <ul class="timeLine">
+                        <li>
+                            <div class="time1">
+                                <!-- <div>12-03</div>
+                                <div>23:34</div> -->
+                            </div>
+                            <div class="con1">【收货地址】{{siteinfo.birth}}</div>
+                        </li>
+                        <li v-for="(item,index) in sitelist" :key="index">
+                            <div class="time ico0"  v-if="item.status == '签收'" >
+                                <div>{{item.day}}</div>
+                                <div>{{item.times}}</div>
+                            </div>
+                            <div class="time ico1"  v-else-if="item.status == '揽收'" >
+                                    <div>{{item.day}}</div>
+                                    <div>{{item.times}}</div>
+                            </div>
+                            <div class="time ico2"  v-else-if="item.status == '备货中'" >
+                                    <div>{{item.day}}</div>
+                                    <div>{{item.times}}</div>
+                            </div>
+                            <div class="time ico3"  v-else-if="item.status == '已下单'" >
+                                    <div>{{item.day}}</div>
+                                    <div>{{item.times}}</div>
+                            </div>
+                            <div class="time iconx"  v-else-if="item.status == '派件' || item.status == '在途'"  >
+                                    <div>{{item.day}}</div>
+                                    <div>{{item.times}}</div>
+                            </div>
+                            <div class="time "  v-else-if="item.status == '已创建'" >
+                                    <div>{{item.day}}</div>
+                                    <div>{{item.times}}</div>
+                            </div>
+                            <div class="con">
+                                <div>{{item.context}}</div>
+                                <div></div>
+                            </div>
+                        </li>
+                        <li v-for="(item,index) in sitelistmore" :key="index" v-show="course_more">
+                                    <div class="time ico0"  v-if="item.status == '签收'" >
+                                        <div>{{item.day}}</div>
+                                        <div>{{item.times}}</div>
+                                    </div>
+                                    <div class="time ico1"  v-else-if="item.status == '揽收'" >
+                                            <div>{{item.day}}</div>
+                                            <div>{{item.times}}</div>
+                                    </div>
+                                    <div class="time ico2"  v-else-if="item.status == '备货中'" >
+                                            <div>{{item.day}}</div>
+                                            <div>{{item.times}}</div>
+                                    </div>
+                                    <div class="time ico3"  v-else-if="item.status == '已下单'" >
+                                            <div>{{item.day}}</div>
+                                            <div>{{item.times}}</div>
+                                    </div>
+                                    <div class="time iconx"  v-else-if="item.status == '派件' || item.status == '在途'"  >
+                                            <div>{{item.day}}</div>
+                                            <div>{{item.times}}</div>
+                                    </div>
+                                    <div class="time "  v-else-if="item.status == '已创建'" >
+                                            <div>{{item.day}}</div>
+                                            <div>{{item.times}}</div>
+                                    </div>
+                                    <div class="con">
+                                        <div>{{item.context}}</div>
+                                        <div></div>
+                                    </div>
+                        </li>
+                    </ul>
+                    <div class="order_course_more" @click="courseMore()" v-show="!course_more">
+                        <div>点击查看更多物流信息</div>
+                        <img src="./../../image/bargain/xiala.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="../../js/libs/common.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            course_more: false,
+            orderId: '',
+            siteinfo: [],
+            sitecommod: [],
+            sitelist : [] ,
+            sitelistmore : [],
+            nowstatus : ''
+        },
+        mounted: function () {
+            this.getParameter();
+            this.gitstyle();
+        },
+        // 刷新
+        methods: {
+            gitstyle: function(){
+                Http.post(Http.HOST + Http.API_URL.EXPRESSAGE, {orderSn: this.orderId}, true).then((res) => {
+                    this.siteinfo = res.data.info;
+                    this.sitecommod = this.siteinfo.goods;
+                    this.sitelist = this.siteinfo.list.slice(0,5);
+                    this.sitelistmore = this.siteinfo.list.slice(5);
+                    this.nowstatus =  this.siteinfo.list[0]['status']
+                })
+            },
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            courseMore: function(){
+                this.course_more = true;
+            },
+            expressCopy(express){
+                dsBridge.call("clipBoard", {value: express})
+            },
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.orderId = Request['orderSn']
+            }
+        }
+    })
+</script>
+
+
+
+</html>

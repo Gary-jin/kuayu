@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的申请列表</title>
+    <script>
+      (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../../css/common.css?i=1128?i=20191012">
+    <link rel="stylesheet" href="../../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/libs/swiper_min.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../../../js/libs/mescroll/mescroll.min.css" >
+    <style >
+	#header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 50px;
+            border-bottom: 1px solid #eee;
+			background:#fff;
+			z-index: 9999;
+        }
+
+        #header .left {
+          display: flex;align-items: center; justify-content: center;font-size: .36rem; color: #666; z-index: 1;
+            position: absolute;
+            bottom: 0;
+            left: .2rem;
+            height: 50px;
+        }
+
+        #header .center {
+            position: relative;font-size: .34rem;
+            width: 100%;
+            height: 50px;line-height: 50px;
+            text-align: center;
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+		.common-hight{height:50px}
+		
+      html,body {background: none;}
+      #vue-app { transition: opacity .3s; opacity: 1; padding-bottom: .5rem; height:100%}
+      .cards-list .card-item { padding:0 .2rem; margin: .12rem 0; background: white;}
+      .cards-list .card-item .card-title { line-height: .8rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; }
+      .cards-list .card-item .card-title div { color: #333; font-size: .3rem; }
+      .cards-list .card-item .card-title p {font-size: .26rem; }
+      .cards-list .card-item .card-title p.unpassed { color: #FF5847; }
+      .cards-list .card-item .card-content { display: flex; align-items: center; justify-content: center; padding: .28rem 0;}
+      .cards-list .card-item .card-content img { width: 1.9rem; border-radius: .1rem; }
+      .cards-list .card-item .card-content .text-box { margin: 0 .19rem; width: 4rem; }
+      .cards-list .card-item .card-content .text-box .card-name { font-size: .3rem; color: #333;}
+      .cards-list .card-item .card-content .text-box p { font-size: .26rem; color: #666; }
+      .cards-list .card-item .card-content .text-box p span { color: #FF5847;}
+      .push-status { font-size: .26rem; color: #ccc; text-align: center; margin-top: 3rem;}
+      .blank { text-align: center; font-size: .3rem; color: #999; padding-top: .6rem; }
+      .blank img { width: 3rem;}
+	  #mescroll{
+		width: 100%;
+		position: fixed;
+		top: .88rem;
+		bottom: 0;
+		height: auto;
+	}
+    </style>
+</head>
+
+<body>
+  <div id="vue-app" v-cloak>
+	<div id="header">
+      <div class="left" @click="onBack"><i class="iconfont icon-back"></i></div>
+      <div class="center">我的申请</div>
+    </div>
+	<div class='common-warp mescroll' ref="mescroll" id="mescroll">
+		
+			<div class="cards-list" id="d26">
+			  <div class="card-item" v-for="(item, index) in list" :key="index">
+				<div class="card-title"><div>{{item.bank}}</div><p :class="{unpassed:item.status==0}">{{item.status==0?'待审核':'成功'}}</p></div>
+				<div class="card-content">
+				  <img :src="item.img" >
+				  <div class="text-box">
+					<div class="card-name text-overflow_1-xzh">{{item.card_name}}</div>
+					<p>{{new Date(item.created_at*1000).toLocaleString('zh', {hour12: false})}}</p>
+				  </div>
+				</div>
+			  </div>
+			</div>
+	</div>
+  </div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910112246"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+  //apiready = function(){
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data(){
+			return {
+				list: [],
+			  page:{num: 0},
+			  hasMore: true,
+			  pageLimit: 10,
+			  mescroll: null
+			}
+          
+        },
+        mounted: function(){
+          // 初始化下拉刷新
+          //this.initRefresh();
+          //this.getInfo();
+
+          // 初始化上拉加载
+          //this.initLoadMore();
+		  //this.refresh()
+		  this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+				down: {
+					auto: false,
+					callback: this.refresh
+				 },
+				up: {
+					callback: this.upCallback,
+					page: {
+					  num: 0
+					},
+					htmlNodata: '<p class="upwarp-nodata">—— 我也是有底线的 ——</p>',
+					noMoreSize: 5,
+					empty: {
+            warpId: 'd26',
+            icon: imgConfig.NODATA_IMG || '../../../image/kong.png',
+            tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+					}
+				}
+			});	
+        },
+        methods: {
+			onBack: function(ret, err){
+				dsBridge.call('closeWin')
+			 },
+          upCallback: function(page, mescroll){
+            Http.post(Http.HOST+Http.API_URL.HOMECARDAPPLY,{page: page.num},true).then((res)=>{
+				if(res.code === 0){
+					this.list = res.data
+					let arr = res.data.lenght < 1 ? [] : res.data
+					if (page.num === 1) this.list = []
+					this.list = this.list.concat(arr)
+					this.$nextTick(() => {
+						mescroll.endSuccess(res.data.length, true)
+					})
+				}
+			})
+          },
+          getInfo: function(refresh) {
+            var that = this;
+            if (refresh){
+              this.page = 1;
+              this.list.length = 0;
+            } else {
+              this.page++;
+            }
+            Http.post(Http.HOST+Http.API_URL.HOMECARDAPPLY,{page: this.page },true).then((res)=>{
+				that.list = that.list.concat(res.data);
+                if (res.data.length < that.pageLimit) {
+                  // 当返回的数量不足每页的数量时
+                  that.hasMore = false;
+                }
+			
+			})
+          }
+        }
+    })
+  //}
+</script>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>信用卡分享</title>
+    <script>
+      (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=20191012">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <style >
+      #vue-app { transition: opacity .3s; opacity: 1; padding-bottom: .5rem; height:100%}
+	  .common-hight{height:50px}
+	  .common-warp{height:100%;-webkit-overflow-scrolling: touch;overflow-scrolling: touch;overflow: scroll;}
+      header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 50px;
+            border-bottom: 1px solid #eee;
+			background:#fff;
+			z-index: 9999;
+        }
+
+        header .left {
+          display: flex;align-items: center; justify-content: center;font-size: .36rem; color: #666; z-index: 1;
+            position: absolute;
+            bottom: 0;
+            left: .2rem;
+            height: 50px;
+        }
+
+        header .center {
+            position: relative;font-size: .34rem;
+            width: 100%;
+            height: 50px;line-height: 50px;
+            text-align: center;
+        }
+      .tips-top { background: #FFF3F2; height: 0.78rem; padding-left: .2rem; display: flex; align-items: center; color: #FF5847; font-size: .3rem; }
+      .share-content { padding: 0 .3rem 2rem;  }
+      .share-content .card-title { margin-top: .4rem; color: #FF5847; font-size: .3rem; }
+      .share-content .card-info { color: #333; font-size: .28rem; margin-top: .2rem; width: 6rem; word-break: break-all;}
+      .share-content .card-img { margin-top: .2rem; width: 4.6rem; }
+      .share-content .comment-box { width: 6rem; background: #f7f7f7; border-radius: .1rem; margin-top: .37rem; position: relative;padding: .3rem .28rem;}
+      .share-content .comment-box::before { content: ''; position: absolute; left: .68rem; width: .4rem; height: .4rem; transform: rotate(45deg); top: -.2rem; background: #f7f7f7;}
+      .share-content .comment-box ul { position: relative; z-index: 1; }
+      .share-content .comment-box ul dd { font-size: .3rem; color: #333; }
+      .share-content .comment-box ul li { color: #666; font-size: .26rem; display: flex; align-items: center;margin-top: .18rem;}
+      .share-content .comment-box ul li::before {content: ''; display: block; width: .06rem; height: .06rem; border-radius: 50%; background: #FF5847;margin-right: .08rem;}
+      .share-content .comment-box .copy { line-height: .4rem; font-size: .24rem; color: #FF5847; background: #FFEDEB; border-radius: .4rem; text-align: center; position: absolute; bottom: .18rem; right: .2rem;z-index: 2;padding: 0 .25rem;}
+      .share_to {background: #fff;border-top: 1px solid #ccc;position: fixed;bottom: 0;left: 0;width: 100%; z-index: 3;}
+      .share_to h2 {font-size: .26rem;text-align: center;padding-top: .32rem;color: #666666;}
+      .share_to ul {display: flex;justify-content: space-between;padding: .2rem .5rem .42rem; line-height: 0;}
+      .share_to ul li img {width: .70rem;height: .70rem;border-radius: 50%;}
+    </style>
+</head>
+
+<body>
+  <div id="vue-app" v-cloak>
+    <header id="header">
+      <div class="left" @click="onBack"><i class="iconfont icon-back"></i></div>
+      <div class="center">创建分享</div>
+    </header>
+	<div class='common-warp'>
+		<div class='common-hight'></div>
+		<div class="tips-top">分享后不要忘了复制粘贴【评论区文案】！！！</div>
+		<div class="share-content">
+		  <div class="card-title">{{cardInfo.name}}</div>
+		  <div class="card-info">免费下载【{{appName}}】，成功申请信用卡即返￥{{cardInfo.commission}}元,【申请地址】{{cardInfo.url}}</div>
+		  <div class="card-title">分享图片</div>
+		  <img class="card-img" :src="cardInfo.image">
+		  <div class="comment-box">
+			<ul>
+			  <dd>{{cardInfo.name}}权益：</dd>
+			  <li v-if="cardInfo.quanyi!=''" v-for="(item, index) in cardInfo.quanyi.split('\r\n')">{{item}}</li>
+			</ul>
+			<div class="copy" @click="copyText(cardInfo.quanyi)">复制评论</div>
+		  </div>
+		</div>
+		<div class='common-hight' style='height:.7rem'></div>
+		<div class="share_to">
+		  <h2>分享图文到</h2>
+		  <ul>
+			<li @click="shareHref()">
+			  <img src="../../image/icon/bcdxc.png" alt="">
+			</li>
+			<li @click="shareFri(1)">
+			  <img src="../../image/icon/wechat.png" alt="">
+			</li>
+			<li @click="shareFri(2)">
+			  <img src="../../image/icon/friend_circle.png" alt="">
+			</li>
+			<li @click="shareFri(4)">
+			  <img src="../../image/icon/microblog.png" alt="">
+			</li>
+			<li @click="shareFri(3)">
+			  <img src="../../image/icon/qq.png" alt="">
+			</li>
+		  </ul>
+		</div>
+	</div>
+  </div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910112246"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+  //apiready = function(){
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data:{
+          appName: '',
+          cardInfo: utils.storage.get('cardInfo'),
+          select: []
+        },
+        mounted: function(){
+			var that = this
+			that.appName = dsBridge.call("receiveParams", 'appName')
+			//alert(this.appName)
+          // 设置状态栏显示样式
+          //api.setStatusBarStyle({
+              //style: 'dark'
+          //});
+          // 实现沉浸式状态栏效果
+         // var header = $api.byId('header');
+          //$api.fixStatusBar(header);
+
+          //document.getElementById('vue-app').style.paddingTop = $api.offset($api.byId('header')).h + 'px';
+        },
+        methods: {
+          copyText: function(text){
+            dsBridge.call("clipBoard", {value: text})
+          },
+          shareFri: function (type) {
+			 dsBridge.call("inviteShare", {url: this.cardInfo.image, type: type})
+          },
+          shareHref: function () {
+            dsBridge.call("saveMediaToAlbum", {url: this.cardInfo.image})
+          },
+		  onBack: function(ret, err){
+			dsBridge.call('closeWin')
+		 },
+        }
+    })
+ // }
+</script>
+
+</html>

@@ -1,0 +1,411 @@
+.newactivities {
+  min-height: 100%;
+  position: relative;
+  background: #ee3636;
+}
+.newactivities .banner {
+  position: relative;
+}
+.newactivities .banner .times {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 0.43rem;
+  color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.newactivities .banner .times .time {
+  display: block;
+  width: 0.27rem;
+  height: 0.27rem;
+  margin-top: 0.05rem;
+  margin-right: 0.1rem;
+}
+.newactivities .content {
+  padding: 0 0.3rem;
+}
+.newactivities .activityinfo {
+  width: 100%;
+  background: #fff;
+  border-radius: 0.15rem;
+  padding: 0.15rem;
+  box-sizing: border-box;
+  position: relative;
+}
+.newactivities .activityinfo .titlelogo {
+  position: absolute;
+  margin-left: -2.1rem;
+  top: -0.32rem;
+  width: 4.2rem;
+  height: 1rem;
+  left: 50%;
+}
+.newactivities .activityinfo .activityinfo_child {
+  height: 100%;
+  border: 1px solid #ff8d8d;
+  padding: 0.8rem 0.3rem 0.2rem 0.3rem;
+  box-sizing: border-box;
+  overflow: scroll;
+}
+.newactivities .activityinfo .activityinfo_child .infolist {
+  margin-bottom: 0.15rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+.newactivities .activityinfo .activityinfo_child .infolist .ion {
+  display: block;
+  width: 0.15rem;
+  height: 0.15rem;
+  border-radius: 50%;
+  background: red;
+  margin-top: 0.1rem;
+  margin-right: 0.1rem;
+}
+.newactivities .activityinfo .activityinfo_child .infolist .ion_test {
+  width: 95%;
+}
+.newactivities .laxin {
+  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+.newactivities .laxinnum {
+  min-height: 1.35rem;
+  background: #fff;
+  border-radius: 0.15rem;
+  padding: 0.3rem 0.2rem;
+  box-sizing: border-box;
+}
+.newactivities .laxinnum .logobox {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+.newactivities .laxinnum .logobox .log {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: #fff;
+  margin-right: 0.2rem;
+}
+.newactivities .laxinnum .logobox .log img{
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+.newactivities .laxinnum .logobox .title_box .title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 3rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  font-size: 0.28rem;
+  color: #000;
+}
+.newactivities .laxinnum .logobox .title_box .tel {
+  font-size: 0.2rem;
+  color: #999491;
+  line-height: 0.3rem;
+  height: 0.3rem;
+}
+.newactivities .laxinnum .nums {
+  text-align: right;
+}
+.newactivities .laxinnum .nums .titles {
+  color: #666666;
+}
+.newactivities .laxinnum .nums .numres {
+  color: #e30a1f;
+  font-size: 0.28rem;
+}
+.newactivities .laxinmun_box {
+  background: #fff;
+  border-radius: 0.15rem;
+  overflow: scroll;
+  max-height: 5.4rem;
+  min-height: 1.35rem;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums {
+  min-height: 1.35rem;
+  background: #fff;
+  padding: 0.3rem 0.1rem;
+  box-sizing: border-box;
+  border-bottom: 1px solid #ffd2b1;
+  margin: 0 0.2rem;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums .logobox {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums .logobox .ranking {
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-top: 0.15rem;
+  margin-right: 0.15rem;
+  font-size: 0.28rem;
+  font-weight: 800;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums .logobox .ranking .rankingnum {
+  text-align: center;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums .logobox .log {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: #fff;
+  margin-right: 0.2rem;
+  text-align: center;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums .logobox .log img{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums .logobox .title_box .title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 3rem;
+  height: 0.4rem;
+  line-height: 0.4rem;
+  font-size: 0.28rem;
+  color: #000;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums .logobox .title_box .tel {
+  font-size: 0.2rem;
+  color: #999491;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums .nums {
+  text-align: right;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums .nums .titles {
+  color: #666666;
+}
+.newactivities .laxinmun_box .laxinmun_hua .laxinnums .nums .numres {
+  color: #e30a1f;
+  font-size: 0.28rem;
+}
+.newactivities .btnis {
+  margin-top: 0.6rem;
+}
+.newactivities .prizealert {
+  width: 100%;
+  background: rgba(76, 76, 76, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3000;
+  height: 100%;
+}
+.newactivities .prizealert .alert {
+  width: 4.8rem;
+  height: 6rem;
+  background: #fff;
+  border-radius: 0.2rem;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  margin-left: -2.4rem;
+  margin-top: -4rem;
+  box-sizing: border-box;
+}
+.newactivities .prizealert .alert .guang {
+  position: absolute;
+  top: -1.7rem;
+  left: 0;
+}
+.newactivities .prizealert .alert .prizetitle {
+  position: relative;
+}
+.newactivities .prizealert .alert .prizetitle .pictxt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  width: 100%;
+  margin-top: 0.2rem;
+}
+.newactivities .prizealert .alert .prizetitle .pictxt .he {
+  width: 100%;
+  font-size: 0.4rem;
+  color: #fff;
+  text-align: center;
+}
+.newactivities .prizealert .alert .prizetitle .pictxt .hetit {
+  width: 100%;
+  font-size: 0.3rem;
+  color: #fff;
+  text-align: center;
+}
+.newactivities .prizealert .alert .prizetitle .pictxts {
+  position: absolute;
+  width: 2.4rem;
+  top: 0;
+  left: 0;
+  text-align: center;
+  margin-top: 0.2rem;
+  margin-left: 0.4rem;
+}
+.newactivities .prizealert .alert .prizetitle .pictxts .he {
+  width: 100%;
+  font-size: 0.4rem;
+  color: #fff;
+  text-align: left;
+}
+.newactivities .prizealert .alert .prizetitle .pictxts .hetit {
+  width: 100%;
+  font-size: 0.3rem;
+  color: #fff;
+  text-align: left;
+}
+.newactivities .prizealert .alert .prizecontent {
+  margin-top: 0.2rem;
+  text-align: center;
+  font-size: 0.4rem;
+  color: #000;
+  height: 3rem;
+  width: 100%;
+}
+.newactivities .prizealert .alert .prizecontent .contents {
+  width: 100%;
+  text-align: center;
+  color: #000;
+  font-size: 0.25rem;
+}
+.newactivities .prizealert .alert .prizecontent .contents .corred {
+  font-size: 0.3rem;
+  color: #ff5846;
+}
+.newactivities .prizealert .alert .prizecontent .prize {
+  margin-top: 0.3rem;
+  font-size: 0.3rem;
+}
+.newactivities .prizealert .alert .prizecontent .tishi {
+  font-size: 0.25rem;
+  color: #999999;
+  margin-top: 0.1rem;
+}
+.newactivities .prizealert .alert .prizecontent .lijibtn {
+  width: 2.5rem;
+  height: 0.6rem;
+  line-height: 0.6rem;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.3rem;
+  background: linear-gradient(to right, #fea164, #fe6039);
+  margin: 0.35rem auto 0;
+  font-size: 0.3rem;
+}
+.newactivities .prizealert .alert .prizecontent .clos {
+  width: 100%;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  color: #000;
+  margin-top: 0.35rem;
+  font-size: 0.25rem;
+}
+.newactivities .share_to {
+  background: rgba(76, 76, 76, 0.5);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* display: none; */
+  top: 0;
+}
+.newactivities .share_to .weui-mask{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.newactivities .share_to .weui-mask img{
+  height: 8rem;
+  width: 5rem;
+  background: #fff;
+  /* margin-top: 1.5rem; */
+  margin-bottom: 2rem;
+}
+.newactivities .remind {
+  width: 100%;
+  height: 100%;
+  background: rgba(76, 76, 76, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3000;
+}
+.newactivities .remind .alerts {
+  width: 4.8rem;
+  height: 3rem;
+  background: #fff;
+  border-radius: 0.2rem;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  margin-left: -2.4rem;
+  margin-top: -4rem;
+  padding: 0.2rem;
+  box-sizing: border-box;
+}
+.newactivities .remind .alerts .remindtitle {
+  margin-bottom: 0.3rem;
+  width: 100%;
+  text-align: center;
+  color: #da2a03;
+  font-size: 0.35rem;
+}
+.newactivities .remind .alerts .remindcontent {
+  margin-top: 0.1rem;
+  text-align: center;
+  font-size: 0.4rem;
+  color: #da2a03;
+  height: 2rem;
+  width: 100%;
+}
+.newactivities .remind .alerts .remindcontent .remindcontents {
+  height: 1rem;
+  width: 100%;
+  color: #000;
+}
+.newactivities .remind .alerts .remindcontent .remindnext {
+  text-align: center;
+  color: #000;
+  font-size: 0.25rem;
+}
+.lt {
+  float: left;
+}
+.rt {
+  float: right;
+}
+.classBox {
+  /* border-top: 1px solid #f9f6f6; */
+  z-index: 100000;
+  position: fixed;
+  bottom: 0;
+  height: 2rem;
+  width: 7.5rem;
+  display: flex;
+  background: #fff;
+  border-radius: 0.2rem 0.2rem 0 0;
+}
+.classBox div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.classBox div img {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+.classBox div p {
+  margin-top: 0.2rem;
+  color: #666;
+  font-size: 0.26rem;
+}

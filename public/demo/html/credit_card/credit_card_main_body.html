@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>信用卡首页</title>
+    <script>
+      (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=20191012">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <style >
+		#header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 50px;
+            border-bottom: 1px solid #eee;
+			background:#fff;
+			z-index: 9999;
+        }
+
+        #header .left {
+          display: flex;align-items: center; justify-content: center;font-size: .36rem; color: #666; z-index: 1;
+            position: absolute;
+            bottom: 0;
+            left: .2rem;
+            height: 50px;
+        }
+
+        #header .center {
+            position: relative;font-size: .34rem;
+            width: 100%;
+            height: 50px;line-height: 50px;
+            text-align: center;
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+		.common-hight{height:50px}
+      #vue-app { transition: opacity .3s; opacity: 1; padding-bottom: .5rem; height:100%;}
+	  .common-warp{height:100%;-webkit-overflow-scrolling: touch;overflow-scrolling: touch;overflow: scroll;}
+      .main-banner { width: 7.1rem; margin: .22rem auto 0; display: flex; justify-content: center; align-items: center; border-radius: .2rem; }
+      .main-banner img { width: 100%; }
+      .nav-list { width: 7.34rem; margin: 0 auto; border-bottom: 1px solid #eee; margin-top: .22rem; transition: height .3s; overflow: hidden;}
+      .nav-list .nav-box { width: 100%;  display: flex; flex-wrap: wrap;}
+      .nav-list .nav-item { display: flex; align-items: center; flex-direction: column; text-align: center; width: 25%;margin-bottom: .21rem;}
+      .nav-list .nav-item img { width: .82rem; height: .82rem; border-radius: 50%; margin-bottom: .1rem; display: block;}
+      .nav-list .nav-item .bank-name {font-size: .24rem; line-height: .3rem; color: #333;}
+      .nav-list .nav-item .commission { color: #FF5847; font-size: .18rem; border: 1px solid #FFBFB8; border-radius:.15rem; height: .3rem; padding: 0 .12rem; display: flex; align-items: center; box-sizing: border-box;}
+      .bobao-box { height: .74rem; display: flex; padding: 0 .4rem; align-items: center; justify-content: space-between; color: #666; border-bottom: .15rem solid #f7f7f7;}
+      .bobao-box .swiper-container { width: 70%; height: 100%; font-size: .24rem; margin: 0;}
+      .bobao-box .swiper-container .swiper-slide { display: flex; align-items: center;}
+      .bobao-box .swiper-container .swiper-slide img { width: .25rem; margin-right: .1rem; }
+      .bobao-box .swiper-container .swiper-slide p { max-width: calc(100% - .4rem) }
+      .bobao-box .more { font-size: .22rem;}
+      .bobao-box .more i { font-size: .14rem; transition: transform .3s; display: inline-block; transform: rotate(0deg);}
+      .hot-list { padding: 0 .2rem; }
+      .hot-list .title { display: flex; padding: .28rem 0 .2rem .12rem; flex-direction: column; border-bottom: 1px solid #eee;}
+      .hot-list .title h3 { font-size: .32rem; font-weight: bold; color: #A75E07;}
+      .hot-list .title h3 img { width: .31rem; margin-right: .05rem; }
+      .hot-list .title p { font-size: .242rem; color: #C98533;}
+      .hot-list .content-list {display: flex; flex-wrap: wrap;}
+      .hot-list .content-list .card-item { width: 3.36rem; padding-top: .3rem; }
+      .hot-list .content-list .card-item:nth-child(even) { margin-left:.14rem; }
+      .hot-list .content-list .card-item img { width: 100%; }
+      .hot-list .content-list .card-item .bank-name { font-size: .24rem; color: #666; width: 100%; margin-bottom: .1rem; }
+      .hot-list .content-list .card-item .card-name { font-size: .32rem; color: #333; width: 100%;}
+      .hot-list .content-list .card-item ul li { color: #666; font-size: .26rem; display: flex; align-items: center; width: 100%; }
+      .hot-list .content-list .card-item ul li:before {content: ''; display: block; width: .06rem; height: .06rem; border-radius: 50%; background: #FF5847;margin-right: .08rem;}
+      .hot-list .content-list .card-item ul li p { width: 3.2rem; }
+    </style>
+</head>
+
+<body>
+
+  <div id="vue-app" v-cloak>
+	<div id="header">
+      <div class="left" v-if='isShowBackBtn' @click="onBack"><i class="iconfont icon-back"></i></div>
+      <div class="center">办卡返现</div>
+      <div class="right" tapmode @click="toRecord">申请记录</div>
+    </div>
+	<div class='common-warp' v-if='isShow'>
+		<div class='common-hight'></div>
+		<div class="main-banner"><img :src="haibao"></div>
+
+		<div class="nav-list" :style="{height: banks.length>8? '3.46rem': 'auto'}">
+		  <div class="nav-box">
+			<div class="nav-item" v-for="(item, index) in banks" :keys="index" @click="goBank(item)">
+			  <img :src="item.img">
+			  <div class="bank-name">{{item.title}}</div>
+			  <div class="commission">返￥{{item.commission}}</div>
+			</div>
+		  </div>
+		</div>
+		<div class="bobao-box">
+		  <swiper :options="swiperOption" ref="mySwiper" v-if="msg.length>0">
+			  <swiper-slide class="swiper-no-swiping" v-for="(item, index) in msg" :key="index" >
+				<img src="../../image/icon/notice_icon.png">
+				<p class="text-overflow_1-xzh">{{item.time}}，{{item.nick}}获得<span class="msg-price">￥{{item.money}}</span>办卡奖励</p>
+			  </swiper-slide>
+		  </swiper>
+		  <div class="more" v-if="banks.length > 8" @click="toggleMore">更多银行<i class="iconfont icon-unfold"></i></div>
+		</div>
+
+		<div class="hot-list">
+		  <div class="title">
+			<h3><img src="../../image/icon/top_icon.png">热门卡片推荐</h3>
+			<p>效益杠杠的，办卡还有现金返!</p>
+		  </div>
+		  <div class="content-list">
+			<div class="card-item" v-for="(item, index) in cards" :keys="index" @click="toDetail(item)">
+			  <img :src="item.image">
+			  <div class="bank-name text-overflow_1-xzh">{{item.bank}}</div>
+			  <div class="card-name text-overflow_1-xzh">{{item.name}}</div>
+			  <ul v-if="item.quanyi!=''">
+				<li v-for="(qItem, qIndex) in item.quanyi.split('\r\n')" :key="qIndex"><p class="text-overflow_1-xzh">{{qItem}}</p></li>
+			  </ul>
+			</div>
+		  </div>
+		</div>
+	</div>
+  </div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=1&v=201910112256"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+  Vue.use(window.VueAwesomeSwiper)
+  //apiready = function(){
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data:{
+		  isShow: false,
+          haibao: '',
+          banks: [],
+          cards: [],
+          msg: [],
+          showMore: false,
+          quanyi: [],
+          swiperOption: {
+            direction: 'vertical',
+            loop: true,
+            autoplay: true,
+            noSwiping: true
+          },
+          list: []
+        },
+        mounted: function(){
+          // 初始化下拉刷新
+          //this.initRefresh();
+          this.getInfo();
+        },
+        methods: {
+			onBack: function(ret, err){
+				dsBridge.call('closeWin')
+			 },
+			toRecord: function(){
+				dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/credit_card/record/credit_card_record_body.html',type: 'web'})
+            //api.openWin({
+                //name: 'credit_card_record_head',
+                //url: './record/credit_card_record_head.html',
+                //bgColor: 'f7f7f7'
+            //});
+          },
+          toggleMore: function(){
+            if (this.showMore) {
+              document.querySelector('.nav-list').style.height = '3.46rem';
+              document.querySelector('.icon-unfold').style.transform = 'rotate(0deg)';
+            } else {
+              document.querySelector('.nav-list').style.height = document.querySelector('.nav-box').offsetHeight + 'px';
+              document.querySelector('.icon-unfold').style.transform = 'rotate(180deg)';
+            }
+            this.showMore = !this.showMore
+          },
+          toDetail: function(item){
+		    utils.storage.set('cardInfo', item)
+			dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/credit_card/detail/credit_card_detail_body.html',type: 'web'})
+          },
+          goBank: function(item){
+			console.log(item)
+			utils.storage.set('bankInfo', item)
+			//window.localStorage.setItem('bankInfo', window.JSON.stringify(item))
+			dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/credit_card/credit_card_list_body.html',type: 'web'})
+            //api.openWin({
+                //name: 'credit_card_list',
+                //url: './credit_card_list_head.html',
+                //pageParam: {
+                    //bankInfo: item
+                //}
+            //});
+          },
+          // 实现下拉刷新功能
+          initRefresh: function() {
+              api.setRefreshHeaderInfo({
+                  visible: true,
+                  loadingImg: 'widget://image/icon/credit_card.png',
+                  bgColor: '#fff',
+                  textColor: '#999',
+                  showTime: true,
+                  textDown: '下拉刷新(｡･∀･)ﾉﾞ',
+                  textUp: '松开查看(๑•̀ㅂ•́)و✧',
+                  textLoading: '刷新中(．． )…'
+              }, function(ret, err) {
+                  // 刷新数据
+                  vueObj.getInfo();
+              });
+          },
+          getInfo: function(){
+			console.log('222')
+            var that = this;
+            Http.post(Http.HOST+Http.API_URL.HOMECREDITINDEX,
+				{}, true).then((res)=>{
+					//api.refreshHeaderLoadDone();
+					that.haibao = res.data.haibao;
+					that.banks = res.data.banks;
+					that.cards = res.data.cards;
+					that.msg = res.data.msg;
+					this.isShow = true
+				})
+			}
+        }
+    })
+  //}
+</script>
+
+</html>

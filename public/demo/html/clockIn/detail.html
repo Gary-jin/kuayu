@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>打卡明细</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/tab/style.css" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css"> -->
+    <!-- <link rel="stylesheet" href="../../js/mint-ui/style.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+        .detail {
+        font-family: PingFang-SC-Regular;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+      }
+      .detail .headerConBox {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        height: 3.2rem;
+        /*padding-top: 0.35rem;*/
+        box-sizing: border-box;
+        background: linear-gradient(0deg, #c7d8e6, #226499);
+      }
+      .detail .headerConBox .header {
+        width: 100%;
+        height: 0.4rem;
+        margin-top: 0.3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+      }
+      .detail .headerConBox .header .icon-back {
+        width: 0.2rem;
+        font-size: 0.36rem;
+        font-weight: bold;
+        margin-left: 0.2rem;
+      }
+      .detail .headerConBox .header .title {
+        width: 6.9rem;
+        margin-right: 0.4rem;
+        font-size: 0.34rem;
+        font-weight: 500;
+        line-height: 0.4rem;
+        text-align: center;
+      }
+      .detail .headerConBox .statisticsBox {
+        width: 100%;
+        height: 1.86rem;
+        padding-top: 0.33rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        text-align: center;
+      }
+      .detail .headerConBox .statisticsBox .statisticsItem {
+        flex: 1;
+      }
+      .detail .headerConBox .statisticsBox .statisticsItem .number {
+        font-family: PingFang-SC-Bold;
+        font-size: 0.36rem;
+        font-weight: bold;
+        line-height: 0.36rem;
+        margin-bottom: 0.4rem;
+      }
+      .detail .headerConBox .statisticsBox .statisticsItem .text {
+        font-family: PingFang-SC-Medium;
+        font-size: 0.3rem;
+        font-weight: 500;
+        line-height: 0.3rem;
+      }
+      .detail .statisticsList {
+        position: absolute;
+        top: 3.2rem;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        color: #333;
+      }
+      .detail .statisticsList .title {
+        width: 100%;
+        margin-top: 0.38rem;
+        margin-bottom: 0.23rem;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-family: PingFang-SC-Regular;
+        font-size: 0.26rem;
+        font-weight: bold;
+        line-height: 0.26rem;
+        text-align: left;
+      }
+      .detail .statisticsList .title .titleIcon {
+        display: block;
+        width: 0.04rem;
+        height: 0.24rem;
+        margin-right: 0.1rem;
+        margin-left: 0.2rem;
+        background: #FF5847;
+      }
+      .detail .statisticsList .listBox {
+        position: absolute;
+        top: 0.87rem;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      .detail .statisticsList .listBox .listItem {
+        font-family: PingFang-SC-Regular;
+        width: 6.9rem;
+        height: 0.88rem;
+        margin: auto;
+        font-size: 0.24rem;
+        font-weight: bold;
+        line-height: 0.88rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 0.01rem solid #EEEEEE;
+      }
+      .detail .statisticsList .listBox .listItem .itemTime {
+        width: 3.6rem;
+        text-align: left;
+      }
+      .detail .statisticsList .listBox .listItem .itemPric {
+        width: 2.09rem;
+      }
+      .detail .statisticsList .listBox .listItem .itemState {
+        width: 1.2rem;
+        text-align: center;
+      }
+
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: 4.07rem;
+            bottom: 0;
+            height: auto; 
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="detail">
+      <div class="headerConBox">
+        <div class="header" :style="{paddingTop: statusH + 'rem'}">
+          <i class="iconfont icon-back" @click="onBack()"></i>
+          <p class="title">挑战明细</p>
+        </div>
+        <div class="statisticsBox">
+          <div class="statisticsItem">
+            <p class="number">{{spend}}</p>
+            <p class="text">投入(元)</p>
+          </div>
+          <div class="statisticsItem">
+            <p class="number">{{profit}}</p>
+            <p class="text">收入(元)</p>
+          </div>
+          <div class="statisticsItem">
+            <p class="number">{{count}}</p>
+            <p class="text">参与(天)</p>
+          </div>
+          <div class="statisticsItem">
+            <p class="number">{{success}}</p>
+            <p class="text">成功(天)</p>
+          </div>
+        </div>
+      </div>
+      <div class="statisticsList">
+        <p class="title"><i class="titleIcon"></i>每日明细</p>
+        <div class="listBox">
+          <div class='common-warp mescroll' ref="mescroll" id="mescroll" >
+            <div class="listItem" v-for="(item,index) in dataList" :key="'detail'+index">
+              <div class="itemTime">{{item.created_at}}期</div>
+              <div class="itemPric">投入{{item.money}}</div>
+              <div class="itemState" v-if="item.status == '0'">等待打卡</div>
+              <div class="itemState" v-if="item.status == '1'">打卡成功</div>
+              <div class="itemState" v-if="item.status == '2'">打卡失败</div>
+            </div>
+            <div id="empty"></div>
+          </div>
+        </div>
+      </div>
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201911061452"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!-- <script src="../../js/mint-ui/index.js"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+          count: '',
+          profit: '',
+          spend: '',
+          success: '',
+          mescroll: null, // mescroll实例对象
+          dataList: [], // 列表数据
+          statusH:0
+        },
+        created () {
+          let safeArea = dsBridge.call('receiveParams', 'safeAreaTop1')
+          let size = (document.documentElement.clientWidth / 7.5)
+          if (safeArea == '123'){
+            this.statusH = 0
+          } else {
+            this.statusH = (safeArea / size)
+          }
+        },
+        mounted: function () {
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+              
+            },
+            
+            up: {
+              callback: this.upCallback, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 10 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+              htmlLoading: '',
+              noMoreSize: 5,
+              toTop: {
+                src: '../../image/back_top.png',
+                offset: 1000
+              },
+              empty: {
+                warpId: 'empty',
+                icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+              }
+            }
+          });
+        },
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            
+            upCallback (page, mescroll) {
+              // 联网请求
+              Http.post(Http.HOST+Http.API_URL.HOMEDKDETAIL, {page:page.num}, true).then((response) => {
+                // 请求的列表数据
+                if (response.code === 0) {
+                  var data = response.data
+                  this.count = data.count
+                  this.profit = data.profit
+                  this.spend = data.spend
+                  this.success = data.success
+                }
+                let arr = response.data.data
+                // 如果是第一页需手动制空列表
+                if (page.num === 1) this.dataList = []
+                // 把请求到的数据添加到列表
+                this.dataList = this.dataList.concat(arr)
+                // 数据渲染成功后,隐藏下拉刷新的状态
+                this.$nextTick(() => {
+                  mescroll.endSuccess(arr.length)
+                })
+              }).catch((e) => {
+                // 联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                mescroll.endErr()
+              })
+            },
+        },
+        
+    })
+</script>
+
+</html>

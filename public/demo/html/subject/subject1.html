@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>活动专区</title>
+    <script>
+      (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">  
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style media="screen">
+  html,body { background: #f7f7f7;height: 100vh;}
+        .headerContent{
+            height: 3.25rem;
+            width: 100%;
+            /* background: #E55D1F; */
+            border-radius: 0 0 1rem 1rem;
+            position: relative;
+        }
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color: #fff;
+            line-height: 1rem;
+            font-size:0.36rem;
+            font-family:PingFang SC;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            z-index: 99;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .2rem;
+            height: 0.88rem;
+        }
+        .headerContent .headerBanner{
+            position: absolute;
+            left: 0.3rem;
+            bottom: -0.48rem;
+            border-radius: .6rem 0.6rem 0.2rem 0.2rem;
+            z-index: 2;
+            width: 6.9rem;
+            height: 3.1rem;
+        }
+        .headerContent .headerBanner img{
+            width: 100%;
+            height: 100%;
+            border-radius: .6rem 0.6rem 0.2rem 0.2rem;
+        }
+        .goodsListContent{
+            margin: 0.68rem 0.3rem 0;
+            z-index: 3;
+            background:rgba(255,255,255,1);
+            border-radius:0.15rem;
+        }
+        .goodsListContent .tabList{
+          width: 100%;
+          overflow: hidden;
+          border-bottom: 1px solid #EEEEEE;
+          height: .47rem;
+          padding: 0.16rem 0;
+          
+        }
+        .goodsListContent .tabList .tabItem{
+          text-align: center;
+          /* padding: 0 .2rem; */
+          color: #333333;
+          font-size: .28rem;
+          width: 1rem;
+          height: .48rem;
+          line-height: .48rem;
+          /* margin: 0 .23rem; */
+        }
+        .goodsListContent .tabList .tabItem.active{
+          background:linear-gradient(270deg,rgba(248,172,56,1),rgba(237,130,45,1),rgba(244,194,74,1));
+          box-shadow:0px 5px 5px 0px rgba(243,175,69,0.27);
+          border-radius: .24rem;
+          color: #fff
+        }
+        .goodsListContent .goodsItem{
+            height: 2.4rem;
+            padding: 0.25rem 0.39rem 0.25rem 0.17rem;
+            border-bottom: 0.01rem solid #EEEEEE;
+            display: flex;
+        }
+        .goodsListContent .goodsItem .goodsItemLeft{
+            height: 2.4rem;
+            width: 2.4rem;
+            border-radius:0.07rem;
+        }
+        .goodsListContent .goodsItem .goodsItemLeft img{
+            width: 100%;
+            height: 100%;
+            border-radius:0.07rem;
+        }
+        .goodsListContent .goodsItem .goodsItemRight{
+            width: 3.7rem;
+            margin-left: 0.24rem;
+        }
+        .goodsListContent .goodsItem .goodsItemRight .goodsTitle{
+            width: 100%;
+            line-height: 0.36rem;
+            font-weight:500;
+            font-family:PingFang SC;
+            font-size:0.28rem;
+            color: #333333;
+            padding-top: 0.2rem;
+            text-overflow: -o-ellipsis-lastline;
+            overflow:hidden; 
+            text-overflow:ellipsis;
+            display:-webkit-box; 
+            -webkit-box-orient:vertical;
+            -webkit-line-clamp:2; 
+        }
+        .goodsListContent .goodsItem .goodsItemRight .goodsPrice{
+            margin-top: 0.27rem;
+            display: flex;
+            align-items: flex-end;
+        }
+        .goodsListContent .goodsItem .goodsItemRight .goodsPrice .nowPrice{
+            font-size: 0.24rem;
+            font-weight:bold;
+            color: #FF2556;
+            margin-right: 0.08rem;
+        }
+        .goodsListContent .goodsItem .goodsItemRight .goodsPrice .nowPrice span{
+            font-size: 0.36rem;
+        }
+        .goodsListContent .goodsItem .goodsItemRight .goodsPrice .rawPrice{
+            font-size: 0.2rem;
+            color: #C1C1C1;
+            text-decoration:line-through;
+        }
+        .goodsListContent .goodsItem .goodsItemRight .goodsTicket{
+            margin-top: 0.2rem;
+            display: flex;
+            align-items: flex-end;
+            font-size:0.22rem;
+            font-family:PingFang SC;
+            font-weight:500;
+            height: 0.42rem;
+            line-height: 0.42rem;
+            color: #FF0036;
+        }
+        .goodsListContent .goodsItem .goodsItemRight .goodsTicket .ticket{
+            width: 1.09rem;
+            height: 0.42rem;
+            text-align: center;
+            line-height: 0.42rem;
+            background:url(../../image/quanbj.png) no-repeat;
+            background-size: cover; 
+        }
+        .goodsListContent .goodsItem .goodsItemRight .goodsTicket .yuguzhuan{
+            margin-left: 0.21rem;
+            padding: 0 0.13rem;
+            background: #FFF3D9;
+        }
+        .active{
+          background:linear-gradient(270deg,rgba(248,172,56,1),rgba(237,130,45,1),rgba(244,194,74,1));
+          box-shadow:0px 5px 5px 0px rgba(243,175,69,0.27);
+          border-radius:24px;
+          color: #FFFFFF;
+          font-weight:bold;
+        }
+        .goodsListContent .tabListTop{
+          position: fixed;
+          top: 0.88rem;
+          z-index: 100;
+          background: #FFFFFF;
+          /* padding-right: 0.3rem; */
+          border-radius:0.15rem;
+          width: 6.9rem;
+        }
+        #mescroll{
+          width: 100%;
+          position: fixed;
+          /* top: 0.87rem; */
+          bottom: 0;
+          height: auto;
+        }
+
+    </style>
+</head>
+
+<body>
+  <div id="vue-app"  v-cloak>
+    <div class="header" :style="{background:styleInfo.bgcolor,paddingTop:pdTop+0.1+'rem'}">    
+        <div  v-if='isShowBackBtn' class="left" @click="onBack"><i class="iconfont icon-back" :style="{color: styleInfo.color}"></i></div>
+        <div class="center" :style="{color: styleInfo.color}">{{styleInfo.title}}</div>
+    </div>
+    <div class='common-warp mescroll' ref="mescroll" id="mescroll" :style="{top:0.87+pdTop+'rem'}">    
+        <div class="headerContent" :style="{background:styleInfo.bgcolor}">
+            <div  v-if="styleInfo && styleInfo.img != ''" class="headerBanner">
+                <img :src="styleInfo.url">
+            </div>
+        </div>
+        <div class="goodsListContent" ref="tabList" id="empty">
+            <!-- <div class="tabList"> -->
+              <swiper v-if="tabList && tabList.length > 0 && type == 2" :class="scrollTop == 1 ? 'tabListTop' : ''" :style="scrollTop == 1 ? {top:0.88+pdTop+'rem'} : ''" class="tabList"  :options="swiperOption" ref="mySwiper">              
+                <swiper-slide class="tabItem" v-for="(item, index) in tabList" :key="index" :class="flag == index ? 'active' :''" :id="index" :accessKey="item.value">{{item.name}}</swiper-slide>
+              </swiper>
+            <!-- </div> -->
+            <div class="goodsList">
+                <div class="goodsItem" v-for="(item, index) in goodsList" :key="index"  @click="toDetail(item)">
+                    <div class="goodsItemLeft">
+                        <img :imgurl="item.thumb">
+                    </div>
+                    <div class="goodsItemRight">
+                        <p class="goodsTitle">{{item.title}}</p>
+                        <div class="goodsPrice">
+                            <p class="nowPrice">￥<span>{{item.coupon_price}}</span></p>
+                            <span class="rawPrice">￥{{item.zk_final_price}}</span>
+                        </div>
+                        <div class="goodsTicket">
+                            <div class="ticket">{{item.coupon_money}}元券</div>
+                            <div class="yuguzhuan">预估赚￥{{item.commission_money}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+	
+  </div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js"></script>
+
+<!-- 线上路径，线上需开启 -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<!-- 本地调试路径 -->
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<script type="text/javascript">
+    Vue.use(window.VueAwesomeSwiper)
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+          dataList: [],
+          mescroll: null,
+          flag: 0,
+          scrollTop:'',
+          styleInfo:'',
+          swiperOption:{
+            freeMode: true,
+            freeModeMomentumRatio: 0.5,
+            slidesPerView: 5,
+            slideToClickedSlide: false,
+            centeredSlides : false,
+            on:{
+              tap:function(e){
+                vueObj.flag = e.target.id
+                vueObj.materialId = e.target.accessKey
+                vueObj.reset()
+                console.log(e)
+                // console.log(this)
+                // if (e.target.offsetLeft > e.target.offsetWidth * 3) {
+                //   e.target.offsetLeft = e.target.offsetWidth * 2
+                // }
+              }
+            },
+          },
+          // tabList:['男装','女装','童装','母婴','化妆品','家用电器','家纺','玩具'],
+          tabList:[],
+          goodsList:[],
+          id:'',
+          pdTop:0,
+          type:'', //商品源类型
+          materialId:'' //分类id
+        },
+        mounted: function(){
+          //沉浸式，获取状态栏高度
+          let safeArea = dsBridge.call('receiveParams', 'safeAreaTop')
+          let size = (document.documentElement.clientWidth / 7.5)
+          this.pdTop = (safeArea / size)
+          console.log('safeArea',safeArea)
+          console.log('size',size)
+          // 获取自定义样式
+          this.getStyle()
+          window.addEventListener('scroll', this.handleScroll, true);
+          this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+              
+            },
+            
+            up: {
+              callback: this.upCallback, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 10 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+              htmlLoading: '',
+              noMoreSize: 5,
+              toTop: {
+                src: '../../image/back_top.png',
+                offset: 1000
+              },
+              empty: {
+                warpId: 'empty',
+                icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                 tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+              },
+              lazyLoad: {
+                  use: true, // 是否开启懒加载,默认false
+                  attr: 'imgurl', // 网络地址的属性名 (图片加载成功会移除该属性): <img imgurl='网络图  src='占位图''/>
+                  showClass: 'mescroll-lazy-in', // 图片加载成功的显示动画: 渐变显示,参见mescroll.css
+                  //delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
+                  //offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
+              }
+            }
+          });
+        },
+        created: function() {
+          // 获取专题模板id
+          this.getParameter()
+        },
+        methods: {
+          // 获取传参
+          getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.id = Request['id']
+                console.log(this.id)
+            },
+          change:function(i){
+            console.log(i)
+          },
+          // 获取自定义样式
+          getStyle:function(){
+            Http.post(Http.HOST+Http.API_URL.APPREPAIRSOURCE,{style_id: this.id},true,true).then((res)=>{
+              if(res.code == 0){
+                this.styleInfo = res.data.info
+                this.tabList = res.data.category
+                if (this.tabList == null) {
+                  this.type = 1
+                  this.reset()
+                } else {
+                  this.type = 2
+                  this.materialId = this.tabList[0].value
+                  this.reset()
+                }
+              }
+            })
+          },
+          // 监听滚动条高度，tab栏固定
+          handleScroll:function () {
+            var goodsListContent = document.getElementsByClassName('goodsListContent')[0]
+            if(goodsListContent.offsetTop-this.$refs.mescroll.scrollTop <= 0) {
+              this.scrollTop = 1
+            }else{
+              this.scrollTop = ''
+            }
+          },
+          onBack: function(ret, err){
+            dsBridge.call('closeWin')
+          },
+          upCallback (page) {
+            if (this.type == 1) {
+                //联网请求
+              Http.post(Http.HOST+Http.API_URL.APPREPAIRDATA,{style_id: this.id, page:page.num},true,true).then((response)=> {
+                //请求的列表数据
+                let arr = response.data;
+                //如果是第一页需手动置空列表
+                if (page.num == 1) this.dataList = [];
+                //把请求到的数据添加到列表
+                this.dataList = this.dataList.concat(arr);
+                //数据渲染成功后,隐藏下拉刷新的状态
+                this.goodsList = this.dataList
+                this.$nextTick(() => {
+                  this.mescroll.endSuccess(arr.length);
+                })
+              }).catch((e)=> {
+                //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                this.mescroll.endErr();
+              })
+            } else if (this.type == 2) {
+              Http.post(Http.HOST+Http.API_URL.APPREPAIRDATA,{style_id: this.id,material_id: this.materialId, page:page.num},true,true).then((response)=> {
+                //请求的列表数据
+                let arr = response.data;
+                //如果是第一页需手动置空列表
+                if (page.num == 1) this.dataList = [];
+                //把请求到的数据添加到列表
+                this.dataList = this.dataList.concat(arr);
+                //数据渲染成功后,隐藏下拉刷新的状态
+                this.goodsList = this.dataList
+                this.$nextTick(() => {
+                  this.mescroll.endSuccess(arr.length);
+                })
+              }).catch((e)=> {
+                //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                this.mescroll.endErr();
+              })
+            }
+			      
+          },
+          reset () {
+            this.goodsList = []
+            // this.mescrollUp.page.num = 1
+            this.mescroll.setPageNum(1);
+            this.mescroll.resetUpScroll()
+          },
+          // 跳转详情
+          toDetail: function(item){
+            dsBridge.call('openGood', item)
+          },
+		  }
+    })
+</script>
+
+</html>

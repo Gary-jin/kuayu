@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>管理卡密</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/tab/style.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <link rel="stylesheet" href="../../js/mint-ui/style.css">  
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .header .right{
+            width: 1.2rem;
+            height: 0.32rem;
+            position: absolute;
+            right: 0.3rem;
+            top: 0.29rem;
+            font-size: 0.28rem;
+            font-weight: 500;
+            line-height: 0.32rem;
+            color:  #999999;
+        }
+        .videoCard {
+  height: 100%;
+}
+.videoCard .save {
+  color: #666;
+}
+
+.videoCard .lists {
+  /* height: calc(51%); */
+  position: relative;
+}
+.videoCard .list {
+  height: 1rem;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 14vw;
+  padding-right: 18vw;
+  align-items: center;
+  padding-left: .6rem;
+  background: #fff;
+  color: #333;
+  position: relative;
+}
+.videoCard .tab-type {
+  width: 100vw;
+  height: 0.72rem;
+  line-height: 0.72rem;
+  padding-top: 0.08rem;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+.videoCard .tab-type > .tab {
+  width: 40vw;
+  margin: 0 auto;
+  display: flex;
+}
+.videoCard .tab-type > .tab > div {
+  width: 20vw;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  color: white;
+  background: #dcdcdc;
+}
+.videoCard .tab-type > .tab > div:first-child {
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.videoCard .tab-type > .tab > div:last-child {
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.videoCard .active {
+  background: #e51c23 !important;
+}
+.videoCard .tab-handle {
+  width: 100vw;
+  height: 0.7rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.videoCard .copy-code {
+  width: 15vw;
+  height: 7vw;
+  line-height: 7vw;
+  background: #3f51b5;
+  color: white;
+  border-radius: 3px;
+  text-align: center;
+}
+.videoCard .list:after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  border-bottom: 1px solid #ededed;
+  transform: scale(0 0.5);
+}
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: 2.42rem;
+            bottom: 0;
+            height: auto; 
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="videoCard">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">管理卡密</div>
+            <div class="right" @click="produce">生产卡密</div>
+        </div>
+        <div class="tab-type">
+            <div class="tab">
+              <div @click="reset(0)" :class="{active:type==0}">未激活</div>
+              <div @click="reset(1)" :class="{active:type==1}">已激活</div>
+            </div>
+         </div>
+         <div class="tab-handle">
+            <div>卡号</div>
+            <div>操作</div>
+         </div>
+         <div class="lists">
+            <div class='common-warp mescroll' ref="mescroll" id="mescroll" >
+                <div class="list" v-for="(item, index) of list" :key="index" @click="start(item.cdkey)">
+                <div>{{item.cdkey}}</div>
+                <div class="copy-code" @click="copyText(item.cdkey)">复制</div>
+                </div>
+    
+                <div id="empty"></div>
+           </div>
+         </div>
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<!-- <script src="../../js/tab/index.js"></script>000000000000 -->
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            mescroll: null,
+            type: 0,
+            index: 0,
+            list: [],
+            tab:0,
+        },
+        created: function() {
+
+        },
+        mounted: function () {
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+              
+            },
+            
+            up: {
+              callback: this.upCallback, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 20 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+              htmlLoading: '',
+              noMoreSize: 5,
+              toTop: {
+                src: '../../image/back_top.png',
+                offset: 1000
+              },
+              empty: {
+                warpId: 'empty',
+                icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+              }
+            }
+          });
+        },
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            copyText(item){
+              // utils.copyText(item)
+              dsBridge.call("clipBoard", {value: item})
+            },
+            produce () {
+                Http.post(Http.HOST+Http.API_URL.MOVIEADDCARD, {
+                    number: 20
+                }, true).then(res => {
+                    if (res.code === 0) {
+                        dsBridge.call("toast", {msg: res.msg})
+                        this.reset(this.index)
+                    }
+                })
+            },
+            upCallback (page, mescroll) {
+                Http.post(Http.HOST+Http.API_URL.MOVIECARDLIST, {
+                    page: page.num,
+                    status: this.type
+                }, true).then((res) => {
+                    if (res.code === 0) {
+                    let arr = res.data
+                    if (page.num === 1) this.list = []
+                    this.list = this.list.concat(arr)
+
+                    this.$nextTick(() => {
+                        mescroll.endSuccess(arr.length)
+                    })
+                    } else {
+                    mescroll.endErr()
+                    }
+                }).catch((e) => {
+                    mescroll.endErr()
+                })
+            },
+            reset (type) {
+                this.type = type
+                this.list = []
+                this.mescroll.setPageNum(1)
+                this.mescroll.resetUpScroll()
+            },
+            start (cdkey) {
+                dsBridge.call('clipBoard', {value: cdkey})
+            },
+            
+        },
+        
+    })
+</script>
+
+</html>

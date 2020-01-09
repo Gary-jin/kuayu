@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拉新奖励</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css"> -->
+    <!-- <link rel="stylesheet" href="../../js/mint-ui/style.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" > -->
+    <style media="screen">
+    html,body { background: #f7f7f7;font-family:PingFang SC;}
+    #vue-app{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .content{
+            flex: 1;
+            overflow-y: scroll;
+        }
+        
+
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="paySuccess">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">邀请明细</div>
+        </div>
+        <div class="content">
+            <div class="days">
+                <p v-if="isShow" style="text-align: center;">没有邀请明细，赶紧去邀请朋友吧！</p>
+                <ul class="day-ul">
+                    <li class="day-li" v-for="(item,index) in data_list" :key="index">
+                    <div class="day-tit">
+                        <span v-text="item.mobile"></span>
+                        <span v-if="item.status == '1'" class="blue">新注册</span>
+                        <span v-else-if="item.status == '2'" class="red">激活</span>
+                        <span v-else class="yellow">首购</span>
+                    </div>
+                    <div class="day-msg">
+                        <p>注册时间：{{item.register_date}}</p>
+                        <p>首购时间：{{item.buy_date}}</p>
+                        <p>激活时间：{{item.bind_date}}</p>
+                        <p>订单号：{{item.tb_trade_parent_id}}</p>
+                    </div>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+        
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js?i=1" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!-- <script src="../../js/mint-ui/index.js"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script> -->
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            data_list: [],
+            isShow:false,
+        },
+        created: function() {
+            
+        },
+        
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            
+        },
+        
+        mounted: function () {
+            let _this = this;
+            let day = window.location.href.split('?')[1].split("=")[1];
+            Http.post(Http.HOST+Http.API_URL.USERNEWUSERLIST,{
+                y:day.split('-')[0],
+                m:day.split('-')[1],
+                d:day.split('-')[2]
+            },true).then(res => {
+                if (res.code == 0) {
+                    console.log(res);
+                    if(res.data.length <= 0 || res.data == []){
+                    /*TODO--没有数据页面*/
+                    dsBridge.call("toast", {msg: '加载失败！'})
+                    _this.isShow = true;
+                    return;
+                    }
+                    _this.data_list = res.data;
+                } else {
+                    dsBridge.call("toast", {msg: '加载失败！'})
+                }
+            })
+        }
+        
+    })
+</script>
+
+</html>

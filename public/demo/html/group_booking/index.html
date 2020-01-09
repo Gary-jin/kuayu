@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>福利团</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+      </script>
+
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/group_booking/group.css?i=1122">
+    <link rel="stylesheet" href="../../js/tab/style.css">
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    
+    <style>
+	#groupBooking{
+	  height: 100%;
+	  display: flex;
+	  flex-direction: column;
+	  position:relative;
+	  }
+	
+        #header{
+            position: relative;
+            //top: 0;
+           // left: 0;
+            //right: 0;
+            z-index: 999;
+			width:100%;
+            height: .88rem;
+            line-height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+        }
+        #header .left{
+            display: flex;
+            align-items: center;
+            z-index: 1;
+            position: absolute;
+            left: 0.3rem;
+			top: .28rem
+        }
+        #header .left img{
+            width: .18rem;
+            height: .32rem;
+        }
+        #header .title{
+            width: 100%;
+            text-align: center;
+            font-size: .34rem;
+            color: #2F2F2F;
+            font-weight: bold;
+        }
+        #header .right{
+            font-size: .30rem;
+            color: #666;
+            position: absolute;
+            right: .3rem;
+            z-index: 1;
+        }
+
+        #mescroll{
+            width: 100%;
+            position: absolute;
+            top: .88rem;
+            bottom: 0;
+            height: auto;
+        }
+        /* tab标签 */
+        /* .vux-tab-container{
+            padding: .26rem 0 0;
+        } */
+        .scrollable .vux-tab-item{
+            flex: 0 0 15% !important;
+        }
+        .vux-tab{
+            height: 32px;
+        }
+        .vux-tab .vux-tab-item{
+            background: none;
+        }
+        .scrollable{
+            padding-bottom: 24px;
+        }
+        .vux-tab .vux-tab-item{
+            font-size: .28rem;
+            color: #2f2f2f;
+        }
+        .vux-tab .vux-tab-item.vux-tab-selected{
+            font-size: .3rem;
+            font-weight: bold;
+        }
+        /* .goods-list .list{
+            margin-top: .34rem;
+        } */
+        .vux-tab-bar-inner{
+            border-radius: 2px;
+        }
+        .goods-list .tabWap{
+            // position: relative;
+            height: 1rem;
+            /*margin: .18rem 0 .12rem;*/
+            width: 100%;
+        }
+        .vux-tab-wrap{
+            position: none;
+        }
+        .goods-list .mescroll-empty .empty-icon{
+            width: 2.4rem;
+        }
+        .goods-list .mescroll-empty .empty-tip{
+            font-size: .24rem;
+        }
+		.goods-swiper{
+		margin-bottom:0.2rem;
+		}
+		
+		.tabWap{
+		height:1rem;
+		}
+		.swiperBanner{
+            height: 3rem;
+            background: #f7f7f7;
+        }
+        .swiperBanner .swiper-slide{
+            height: 3rem;
+        }
+        .swiperBanner .swiper-slide img{
+            max-height: 3rem;
+        }
+        .index-note{
+            padding: 0 !important;
+            height: .78rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="groupBooking" v-cloak>
+    <div id="header">
+        <div class="left" @click="onBack()"><img src="../../image/group_booking/back.png" alt=""></div>
+        <div class="title">福利团</div>
+        <span class="right" @click="toMyGroup()">我的拼团</span>
+    </div>
+    <div class="common-hight"></div>
+    <!-- <div class="yujiazai" v-if="yujiazai">
+        <div class="top"></div>
+        <div class="middle" v-for="x in 20"></div>
+    </div> -->
+    <div class="common-warp mescroll" ref="mescroll" id="mescroll" >
+        <div>
+            <div class="swiper-container swiperBanner">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" v-for="(item, index) in groupIndex.slide" :key="index" @click="toNav(item.types, item.type, item.goodsId, item.goodsCid, item.title, item.link)">
+                        <img :src="item.thumb" alt="">
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <div class="index-note" v-if="groupIndex.minNav">
+                <span v-for="(item, index) in groupIndex.minNav" ::key="index"><img :src="item.thumb" alt="">{{item.title}}</span>
+            </div>
+            <div class="index-nav" v-if="groupIndex.maxNav">
+                <ul class="clr">
+                    <li v-for="(item, index) in groupIndex.maxNav" :key="index" @click="toNav(item.types, item.type, item.goodsId, item.goodsCid, item.title, item.link)">
+                        <img :src="item.thumb" alt="">
+                        <p>{{item.title}}</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="goods-swiper" v-if="groupIndex.hotGoodsList">
+                <div class="content">
+                    <div class="title-img"><img :src="titleThumb" alt="" width="100%"></div>
+                    <div class="swiper-container swiperGoods">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" v-for="(item, index) in groupIndex.hotGoodsList" :key="index" @click="toGroupDetail(item.id)">
+                                <div class="goods-img">
+                                    <img :src="item.thumb" alt="">
+                                </div>
+                                <div class="info">
+                                    <h3 class="title text-overflow_1-xzh">{{item.goodsName}}</h3>
+                                    <p class="price"><span>{{item.collageNum}}人团</span><b>¥{{item.collagePrice}}</b></p>
+                                    <span class="num">已拼{{item.sales}}{{item.unit}}</span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="goods-list" v-if="groupIndex" :style="scrollTop == 1 ? {paddingTop:'1rem'} : {paddingTop:0}">
+                <div class="tabWap" :class="scrollTop == 1 ? 'tabListFix' : ''">
+                    <tab :line-width="2" custom-bar-width=".34rem" active-color="#D92B24" default-color="#333" v-model="selectType" class="resultTab"  ref="mySwiper">
+                        <tab-item @on-item-click="resetTab(item.id)" v-for="(item, index) in groupIndex.category" :key="index" >{{item.title}}</tab-item>
+                      </tab>
+                </div>
+               
+                <div class="list" id="d26" :style="{'minHeight': goodsListH + 'rem'}">
+                    <ul>
+                      <li class="flex" v-for="(item, index) in goodsList" :key="index" @click="toGroupDetail(item.id)">
+                            <div class="left"><img :src="item.thumb" alt=""></div>
+                            <div class="right flex_1">
+                                <h3 class="title text-overflow_1-xzh">{{item.goodsName}}</h3>
+                                <div class="num"><span class="postage">{{item.freeShippingInfo}}</span><span class="piece">已拼{{item.sales}}件</span></div>
+                                <div class="btm">
+                                    <div class="price">
+                                        <p><span>{{item.collageNum}}人拼团</span><b><i>¥</i>{{item.collagePrice}}</b></p>
+                                        <span class="single">单人价¥{{item.spe_price}}</span>
+                                    </div>
+                                    <button>去拼团</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js" charset="utf-8"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/mint-ui/index.js"></script>
+<script src="../../js/tab/index.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: "#groupBooking",
+        data:{
+            selected: 1,
+            yujiazai: true,
+            dialog: false,
+            mescroll:null,
+            selectType: '0',
+            scrollTop: '',
+            goodsList: '',
+            groupIndex: '',
+            goodsListH: '',
+            daySlide: '',
+            titleThumb: ''
+        },
+        created () {
+            var H = document.documentElement.clientHeight
+			var size = (document.documentElement.clientWidth / 7.5)
+			this.goodsListH = (H/size) - 1.88
+        },
+        methods: {
+            onBack: function(){
+                dsBridge.call('closeWin')
+            },
+            resetTab(id){
+                var that = this
+                that.cid = id
+                that.mescroll.optUp.page.num = 1
+                that.upCallback(that.mescroll.optUp.page, that.mescroll)
+            },
+            swiperBanner(){
+                new Swiper ('.swiperBanner', {
+                    loop: false,
+                    autoplay: {
+                        delay: 3000,
+                        disableOnInteraction: false
+                    },
+                    pagination: {
+                        el: '.swiper-pagination'
+                    }
+                });
+            },
+            swiperGoods(){
+                new Swiper ('.swiperGoods', {
+                    slidesPerView: 3,
+                    spaceBetween: 10,
+                });
+            },
+            // 监听滚动条高度，tab栏固定
+            handleScroll:function () {
+                var goodsListContent = document.getElementsByClassName('goods-list')[0]
+                if(goodsListContent.offsetTop-this.$refs.mescroll.scrollTop <= 0) {
+                    this.scrollTop = 1
+                }else{
+                    this.scrollTop = ''
+                }
+            },
+            getIndex: function() {
+                Http.post(Http.HOST+Http.API_URL.GROUPINDEX,{},true).then((res)=>{
+                    this.yujiazai = false
+                    if(res.code === 0){
+                        this.groupIndex = res.data;
+                        this.daySlide = res.data.daySlide
+                        this.titleThumb = res.data.daySlide[0].thumb
+                        this.cid = res.data.category[this.selectType].id
+                        this.$nextTick(function(){
+                            this.swiperBanner()
+                            this.swiperGoods()
+                            this.mescroll.optUp.page.num = 1
+                            this.upCallback(this.mescroll.optUp.page, this.mescroll)
+                        })
+                    }
+                })
+            },
+            upCallback (page,mescroll) {
+                Http.post(Http.HOST+Http.API_URL.GROUPGOODSLIST,{page: page.num, cid: this.cid},true).then((res)=>{
+                    if (res.code === 0) {
+                        let arr = res.data.list === '' ? [] : res.data.list
+                        if (page.num === 1) this.goodsList = []
+                        this.goodsList = this.goodsList.concat(arr)
+                        this.$nextTick(() => {
+                            mescroll.endSuccess(res.data.list.length, true)
+                        })
+                    }
+                })
+            },
+            // 下拉刷新
+            downCallback(){
+                this.getIndex();
+                this.mescroll.optUp.page.num = 1
+                this.upCallback(this.mescroll.optUp.page, this.mescroll)
+            },
+            // 去拼团
+            toGroupDetail(id){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/goodsDetails.html?id=' + id,type: 'web'})
+            },
+            toMyGroup(){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/myGroup.html',type: 'web'})
+            },
+            toNav(types, type, goodsId, goodsCid, title, link){
+                if(types == 'collageType'){
+                    dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/goodsList.html?title=' + title + '&type=' + type,type: 'web'})
+                }else if(types == 'collageCategory'){
+                    dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/goodsList.html?title=' + title + '&cid=' + goodsCid,type: 'web'})
+                }else if(types == 'collageGoods'){
+                    dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/goodsDetails.html?id=' + goodsId,type: 'web'})
+                }else if(types == 'httpUrl'){
+                    dsBridge.call("open", {url: link})
+                }
+            }
+        },
+        mounted(){
+            this.getIndex()
+            window.addEventListener('scroll', this.handleScroll, true);
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+                down: {
+                    //isLock: true,
+                     auto: false,
+                     callback: this.downCallback,
+                },
+                up: {
+                    //auto: false,
+                    // isBounce: false,
+                    callback: this.upCallback,
+                    page: {
+                        num: 0,
+                        size:5
+                    },
+                    // htmlNodata: '<p class="upwarp-nodata">—— 我也是有底线的 ——</p>',
+                    noMoreSize: 5,
+                    empty: {
+                        warpId: 'd26',
+                        icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                        tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                    }
+                }
+            });
+        }
+    })
+</script>
+
+</html>

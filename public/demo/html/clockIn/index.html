@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>早起打卡</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+       
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="clockIn" >
+        <div class="headerConBox" :style="{paddingTop: statusH + 'rem'}">
+          <div class="header" >
+            <i class="iconfont icon-back" @click="onBack()"></i>
+            <p class="title">早起打卡</p>
+            <span class="detailBut" @click="toDetail">挑战明细</span>
+          </div>
+          <div class="contentBox">
+            <p class="conTitle">早上准时打卡可瓜分金额(元)</p>
+            <p class="conNumber">{{sum}}</p>
+            <div class="personsBox">
+              <div class="photonBox" v-if="avatar.length > 0">
+                <div class="phoImg" v-for="(item,index) in avatar" :key="'phoImg'+index">
+                  <img :src="item" alt="">
+                </div>
+              </div>
+              <div class="photoText">
+                <i class="dot"></i>
+                <i class="dot"></i>
+                <i class="dot"></i>
+                <span class="personsNumber">{{members}}</span>
+                <p>人参与</p>
+              </div>
+            </div>
+            <p class="regulation" @click="toRule">挑战规则 ></p>
+            <div class="challenge" v-show="challengeShow" @click="isPayBox()">
+              <p>我要挑战</p>
+            </div>
+            <div class="challenge" v-show="stateEndShow">
+              <p class="countDown" v-show="staetEndTime">打卡倒计时 {{staetEndTime}}</p>
+              <div class="pricImg" v-show="staetEndTime">
+                <img src="../../image/clockIn/jinbi.png" alt="">
+                <div class="numberBox">
+                  <span class="number">{{manyNumber}}</span>
+                  <span>元</span>
+                </div>
+              </div>
+            </div>
+            <div class="challenge" style="margin-top: .5rem;" @click="doDaka()">
+              <p>我要打卡</p>
+            </div>
+            <div class="invitationBox">
+              <div class="invitation" @click="isInvitation">
+                <img class="mePhoto" src="../../image/clockIn/txiang.png" alt="">
+                <p class="invitationText">邀请<br>好友</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="succeedFailure">
+          <div class="succeedBox">
+            <img class="succeedImg" src="../../image/clockIn/cgdren.png" alt="">
+            <i class="threeIcon"></i>
+            <div class="succeedText">
+              <span class="succeed">成功</span>
+              <span class="succeedNumber">{{success}}</span>
+            </div>
+          </div>
+          <div class="failureBox">
+            <img class="failureImg" src="../../image/clockIn/sbdremn.png" alt="">
+            <i class="threeIcon"></i>
+            <div class="failureText">
+              <span class="failure">失败</span>
+              <span class="failureNumber">{{failed}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="logbuchBox" v-if="last">
+          <div class="logbucTitleBox">
+            <span class="title">今日<br>战况</span>
+          </div>
+          <div class="despiteBox" v-show="true">
+            <div class="despite despiteLeft" v-if="last.early.para">
+              <div class="photoBox">
+                <img class="icon" src="../../image/clockIn/despite.png" alt="" v-show="false">
+                <img class="photoImg" :src="last.early.avatar" alt="">
+              </div>
+              <div class="textBox textBoxLeft">早起之星</div>
+              <p class="userText">{{last.early.nickname}}</p>
+              <p class="desc">{{last.early.para}}打卡</p>
+            </div>
+            <div class="despite despiteLeft" v-else>
+              <div class="photoBox">
+                <img class="icon" src="../../image/clockIn/despite.png" alt="" v-show="false">
+                <img class="photoImg" src="../../image/clockIn/touxiang.png" alt="">
+              </div>
+              <div class="textBox textBoxLeft">早起之星</div>
+              <p class="userText">认真的雪</p>
+              <p class="desc">{{startTime}}打卡</p>
+            </div>
+            <div class="despite" v-if="last.luck.para">
+              <div class="photoBox">
+                <img class="icon" src="../../image/clockIn/despite.png" alt="" v-show="true">
+                <img class="photoImg photoBoxOne" :src="last.luck.avatar" alt="">
+              </div>
+              <div class="textBox">幸运之星</div>
+              <p class="userText">{{last.luck.nickname}}</p>
+              <p class="desc descAction">{{last.luck.para}}元</p>
+            </div>
+            <div class="despite" v-else>
+              <div class="photoBox">
+                <img class="icon" src="../../image/clockIn/despite.png" alt="" v-show="true">
+                <img class="photoImg photoBoxOne" src="../../image/clockIn/count_img.png" alt="">
+              </div>
+              <div class="textBox">幸运之星</div>
+              <p class="userText">时-￥</p>
+              <p class="desc descAction">201元</p>
+            </div>
+            <div class="despite despiteRight" v-if="last.series.para">
+              <div class="photoBox">
+                <img class="icon" src="../../image/clockIn/despite.png" alt="" v-show="false">
+                <img class="photoImg" :src="last.series.avatar" alt="">
+              </div>
+              <div class="textBox textBoxRight">毅力之星</div>
+              <p class="userText">{{last.series.nickname}}</p>
+              <p class="desc">{{last.series.para}}天</p>
+            </div>
+            <div class="despite despiteRight" v-else>
+              <div class="photoBox">
+                <img class="icon" src="../../image/clockIn/despite.png" alt="" v-show="false">
+                <img class="photoImg" src="../../image/clockIn/logos.png" alt="">
+              </div>
+              <div class="textBox textBoxRight">毅力之星</div>
+              <p class="userText">一起玩</p>
+              <p class="desc">1天</p>
+            </div>
+          </div>
+          <div class="bottomBox"></div>
+        </div>
+        <!-- 支付弹窗-->
+        <div class="payPage" v-show="payBoxBollean">
+          <div class="payNoBox" @click="isPayBox()"></div>
+          <div class="payBox">
+            <p class="title">
+              参与早上{{startTime}}~{{endTime}}<br>
+              早起分钱挑战
+            </p>
+            <div class="partBox">
+              <div v-for="(item, index) of numbers" class="partItem" :class="{partItemActive:iscur == index}" @click="hanldeAlert(index,item[0])" :key="'part'+index">
+                <p class="numberBox">
+                  <span class="number">{{item[0]}}</span>
+                  份
+                </p>
+                <p class="desc">{{item[1]}}</p>
+              </div>
+            </div>
+            <p class="hint">提示：1份等于{{price}}元，购买分数越多，打卡成功后赚的越多</p>
+            <div class="payTab">
+              <p class="payTabTitle"><img src="../../image/clockIn/zfu.png" alt="" class="payTitleIcon">支付方式</p>
+              <div class="payTabItem" :class="{payTabItemNo:(index == 'credit' && !isHaveCredit) || (index == 'integral' && !isHaveIntegral),payTabItemCilck:isPay == index}" v-for="(item,index) of payList" @click="isPayTabItem(index)" :key="index">
+                <img v-if="index == 'wxpay'" src="../../image/clockIn/wx.png" alt="" class="payIcon">
+                <img v-if="index == 'alipay'" src="../../image/clockIn/zfubao.png" alt="" class="payIcon">
+                <img v-if="index == 'credit'" src="../../image/clockIn/yue.png" alt="" class="payIcon">
+                <img v-if="index == 'integral'" src="../../image/clockIn/jifbao.png" alt="" class="payIcon">
+                <p class="payItemText">{{item.name}}<span v-if="index == 'credit'">({{credit}}元)</span><span v-if="index == 'integral'">({{integral}}元)</span></p>
+                <i class="paySelectBut">
+                </i>
+              </div>
+            </div>
+            <div class="payButBox">
+              <div class="noBut" @click="isPayBox()">取消</div>
+              <div class="yesBut" @click="handBuy()">确定</div>
+            </div>
+          </div>
+        </div>
+        <!-- 打卡成功弹窗-->
+        <div class="dapPage" v-show="earlyBollean">
+          <div class="earlyYes">
+            <img class="earlyImg" src="../../image/clockIn/zaoqicg.png" alt="">
+            <i class="hiddenBut" @click="hiddenEarly()"></i>
+            <p class="time">每天早上{{startTime}}~{{endTime}}打卡</p>
+            <p class="desc">
+               恭喜您打卡成功啦~<br>
+          瓜分金额可以在挑战明细里查看哦！<br>
+              {{parseInt(endTime.split(":")[0]) + 2}}点前将发放早起奖金
+            </p>
+            <div class="shareBut" @click="shareGrade()">我要分享战绩</div>
+          </div>
+        </div>
+        <!-- 打卡失败弹窗-->
+        <div class="lateBox" v-show="false">
+          <div class="late">
+    
+          </div>
+        </div>
+        <!-- 提醒弹窗-->
+        <div class="remindBox" v-show="remindBollean">
+          <div class="remind">
+            <div class="remindText">
+              <p class="title">提醒</p>
+              <p class="content">确认要消费26个集分宝参与挑战？</p>
+            </div>
+            <div class="butBox">
+              <div class="cancelBut">取消</div>
+              <div class="confirmBut">确定</div>
+            </div>
+          </div>
+        </div>
+        <!-- 提示弹窗-->
+        <div class="hintBox" v-show="hintBollean">
+          <div class="hint">
+            <p class="hintDesc">
+              您的集分宝余额不足<br>
+              请前往任务中心领取更多奖励
+            </p>
+            <div class="hintBton">任务中心>></div>
+          </div>
+        </div>
+        <!-- 邀请好友-->
+        <div class="inviteFriend" v-show="invitationBollean">
+          <div class="inviteImgBox">
+            <i class="shutImg" @click="isInvitation"></i>
+            <!-- <img :src="imgUrlBase64" alt=""> -->
+            <div class="inviteImgCode" ref="inviteImg" id="inviteImg">
+              <img class="inviteImg" src="../../image/clockIn/fxiangbjtu.png" alt="">
+              <p class="conTitle">早上准时打卡可瓜分金额(元)</p>
+              <p class="conNumber">{{sum}}</p>
+              <div class="personsBox">
+                <div class="photonBox" v-if="avatar">
+                  <div class="phoImg" v-for="(item,index) in avatar" :key="'phoImg'+index">
+                    <img :src="item" alt="">
+                  </div>
+                </div>
+                <div class="photoText">
+                  <i class="dot"></i>
+                  <i class="dot"></i>
+                  <i class="dot"></i>
+                  <span class="personsNumber">{{members}}</span>
+                  <p>人参与</p>
+                </div>
+              </div>
+              <div class="meDetail">我已挑战{{count}}天，收入{{profit}}元</div>
+              <div class="twoCode" id="twoCodeqrcode" v-html="codeHtml" ref="twoCodeqrcode"></div>
+              <!-- <img class="twoCode" :src="codeImgUrl" alt=""> -->
+            </div>
+          </div>
+          <div class="inviteTitle">
+            <span></span>
+            分享方式
+            <span></span>
+          </div>
+          <div class="inviteButBox">
+            <div class="item" @click="httpImg(1)">
+              <img src="../../image/clockIn/baoc.png" alt="">
+              <p>保存图片</p>
+            </div>
+            <div class="item" @click="httpImg(2)">
+              <img src="../../image/clockIn/wxfx.png" alt="">
+              <p>微信</p>
+            </div>
+            <div class="item" @click="httpImg(3)">
+              <img src="../../image/clockIn/pyqung.png" alt="">
+              <p>朋友圈</p>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201911201453"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="../../js/libs/qrcode.min.js"></script>
+<script src="../../js/libs/html2canvas.min.js"></script>
+
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            data: '',
+            sum: 0,
+            numbers: '',
+            members: 0,
+            success: 0,
+            failed: 0,
+            last: '',
+            invitationBollean: false,/* 邀请好友 */
+            hintBollean: false,/* 余额不足 */
+            remindBollean: false,/* 提醒 */
+            earlyBollean: false,/* 打卡成功 */
+            payBoxBollean: false,/* 支付弹窗 */
+            challengeShow: false,/* 挑战按钮默认隐藏 */
+            stateEndShow: false,/* 倒计时按钮默认隐藏 */
+            iscur: 0,
+            isPay: 'wxpay',/* 支付单选 */
+            // partList: [{number: 1,desc:'小试牛刀'},{number: 2,desc:'出手不凡'},{number: 5,desc:'心狠手辣'},{number: 10,desc:'小试牛刀'}],
+            partList: '',
+            // payList: {wechat:{name:'微信支付'},alipay:{name:'支付宝支付'},credit:{name:'余额'}},
+            payList: '',
+            integral: 0.00,
+            credit: 0.00,
+            partNumber: '',/* 挑战的份数 */
+            isHaveIntegral: false,/* 积分不够 */
+            isHaveCredit: true,/* 余额不够 */
+            payIsState: '',
+            staetEndTime:'',
+            startTime: '',
+            endTime: '',
+            avatar: [],
+            imgUrl: '',/* 合成的邀请图 */
+            imgUrlBase64: '',
+            codeHtml: '',
+            count: '',
+            profit: '',
+            canvas1: null,
+            manyNumber: '',
+            price: '',/* 每份的单价 */
+            setIntervalObj: null,
+            dakaInfo: {}
+            // qrcodeUrl: '',
+        },
+        created () {
+            let safeArea = dsBridge.call('receiveParams', 'safeAreaTop1')
+            let size = (document.documentElement.clientWidth / 7.5)
+            if (safeArea == '123'){
+            this.statusH = 0
+            } else {
+            this.statusH = (safeArea / size)
+            }
+        },
+        mounted () {
+            this.getInfo()
+            document.addEventListener("visibilitychange", () => {
+              if(document.hidden) {
+                  // 页面被挂起
+                  var el = document.getElementById('twoCodeqrcode')
+                  var childs = el.childNodes
+                  for(var i = childs .length - 1; i >= 0; i--) {
+                    el.removeChild(childs[i])
+                  }
+              }
+              else {
+                  // 页面呼出
+                  this.getInfo()
+              }
+            })
+        },
+        methods: {
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            toDetail () {
+              dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/clockIn/detail.html',type: 'web'})
+            },
+            toRule () {
+              dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/clockIn/regulation.html?startTime=' + this.startTime + '&endTime=' + this.endTime,type: 'web'})
+            },
+            doDaka () {
+                Http.post(Http.HOST+Http.API_URL.HOMEDKDO, {id: this.dakaInfo.info.id || 0}).then(resdaka => {
+                    if (resdaka.code === 0) {
+                      this.earlyBollean = true
+                      this.challengeShow = true
+                      this.stateEndShow = false
+                    }
+                })
+            },
+            // 获取数据
+            getInfo () {
+              var That = this
+              if(this.setIntervalObj) {
+                  clearTimeout(That.setIntervalObj)
+              }
+              Http.post(Http.HOST+Http.API_URL.HOMEDAKA, {}, true).then(res => {
+                  if (res.code === 0) {
+                  That.$nextTick(function () {
+                      //生成二维码
+                      // That.canvas1 = qrcanvas({
+                      //     data: decodeURIComponent(data.qrcodeUrl),
+                      //     size:50
+                      // });
+                      var qrcode = new QRCode("twoCodeqrcode", {
+                          text: decodeURIComponent(data.qrcodeUrl),
+                          width: 45,
+                          height: 45,
+                          // colorDark : "#000000",
+                          // colorLight : "#ffffff",
+                          // correctLevel : QRCode.CorrectLevel.H
+                      });
+                      var canvas=document.getElementsByTagName('canvas')[0];
+                      var img = convertCanvasToImage(canvas);
+                      // $('#qrcode').append(img);// 添加DOM
+                      document.getElementById('qrcode').appendChild(img)
+                      //从 canvas 提取图片 image  
+                      function convertCanvasToImage(canvas) {  
+                      //新建Image对象
+                      var image = new Image();  
+                      // canvas.toDataURL 返回的是一串Base64编码的URL
+                      image.src = canvas.toDataURL("image/png");  
+                      return image;  
+                    }   
+                  })
+
+                  var data = res.data
+                  this.dakaInfo = data
+                  if(!data.sum) {
+                      this.sum = 0
+                  } else {
+                      this.sum = data.sum
+                  }
+                  // this.qrcodeUrl = data.qrcodeUrl
+                  this.numbers = data.numbers
+                  this.partNumber = data.numbers[0][0]
+                  this.members = data.members
+                  this.manyNumber = data.money * data.price
+                  this.price = data.price
+                  if(!data.last.success){
+                      this.success = 0
+                  } else{
+                      this.success = data.last.success
+                  }
+                  if(!data.last.failed){
+                      this.failed = 0
+                  } else{
+                      this.failed = data.last.failed
+                  }
+                  // this.integral = data.credit1
+                  this.credit = data.credit
+                  if(data.credit == 0) {
+                      this.isHaveCredit = false
+                  }
+                  this.last = data.last
+                  if (this.last.early.para) {
+                      this.last.early.para = data.last.early.para.split(" ")[1]
+                  } else {
+                      this.last.early.para = data.last.early.para
+                  }
+                  this.payList = data.pay_type
+                  this.startTime = data.start_time
+                  this.endTime = data.end_time
+                  this.avatar = data.avatar
+                  if (That.newDataYMS(data.start_time,data.end_time)){
+                      // 打卡时间
+                      if (data.info) {
+                          // 已报名
+                          // 进行打卡
+                          if(data.info.status == 0) {
+                              Http.post(Http.HOST+Http.API_URL.HOMEDKDO, {id:data.info.id}, true).then(resdaka => {
+                              if (resdaka.code === 0) {
+                              That.earlyBollean = true
+                              That.challengeShow = true
+                              That.stateEndShow = false
+                              return
+                              }
+                          })
+                          } else {
+                          if (data.is_sign == 1) {
+                              // 已报名
+                              That.challengeShow = false
+                              That.stateEndShow = true
+                              That.endTimeNumber(data.startTime)
+                          } else if(data.is_sign == 0){
+                              // 未报名
+                              That.challengeShow = true
+                              That.stateEndShow = false
+                          }
+                          }
+                      } else {
+                          // 未报名
+                          if (data.is_sign == 1) {
+                          // 已报名
+                          That.challengeShow = false
+                          That.stateEndShow = true
+                          That.endTimeNumber(data.startTime)
+                          } else if(data.is_sign == 0){
+                          // 未报名
+                          That.challengeShow = true
+                          That.stateEndShow = false
+                          }
+                      }
+                  } else {
+                      // 非打卡时间
+                      // 判断是否报名
+                      if (data.is_sign == 1) {
+                      // 已报名
+                      That.challengeShow = false
+                      That.stateEndShow = true
+                      That.endTimeNumber(data.startTime)
+                      } else if(data.is_sign == 0){
+                      // 未报名
+                      That.challengeShow = true
+                      That.stateEndShow = false
+                      }
+                  }
+                  console.log(data.is_sign,'data.is_sign')
+                  }
+              })
+              Http.post(Http.HOST+Http.API_URL.HOMEDKDETAIL, {page: 1}, true).then(resPage => {
+                  if(resPage.code == 0){
+                  this.count = resPage.data.count
+                  this.profit = resPage.data.profit
+                  }
+              })
+            },
+            // 倒计时
+            endTimeNumber(value) {
+              var that = this
+              that.setIntervalObj = setInterval(() => {
+                  that.TimeDown(value)
+              },1000)
+            },
+            // 下载图片
+            downImg () {
+              const that = this
+              dsBridge.call('saveMediaToAlbum', {url: that.imgUrl})
+            },
+            httpImg(types) {
+              console.log(this.canvas1)
+              let canvas = this.$refs.inviteImg
+              let that = this
+              //合成图片
+              html2canvas(canvas, {scale: 2, logging: false, useCORS: true}).then(function (canvas) {
+                  let type = 'png'
+                  let imgData = canvas.toDataURL(type)
+                  // console.log(imgData)
+                  // 照片格式处理
+                  let _fixType = function (type) {
+                    type = type.toLowerCase().replace(/jpg/i, 'jpeg')
+                    let r = type.match(/png|jpeg|bmp|gif/)[0]
+                    return 'image/' + r
+                  }
+                  imgData = imgData.replace(_fixType(type), 'image/octet-stream')
+                  // console.log(imgData)
+                  that.imgUrlBase64 = imgData
+                  Http.post(Http.HOST+Http.API_URL.HOMEDKSHARE, {
+                    img: that.imgUrlBase64,
+                  }, true).then(resimgUrl => {
+                    if (resimgUrl.code === 0) {
+                        that.imgUrl = resimgUrl.data
+                        if(types == 1) {
+                          that.downImg()
+                        } else if(types == 2){
+                          that.shareFri(1)
+                        } else if( types == 3) {
+                          that.shareFri(2)
+                        }
+                    }
+                  })
+              })
+              this.invitationBollean = !this.invitationBollean
+            },
+            //base64转blob
+            base64ToBlob(code) {
+                let parts = code.split(';base64,');
+                let contentType = parts[0].split(':')[1];
+                let raw = window.atob(parts[1]);
+                let rawLength = raw.length;
+
+                let uInt8Array = new Uint8Array(rawLength);
+
+                for (let i = 0; i < rawLength; ++i) {
+                uInt8Array[i] = raw.charCodeAt(i);
+                }
+                return new Blob([uInt8Array], {type: contentType});
+            },
+            // 确定支付
+            handBuy () {
+              var transactionPassword = dsBridge.call("receiveParams", 'transactionPassword'); // 交易密码 0为未设置
+                if (this.isPay === "credit") {
+                  if (transactionPassword == 0 && codeVersion >= 300) {
+                    dsBridge.call("toast", {msg: '还未设置交易密码，快去设置吧~'})
+                      setTimeout(function(){
+                          dsBridge.call("openWin", '/judgeDealisno')
+                      },1000)
+                      return
+                  }
+                }
+                Http.post(Http.HOST+Http.API_URL.HOMEDAKAPAY, {
+                    number: this.partNumber,
+                    type: this.isPay
+                }, true).then(res => {
+                    if (res.code === 0) {
+                      // 如果是余额支付，直接是支付成功返回的data为空数组。
+                      if (this.isPay === 'credit') {
+                        this.payBoxBollean = false
+                        dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/clockIn/paySuccess.html?startTime=' + this.startTime + '&endTime=' + this.endTime,type: 'web'})
+                        return
+                      } else {
+                        this.data = res.data.payOrder
+                        let info = {
+                            apiKey: this.data.appid,
+                            orderId: this.data.prepayid,
+                            mchId: this.data.partnerid,
+                            nonceStr: this.data.noncestr,
+                            timeStamp: this.data.timestamp,
+                            sign: this.data.sign
+                        }
+                        if (this.isPay === 'alipay') {
+                          if (codeVersion >= 300) {
+                            dsBridge.call("alipayPay", {orderInfo: this.data}, (ret) =>{
+                                if (ret == 0) {
+                                    //    支付成功
+                                    this.payBoxBollean = false
+                                    dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/clockIn/paySuccess.html?startTime=' + this.startTime + '&endTime=' + this.endTime,type: 'web'}) 
+                                } else if (ret == -1) {
+                                  //    支付失败
+                                  dsBridge.call('toast', {msg: '支付失败'})
+                                  this.payBoxBollean = false 
+                                }
+                            })
+                          } else {
+                            dsBridge.call("alipayPay", {orderInfo: this.data})
+                            this.payBoxBollean = false
+                            dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/clockIn/paySuccess.html?startTime=' + this.startTime + '&endTime=' + this.endTime,type: 'web'})
+                          }
+                        } else if (this.isPay === 'wxpay'){
+                          if (codeVersion >= 300) {
+                              dsBridge.call("wxPay", info, (ret) =>{
+                                  if (ret == 0) {
+                                      //    支付成功
+                                      this.payBoxBollean = false
+                                      dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/clockIn/paySuccess.html?startTime=' + this.startTime + '&endTime=' + this.endTime,type: 'web'})
+                                    } else if (ret == -1) {
+                                      //    支付失败
+                                      dsBridge.call('toast', {msg: '支付失败'})
+                                      this.payBoxBollean = false 
+                                  }
+                              })
+                          } else {
+                            dsBridge.call("wxPay", info)
+                            this.payBoxBollean = false
+                            dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/clockIn/paySuccess.html?startTime=' + this.startTime + '&endTime=' + this.endTime,type: 'web'})
+                          }
+                        }
+                      }
+                    }
+                })
+            },
+            // 分享到微信1 分享微信朋友圈2
+            shareFri (type) {
+                dsBridge.call('inviteShare', {url: this.imgUrl, type: type})
+            },
+            // 根据今天的年月日获取到打卡时间点  需要输入打卡的时间8:00
+            newDataYMS (time1, time2) {
+                var date = new Date()
+                var dateTime = date.getTime() /* 当前时间时间戳*/
+                var seperator1 = '-'
+                var year = date.getFullYear()
+                var month = date.getMonth() + 1
+                var strDate = date.getDate()
+                if (month >= 1 && month <= 9) {
+                    month = '0' + month
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = '0' + strDate
+                }
+                var startDate = year + seperator1 + month + seperator1 + strDate + ' ' + time1
+                var startTime = new Date(startDate)
+                startDate = startTime.getTime()
+                var endDate = year + seperator1 + month + seperator1 + strDate + ' ' + time2
+                var endTime = new Date(endDate)
+                endDate = endTime.getTime()
+                if (dateTime > startDate && dateTime < endTime) {
+                    return true
+                }
+                return false
+            },
+            // 倒计时
+            TimeDown (endDateStr) {
+                var That = this
+                //结束时间
+                var endDate = new Date(endDateStr * 1000);
+                //当前时间
+                var nowDate = new Date();
+                //相差的总秒数
+                var totalSeconds = parseInt((endDate - nowDate) / 1000);
+                //天数
+                var days = Math.floor(totalSeconds / (60 * 60 * 24));
+                //取模（余数）
+                var modulo = totalSeconds % (60 * 60 * 24);
+                //小时数
+                var hours = Math.floor(modulo / (60 * 60));
+                modulo = modulo % (60 * 60);
+                //分钟
+                var minutes = Math.floor(modulo / 60);
+                //秒
+                var seconds = modulo % 60;
+        //         if(hours == 0 && minutes == 0 && seconds == 0) {
+        //           That.stateEndShow = false
+        //           clearTimeout(That.setIntervalObj)
+        //           setTimeout(() =>{
+        //             That.challengeShow = true
+        //             That.getInfo()
+        //           },1000)
+        //           return
+        //         }
+                if(seconds < 0) {
+                  That.stateEndShow = false
+                  clearTimeout(That.setIntervalObj)
+                  setTimeout(() =>{
+                      That.challengeShow = true
+                      That.getInfo()
+                  },1000)
+                  return
+                }
+                //输出到页面
+                this.staetEndTime = hours + "时" + minutes + "分" + seconds + "秒";
+                console.log(this.staetEndTime)
+            },
+            // 邀请好友弹窗
+            isInvitation() {
+                // 判断是否绑定手机号
+                let userPhone = dsBridge.call("getUserPhone","")
+                let codeVersion = dsBridge.call('receiveParams', 'codeVersion')
+                if( userPhone === '' || userPhone === null && codeVersion >= 300){
+                    dsBridge.call("toast", {msg: '您还未绑定手机号，请先去绑定！'})
+                    setTimeout(function(){
+                    dsBridge.call("openWin", '/judgemobile')
+                    },1000)
+                    return
+                }
+                this.invitationBollean = !this.invitationBollean
+                // document.getElementById('twoCodeqrcode').appendChild(this.canvas1);
+                // console.log(this.canvas1)
+                // if(this.invitationBollean) {
+                //   this.created()
+                // }
+            },
+            // 我要分享战绩
+            shareGrade() {
+                this.earlyBollean = false
+                this.isInvitation()
+            },
+            // 单选份数
+            hanldeAlert(res,number) {
+                this.iscur = res
+                this.partNumber = number
+            },
+            // 选择支付方式
+            isPayTabItem(res){
+                if (res == 'wxpay') {
+                    this.isPay = res
+                } if (res == 'alipay') {
+                    this.isPay = res
+                } if (res == 'credit') {
+                    if (!this.isHaveCredit) {
+                      dsBridge.call("toast", {msg: '余额不足'})
+                      return
+                    }
+                    this.isPay = res
+                } if (res == 'integral') {
+                    if (!this.isHaveIntegral) {
+                      dsBridge.call("toast", {msg: '积分不足'})
+                      return
+                    }
+                    this.isPay = res
+                }
+            },
+            // 关闭打开支付弹窗
+            isPayBox() {
+                // 改成现在的绑定手机号的判断。
+                let userPhone = dsBridge.call("getUserPhone","")
+                let codeVersion = dsBridge.call('receiveParams', 'codeVersion')
+                if( userPhone === '' || userPhone === null && codeVersion >= 300){
+                    dsBridge.call("toast", {msg: '您还未绑定手机号，请先去绑定！'})
+                    setTimeout(function(){
+                    dsBridge.call("openWin", '/judgemobile')
+                    },1000)
+                    return
+                }
+                this.payBoxBollean = !this.payBoxBollean
+            },
+            // 关闭打卡成功界面
+            hiddenEarly() {
+                this.earlyBollean = false
+            }
+        },
+    })
+</script>
+
+</html>

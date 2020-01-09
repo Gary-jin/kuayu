@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>省市县代理</title>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <script src="../../js/global.js"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style media="screen">
+      html,body {background: #f7f7f7;font-family:PingFang SC; height: 100vh; line-height: 1; box-sizing: border-box; font-size: calc(100vw / 7.5);}
+      .header { color: #2F2F2F; background: white; position: absolute; width: 100%; height: 0.88rem; line-height: 0.88rem; display: flex; align-items: center; justify-content: center; top: 0; left: 0; z-index: 1;}
+
+      .header .left { display: flex;align-items: center; justify-content: center; position: absolute; bottom: 0; left: .2rem; height: 0.88rem; }
+      .header .left .back{ height: .32rem; width: .32rem; background-size: contain; background-image: url(../../image/back.png); background-repeat: no-repeat; background-position: center;}
+      .header .center {font-size: 0.34rem;font-weight:bold;}
+
+      #mescroll-box { padding-bottom: 1rem; box-sizing: border-box; background:rgb(247,247,247);height: 100vh;overflow: auto; padding-top: 0.88rem;}
+
+      .top-info { background-size: 7.5rem 3.8rem !important; background-repeat: no-repeat !important; display: flex; flex-direction: column; align-items: center; }
+      .top-info .avatar { width: 1.1rem; height: 1.1rem; border-radius: 50%; margin-top: .39rem; margin-bottom: .18rem; }
+      .top-info .nick-name {font-size: 0.34rem; color: white; font-weight: bold; min-height: .36rem;}
+      .top-info .agent-level { color: white; display: flex; align-items: center; line-height: normal; margin-top: .14rem; margin-bottom: .17rem; min-height: .2rem;}
+      .top-info .agent-level img { width: .28rem; width: .3rem; margin-right: .05rem;}
+      .top-info .agent-level span { font-size: .26rem;}
+      .top-info .total-profit { background:white; border-radius: .2rem; text-align: center; width: 6.9rem; height: 2.8rem; padding-top: .57rem; box-sizing: border-box; }
+      .top-info .total-profit>div:first-child { font-size: .26rem; color: #666666; font-weight: 500; margin-bottom: .36rem; }
+      .top-info .total-profit .price { color: #D92B24; font-size: .25rem; font-weight: bold; display: flex; align-items: flex-end; justify-content: center; margin-bottom: .5rem;}
+      .top-info .total-profit .price-value {font-size: .4rem;}
+      .top-info .total-profit .profit-desc { color: #666; font-size: .24rem; }
+      .top-info .total-profit .iconfont { font-size: .24rem; margin-right: .1rem;}
+
+      .detail-title { display: flex; justify-content: space-between; align-items: center; background:rgb(247,247,247); padding: .44rem .3rem .26rem; width: 100%; box-sizing: border-box; }
+      .detail-title .detail-title-left { font-size: .3rem; color: #2f2f2f; font-weight: bold;}
+      .detail-title .detail-title-right { font-size: .24rem; color: #666;}
+      .detail-title .detail-title-right .iconfont { font-size: .22rem;}
+
+      .detail-list { padding: 0 .3rem; }
+      .detail-list .detail-item { background: white; border-radius: .1rem; box-shadow:0px 2px 10px 0px rgba(186,186,186,0.11); width: 6.9rem; height: 2.16rem; margin-bottom: .2rem;}
+      .detail-list .detail-item .detail-item-title { font-size: .26rem; color: #666; font-weight: 500; padding: .25rem 0 .26rem .22rem; border-bottom: .01rem solid #eee; }
+      .detail-list .detail-item .detail-line { margin-top: .3rem; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 .21rem;}
+      .detail-list .detail-item .detail-line:first-child { font-size: .3rem; color: #2f2f2f; }
+      .detail-list .detail-item .detail-line:last-child { font-size: .24rem; color: #999; }
+    </style>
+</head>
+<body>
+  <div id="vue-app" v-cloak :style="{ paddingBottom: bot + 'px'}">
+      <div class="header" :style="{paddingTop: statusH + 'px'}">
+          <div  v-if='isShowBackBtn' class="left">
+              <div class="back" @click="onBack"></div>
+          </div>
+          <div class="center">省市县代理</div>
+      </div>
+      <div id="mescroll-box">
+        <div class="top-info" :style="{marginTop: statusH + 'px'}">
+          <img src="" class="avatar">
+          <div class="nick-name">{{nickname}}</div>
+          <div class="agent-level">
+            <img :src="levelIcon[level]">
+            <span>{{birthlevel}}</span>
+          </div>
+          <div class="total-profit">
+            <div>总收益</div>
+            <div class="price">￥<div class="price-value">{{price}}</div></div>
+            <div class="profit-desc"><i class="iconfont icon-xinxi"></i>本页面只做展示，在我的收益进行提现</div>
+          </div>
+        </div>
+        <div class="detail-title">
+          <div class="detail-title-left">佣金明细</div>
+          <div class="detail-title-right" @click="showTimeSelector">{{year+'年'+month+'月'}}<i class="iconfont icon-unfold"></i></div>
+        </div>
+        <div class="detail-list">
+          <div class="detail-item" v-for="(item, index) in list">
+            <div class="detail-item-title">订单号:{{item.orderId}}</div>
+            <div class="detail-bottom">
+              <div class="detail-line">
+                <div class="title">{{item.title}}</div>
+                <div class="price">+{{item.price}}</div>
+              </div>
+              <div class="detail-line">
+                <div class="shop-name">{{item.shopName}}</div>
+                <div class="time">{{new Date(item.created_at * 1000).toLocaleString('zh', {hour12: false}).replace(/\//g, '-')}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script>
+  // 根据全局的debug配置来决定是否请求vue.js 还是 vue_min.js
+  !GlobalConfig.debug? ajaxFile('utils_js', `${window.location.origin}/uqWeb/js/utils.js`) : ajaxFile('utils_js', '../../js/utils.js');</script>
+<script>
+  // 根据全局的debug配置来决定请求哪里的http.js?i=201911211908
+  !GlobalConfig.debug? ajaxFile('http_js', `${window.location.origin}/uqWeb/js/http.js?i=201911211908?201911090112`) : ajaxFile('http_js', '../../js/http.js?i=201911211908');
+</script>
+<script>
+    // 根据全局的debug配置来决定是否请求vue.js 还是 vue_min.js
+  !GlobalConfig.debug? ajaxFile('vue_js', `${window.location.origin}/uqWeb/js/libs/vue_min.js`) : ajaxFile('vue_js', '../../js/libs/vue.js');
+</script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            mescroll:null,
+            bot: 0,
+            list: [],
+            isShowBackBtn: isShowBackBtn,
+            utils: utils,
+            nickname: '',
+            level:0,
+            price: 0,
+            birthlevel: '',
+            levelIcon: ['','../../image/agent_profit_detail/province_icon.png', '../../image/agent_profit_detail/city_icon.png', '../../image/agent_profit_detail/county_icon.png'],
+            year: new Date().getFullYear(),
+            month: new Date().getMonth()+1
+        },
+        methods: {
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            /**
+             * 适配顶部底部安全区域
+            */
+            computeTopAndBottom() {
+              // 顶部安全区域
+              this.statusH = dsBridge.call('receiveParams', 'safeAreaTop') || 0
+
+              //ios底部安全区域
+              let saveBottom = (dsBridge.call("receiveParams", 'safeAreaBottom1')) || 0
+              if (saveBottom == '123'){
+                this.bot = 0
+              } else {
+                this.bot = saveBottom
+              }
+            },
+            /** 上拉加载的回调 */
+            upCallback (page, mescroll) {
+              if (page.num == 1) {
+                this.list = [];
+              }
+              Http.post(Http.HOST + Http.API_URL.MALLAGENTAGENTS, {page: page.num, time:this.year+'-'+this.month}).then((res)=>{
+                this.list = this.list.concat(res.data)
+                this.mescroll.endSuccess(res.data.length, true)
+              })
+            },
+            /**初始化mescroll*/
+            initMescroll () {
+              this.mescroll = new MeScroll('mescroll-box', { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+                down: {
+                  use: false
+                },
+                up: {
+                  lazyLoad: {use:true},
+                  isBounce: true,
+                  callback: this.upCallback,
+                  page: {
+                    num: 0,
+                    size:10
+                  },
+                  // htmlNodata: '<p class="upwarp-nodata">—— 我也是有底线的 ——</p>',
+                  noMoreSize: 1,
+                  empty: {
+                    warpId: document.getElementsByClassName('detail-list')[0],
+                    icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                    tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                  }
+                }
+              });	
+            },
+            /**获取一些省市县代理基本信息*/
+            getInfo() {
+              Http.post(Http.HOST + Http.API_URL.MALLAGENTAGENTINFO).then((res)=>{
+                this.level = res.data.level;
+                this.birthlevel = res.data.birthlevel;
+                this.nickname = res.data.nickname;
+                this.price = res.data.price;
+              })
+            },
+            // 根据后台主题色设置顶部背景色
+            setTopBg(){
+              // 顶部背景使用主题色
+              utils.dsBridge.getThemeColor.then((res)=>{
+                document.getElementsByClassName('top-info')[0].style.background = 'linear-gradient('+res.deg+'deg,' +res.mainColor+','+res.secondColor+')';
+              })
+            },
+            // 打开时间选择器
+            showTimeSelector(){
+              utils.dsBridge.showTimeSelector('y-m').then((res)=>{
+                let arr = res.split('-');
+                this.year = arr[0];
+                this.month = arr[1];
+                this.mescroll.optUp.page.num = 1;
+                this.upCallback(this.mescroll.optUp.page, this.mescroll);
+              })
+            },
+            // 吸顶悬浮
+            setObserver(){
+              let detailTitleDom = document.getElementsByClassName('detail-title')[0];
+              let headerDom = document.getElementsByClassName('header')[0];
+              let observer = new IntersectionObserver((entries)=>{
+                entries.forEach( item => {
+                  if (item.isIntersecting) {  // 开始交叉
+                    // 取消吸顶
+                    detailTitleDom.style.position = 'relative';
+                    detailTitleDom.style.top = '0';
+                    document.getElementsByClassName('top-info')[0].style.marginBottom = 0;
+
+                  } else {  // 开始分离
+                    // 判断是否是在顶部临界点
+                    if (item.boundingClientRect.top + item.boundingClientRect.height <= headerDom.offsetHeight) {
+                      // 开始吸顶
+                      detailTitleDom.style.position = 'fixed';
+                      detailTitleDom.style.top = headerDom.offsetHeight+'px';
+                      document.getElementsByClassName('top-info')[0].style.marginBottom = detailTitleDom.offsetHeight+'px';
+                    }
+                  }
+                })
+              }, {
+                rootMargin: -document.getElementsByClassName('header')[0].offsetHeight+'px 0px 0px 0px'
+              })
+              observer.observe(document.getElementsByClassName('top-info')[0]);
+            }
+        },
+        created () { 
+          this.computeTopAndBottom()
+        },
+        mounted () {	
+          this.setObserver();
+          document.getElementsByClassName('avatar')[0].src = utils.dsBridge.getAvatar();
+          this.setTopBg();
+          this.getInfo();
+          this.initMescroll();
+        }
+        
+    })
+</script>
+
+</html>

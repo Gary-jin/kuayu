@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>共享影视</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <link rel="stylesheet" href="../../js/mint-ui/style.css">  
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" > -->
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .header .right{
+            width: 0.6rem;
+            height: 0.32rem;
+            position: absolute;
+            right: 0.3rem;
+            top: 0.29rem;
+            font-size: 0.26rem;
+            line-height: 0.32rem;
+            color: #333;
+        }
+        .swiper img{
+            width: 100%;
+        }
+        .swiper-pagination-bullet {
+            width: 0.08rem;
+            height: 0.08rem;
+            border-radius: 0.04rem;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 1;
+        }
+        .swiper-pagination-bullet-active {
+            width: 0.21rem;
+            height: 0.08rem;
+            background: #F7F7F7;
+        }
+        .swiper-pagination-bullet {
+            margin: 0 10px;
+        }
+        .videoIndex {
+  font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Source Han Sans", "Noto Sans CJK Sc", "Microsoft YaHei", "Microsoft Jhenghei", sans-serif;
+  background: #fff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.video-content{
+    /* height: calc(100% - 0.88rem); */
+    overflow-y: scroll;
+    flex: 1;
+}
+.videoIndex .become-agent {
+  width: 6.88rem;
+  margin: 0.45rem auto 0;
+  display: block;
+}
+.videoIndex .headerConBox {
+  position: absolute;
+  overflow: hidden;
+  background: #fff;
+  width: 100%;
+  height: 0.83rem;
+  z-index: 3;
+}
+.videoIndex .headerConBox .header {
+  position: absolute;
+  width: 100%;
+  height: 0.83rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #191919;
+}
+.videoIndex .headerConBox .header .icon-back {
+  position: absolute;
+  font-size: 0.4rem;
+  font-weight: 500;
+  left: 0.31rem;
+  z-index: 3;
+}
+.videoIndex .headerConBox .header .title {
+  position: relative;
+  width: 100%;
+  font-size: 0.34rem;
+  font-weight: 500;
+  line-height: 0.83rem;
+  text-align: center;
+}
+.videoIndex .bannerSwiper .successNav {
+  width: 100%;
+}
+.videoIndex .searchBox .box {
+  position: relative;
+  margin: auto;
+  margin-top: 0.32rem;
+  width: 6.9rem;
+  height: 0.62rem;
+  box-shadow: 0px 0.02rem 0.02rem 0px #f7f7f7;
+  background: #ffffff;
+  border-radius: .1rem;
+}
+.videoIndex .searchBox .box .inputBox {
+  position: absolute;
+  overflow: hidden;
+  width: 5.73rem;
+  height: 0.62rem;
+  border-top: 0.01rem solid #eeeeee;
+  border-left: 0.01rem solid #eeeeee;
+  border-bottom: 0.01rem solid #eeeeee;
+  border-top-left-radius: .1rem;
+  border-bottom-left-radius: 0.1rem;
+}
+.videoIndex .searchBox .box .inputBox input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  outline: none;
+  border: none;
+  height: 0.62rem;
+  width: 5.73rem;
+  border-bottom-left-radius: .1rem;
+  border-top-left-radius: .1rem;
+  color: #999999;
+  padding-left: .63rem;
+  box-sizing: border-box;
+  font-size: .26rem;
+}
+.videoIndex .searchBox .box .inputBox img {
+  position: absolute;
+  top: .17rem;
+  left: .16rem;
+  width: .29rem;
+  height: .29rem;
+}
+.videoIndex .searchBox .box span {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  width: 1.17rem;
+  height: 0.66rem;
+  line-height: 0.64rem;
+  text-align: center;
+  font-size: .32rem;
+  background: linear-gradient(-9deg, #fa9890, #fe7481, #fe5169);
+  color: #fff;
+  border-bottom-right-radius: .1rem;
+  border-top-right-radius: .1rem;
+}
+.videoIndex .cueCard {
+  position: relative;
+  overflow: hidden;
+  width: 6.88rem;
+  box-sizing: border-box;
+  margin: auto;
+  margin-top: 0.45rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+  padding-top: 0.34rem;
+  padding-bottom: 0.34rem;
+  background: linear-gradient(50deg, #f9e7c6, #f5deb0, #f1d59d);
+  box-shadow: 0px 0.02rem 0.06rem 0px rgba(201, 142, 73, 0.5);
+  border-radius: 0.1rem;
+}
+.videoIndex .cueCard .cardTitle {
+  width: 100%;
+  margin-bottom: 0.3rem;
+  box-sizing: border-box;
+  font-size: 0.3rem;
+  font-weight: 500;
+  line-height: 0.3rem;
+  color: #644529;
+  display: flex;
+  justify-content: space-between;
+}
+.videoIndex .cueCard .cardTitle span {
+  color: #C99252;
+  font-size: .24rem;
+}
+.videoIndex .cueCard .gradeDesc {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.24rem;
+  font-weight: 400;
+  line-height: 0.24rem;
+}
+.videoIndex .cueCard .gradeDesc p {
+  width: 3.24rem;
+}
+.videoIndex .cueCard .gradeDesc .title {
+  color: #C98E49;
+}
+.videoIndex .cueCard .gradeDesc .content {
+  color: #654629;
+}
+.videoIndex .videoPlatform {
+  position: relative;
+  overflow: hidden;
+}
+.videoIndex .videoPlatform .videoTitleBox {
+  width: 6.9rem;
+  height: 0.9rem;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.2rem;
+}
+.videoIndex .videoPlatform .videoTitleBox .titleIcon {
+  width: auto;
+  height: 0.5rem;
+  margin-right: 0.13rem;
+}
+.videoIndex .videoPlatform .videoTitleBox .titleText {
+  flex: 1;
+  font-size: 0.32rem;
+  font-weight: 400;
+  line-height: 0.32rem;
+  color: #191919;
+}
+.videoIndex .videoPlatform .videoTitleBox .titleDesc {
+  font-size: 0.24rem;
+  font-weight: 400;
+  line-height: 0.32rem;
+  color: #999999;
+}
+.videoIndex .videoPlatform .vodeoList {
+  width: 6.9rem;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 0.01rem solid rgba(238, 238, 238, 0.4);
+  border-top: 0.01rem solid rgba(238, 238, 238, 0.4);
+}
+.videoIndex .videoPlatform .vodeoList .logoItem {
+  width: 1.72rem;
+  height: 2.25rem;
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.videoIndex .videoPlatform .vodeoList .logoItem .logoBox {
+  width: 0.98rem;
+  height: 0.98rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  box-shadow: 0px 0.02rem 0.04rem 0px rgba(204, 204, 204, 0.5);
+  border-radius: 0.1rem;
+}
+.videoIndex .videoPlatform .vodeoList .logoItem .logoBox img {
+  width: 0.68rem;
+  height: 0.68rem;
+}
+.videoIndex .videoPlatform .vodeoList .logoItem .logoName {
+  width: 100%;
+  margin-top: 0.2rem;
+  font-size: 0.24rem;
+  font-weight: 400;
+  line-height: 0.24rem;
+  text-align: center;
+  color: #191919;
+}
+.videoIndex .videoPlatform .vodeoList .logoItemRight {
+  border-right: 0.01rem solid rgba(238, 238, 238, 0.4);
+}
+.videoIndex .videoPlatform .vodeoList .logoItemBottom {
+  border-bottom: 0.01rem solid rgba(238, 238, 238, 0.4);
+}
+.videoIndex .videoPlatform .vodeoList .logoItemBut {
+  width: 1.72rem;
+  height: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.videoIndex .videoPlatform .vodeoList .logoItemBut .logoBox {
+  width: 0.98rem;
+  height: 0.98rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  box-shadow: 0px 0.02rem 0.04rem 0px rgba(204, 204, 204, 0.5);
+  border-radius: 0.1rem;
+}
+.videoIndex .videoPlatform .vodeoList .logoItemBut .logoBox img {
+  width: 0.68rem;
+  height: 0.68rem;
+}
+.videoIndex .videoPlatform .vodeoList .logoItemBut .logoName {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.2rem;
+  font-size: 0.24rem;
+  font-weight: 400;
+  line-height: 0.24rem;
+  text-align: center;
+  color: #191919;
+}
+.videoIndex .videoPlatform .vodeoList .logoItemBut .logoName img {
+  width: 0.22rem;
+  margin-left: 0.03rem;
+}
+.videoIndex .videoPlatform .vodeoList .logoItemBut .logoName .logoNameButImg {
+  transform: rotate(180deg);
+}
+.videoIndex .videoBox {
+  position: relative;
+  width: 6.9rem;
+  margin: auto;
+  margin-top: 0.14rem;
+  padding-bottom: 0.2rem;
+  background: #fff;
+}
+.videoIndex .videoBox .videoTitle {
+  width: 6.9rem;
+  height: 0.9rem;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 0.01rem solid #eeeeee;
+}
+.videoIndex .videoBox .videoTitle .titleIcon {
+  display: block;
+  width: 0.07rem;
+  height: 0.3rem;
+  margin-right: 0.22rem;
+  border-radius: 0.04rem;
+  background: linear-gradient(-9deg, #fa9890, #fe7481, #fe5169);
+  box-shadow: 0px 0.04rem 0.1rem 0px rgba(254, 121, 132, 0.5);
+}
+.videoIndex .videoBox .videoTitle .title {
+  flex: 1;
+  font-size: 0.32rem;
+  font-weight: 400;
+  line-height: 0.32rem;
+  color: #191919;
+}
+.videoIndex .videoBox .videoTitle .moreBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.videoIndex .videoBox .videoTitle .moreBox .moreIcon {
+  width: 0.22rem;
+  margin-bottom: 0.03rem;
+  transform: rotate(-90deg);
+}
+.videoIndex .videoBox .videoTitle .moreBox .moreText {
+  font-size: 0.24rem;
+  font-weight: 400;
+  line-height: 0.32rem;
+  color: #999999;
+}
+.videoIndex .videoBox .videoItemBox {
+  width: 6.9rem;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.videoIndex .videoBox .videoItemBox .videoItem {
+  position: relative;
+  overflow: hidden;
+  width: 2.2rem;
+  margin-top: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.videoIndex .videoBox .videoItemBox .videoItem .videoImgBox {
+  position: relative;
+  overflow: hidden;
+  float: left;
+  width: 2.2rem;
+  height: 3.4rem;
+  border-radius: 0.05rem;
+}
+.videoIndex .videoBox .videoItemBox .videoItem .videoImgBox .videoImg {
+  width: 0;
+  height: 100%;
+  padding-left: 100%;
+  overflow: hidden;
+  background-position: center center;
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+.videoIndex .videoBox .videoItemBox .videoItem .videoName {
+  width: 80%;
+  height: 0.3rem;
+  margin-top: 0.15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.23rem;
+  font-weight: 400;
+  color: #191919;
+  line-height: 0.3rem;
+  text-align: center;
+}
+.card-content{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:rgba(0,0,0,0.5);
+    /* opacity:0.5; */
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.card-inner{
+    height: 2.5rem;
+    width: 5.4rem;
+    background:rgba(255,255,255,1);
+    border-radius:.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.card-inner h3{
+    height: 1.1rem;
+    line-height: 1.1rem;
+    font-size:0.36rem;
+    font-weight:500;
+    color:rgba(51,51,51,1);
+}
+.card-inner input{
+    width: 4.5rem;
+    border-bottom: 0.01rem solid rgba(238,238,238,1);
+    padding-left: 0.3rem;
+    font-size:0.3rem;
+    font-weight:400;
+    color:rgba(102,102,102,1);
+    outline: none;
+    line-height: 0.5rem;
+    height: 0.5rem;
+}
+.card-inner .btn{
+    width: 100%;
+    height: 0.88rem;
+    display: flex;
+    font-size:.34rem;
+    font-weight:500;
+    color:rgba(51,51,51,1);
+}
+.card-inner .btn div{
+    width: 2.69rem;
+    height: 100%;
+    text-align: center;
+    line-height: 0.88rem;
+}
+.card-inner .btn div:nth-child(2){
+    color: #1C7EDE;
+    border-left: 0.01rem solid rgba(238,238,238,1);
+}
+.rule-content{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:rgba(0,0,0,0.6);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.rule-content .close{
+    height: 0.4rem;
+    width: 0.4rem;
+    margin-top: 0.3rem;
+    /* border-radius: 50%;
+    border: 2px solid #333; */
+}
+.rule-inner{
+    height: 7rem;
+    width: 5.4rem;
+    background:rgba(255,255,255,1);
+    border-radius:.2rem;
+    overflow-y: scroll;
+}
+.rule-inner h4{
+    text-align: center;
+    font-size:.34rem;
+    font-weight:500;
+    color:rgba(51,51,51,1);
+    height: 0.6rem;
+    line-height: 0.6rem;
+}
+.rule-inner .rule-con{
+    padding: 0.2rem 0.2rem;
+    color: #333;
+    font-size: 0.24rem;
+}
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="videoIndex">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">共享影视</div>
+            <div class="right" @click="show1 = true">规则</div>
+        </div>
+        <div class="video-content" v-if="banners">
+            <div class="bannerSwiper">
+                <div class="successNav">
+                    <swiper class="swiper"  :options="swiperOption" ref="mySwiper">
+                        <swiper-slide v-for="(banner, index) in banners" :key="'swiper'+index">
+                            <img :src="banner.image" @click="toVideoPlay(banner.id)">
+                        </swiper-slide>
+                        <div class="swiper-pagination"  slot="pagination"></div>
+                    </swiper>
+                </div>
+            </div>
+            <div class="searchBox">
+                <div class="box">
+                    <div class="inputBox">
+                    <input type="text" v-model="search" placeholder="请输入关键词">
+                    <img src="../../image/share_video/sousuo.png" alt="">
+                    </div>
+                    <span @click="toSearch">搜索</span>
+                </div>
+            </div>
+            <div class="cueCard" v-if="power === 1 || data.result === 1">
+                <div class="cardTitle">
+                    <p>您当前的观影特权已激活</p>
+                    <span v-if="data.result === 1" @click="toCard">查看卡密>></span>
+                    <span v-else-if="data.result === 0 && data.price > 0" @click="toPay">购买代理>></span>
+                </div>
+                <div class="gradeDesc">
+                    <p v-if="data.get_type === 'task'">
+                    <span class="title">
+                        激活方式：
+                    </span>
+                    <span class="content">
+                        任务达标
+                    </span>
+                    </p>
+                    <p v-else-if="data.get_type === 'key'">
+                    <span class="title">
+                        激活方式：
+                    </span>
+                    <span class="content">
+                        卡密
+                    </span>
+                    </p>
+                    <p v-else-if="data.get_type === 'level'">
+                    <span class="title">
+                        激活方式：
+                    </span>
+                    <span class="content">
+                        等级特权
+                    </span>
+                    </p>
+                    <p>
+                    <span class="title">
+                        到期时间：
+                    </span>
+                    <span class="content">
+                        {{data.date ? data.date : '永久'}}
+                    </span>
+                    </p>
+                </div>
+            </div>
+            <img class="become-agent" src="../../image/share_video/gongxiang.png" @click="toPay" v-else-if="data.result === 0 && data.price > 0">
+            <div class="videoPlatform">
+                <div class="videoTitleBox">
+                    <img class="titleIcon" src="../../image/share_video/VIP.png" alt="">
+                    <p class="titleText">全网VIP</p>
+                    <p class="titleDesc">主流视频平台VIP视频免费看</p>
+                </div>
+                <div class="vodeoList">
+                    <div class="logoItem" :class="{logoItemRight:(index + 1)%4 !== 0,logoItemBottom:(index + 1) <= (logoList.length - logoList.length%4)}" v-for="(item,index) in logoList" :key="'videoLogo'+index" @click="watchVideo(item)">
+                    <div class="logoBox">
+                        <img :src="item.src" alt="">
+                    </div>
+                    <p class="logoName">
+                        {{item.title}}
+                    </p>
+                    </div>
+                    <div class="logoItemBut" @click="showAllLogoList()">
+                    <div class="logoBox">
+                        <img src="../../image/share_video/all.png" alt="">
+                    </div>
+                    <p class="logoName" v-if="allLogo">展开<img src="../../image/share_video/zhankai.png" alt=""></p>
+                    <p class="logoName" v-else>收起<img :class="{logoNameButImg:!allLogo}" src="../../image/share_video/zhankai.png" alt=""></p>
+                    </div>
+                </div>
+                <div class="videoBox" v-if="filmList">
+                    <div class="videoTitle">
+                        <i class="titleIcon"></i>
+                        <p class="title">热门电影</p>
+                        <div class="moreBox"><span class="moreText" @click="toVideoRecommend(0,'热门电影')">更多</span><img class="moreIcon" src="../../image/share_video/zhankai.png" alt=""></div>
+                    </div>
+                    <div class="videoItemBox">
+                        <div class="videoItem" v-for="(item, index) in filmList" :key="'film'+index" @click="toVideoPlay(item.id)">
+                        <div class="videoImgBox">
+                            <div class="videoImg" :style="{backgroundImage: 'url(' + item.image + ')'}"></div>
+                        </div>
+                        <p class="videoName">{{item.title}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="videoBox" v-if="tvList">
+                    <div class="videoTitle">
+                        <i class="titleIcon"></i>
+                        <p class="title">热门电视</p>
+                        <div class="moreBox"><span class="moreText" @click="toVideoRecommend(1,'热门电视')">更多</span><img class="moreIcon" src="../../image/share_video/zhankai.png" alt=""></div>
+                    </div>
+                    <div class="videoItemBox">
+                        <div class="videoItem" v-for="(item, index) in tvList" :key="'tv'+index" @click="toVideoPlay(item.id)">
+                        <div class="videoImgBox">
+                            <div class="videoImg" :style="{backgroundImage: 'url(' + item.image + ')'}"></div>
+                        </div>
+                        <p class="videoName">{{item.title}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="videoBox" v-if="varietyList">
+                    <div class="videoTitle">
+                        <i class="titleIcon"></i>
+                        <p class="title">热门综艺</p>
+                        <div class="moreBox"><span class="moreText" @click="toVideoRecommend(2,'热门综艺')">更多</span><img class="moreIcon" src="../../image/share_video/zhankai.png" alt=""></div>
+                    </div>
+                    <div class="videoItemBox">
+                        <div class="videoItem" v-for="(item, index) in varietyList" :key="'variety'+index" @click="toVideoPlay(item.id)">
+                        <div class="videoImgBox">
+                            <div class="videoImg" :style="{backgroundImage: 'url(' + item.image + ')'}"></div>
+                        </div>
+                        <p class="videoName">{{item.title}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="videoBox" v-if="cartoonList">
+                    <div class="videoTitle">
+                        <i class="titleIcon"></i>
+                        <p class="title">热门动漫</p>
+                        <div class="moreBox"><span class="moreText" @click="toVideoRecommend(3,'热门动漫')">更多</span><img class="moreIcon" src="../../image/share_video/zhankai.png" alt=""></div>
+                    </div>
+                    <div class="videoItemBox">
+                        <div class="videoItem" v-for="(item, index) in cartoonList" :key="'cartoon'+index" @click="toVideoPlay(item.id)">
+                        <div class="videoImgBox">
+                            <div class="videoImg" :style="{backgroundImage: 'url(' + item.image + ')'}"></div>
+                        </div>
+                        <p class="videoName">{{item.title}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        
+        </div>
+        <div class="card-content" v-if="show">
+            <div class="card-inner">
+                <h3>验证卡密</h3>
+                <input type="text" placeholder="请输入卡密" v-model="card">
+                <div class="btn">
+                    <div @click="show = false">取消</div>
+                    <div @click="onConfirm">确认</div>
+                </div>
+            </div>
+        </div>
+        <div class="rule-content" v-if="show1">
+            <div class="rule-inner">
+                <h4>观影规则</h4>
+                <div class="rule-con" v-html="data.rule"></div>
+            </div>
+            <img class="close" @click="show1 = false" src="../../image/bargain/guanbi.png">
+        </div>
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script> -->
+<script type="text/javascript">
+    Vue.use(window.VueAwesomeSwiper)
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            card:'',
+            search: '',
+            banners: [],
+            logoList: [],
+            allLogo: true,
+            power: 0,
+            show: false,
+            show1: false,
+            data: '',
+            agency: false,
+            type: '',
+            filmList: '', /* 电影列表 */
+            cartoonList: '', /* 动漫 */
+            tvList: '', /* 电视 */
+            varietyList: '',/*, 综艺 */
+            swiperOption:{
+                pagination: {el: '.swiper-pagination'},
+                paginationClickable: true,
+                loop: false,
+                autoplay: {
+                    delay: 1500,
+                    stopOnLastSlide: false,
+                    disableOnInteraction: false,
+                },
+            },
+            videoList: [{src: '../../image/share_video/tx.png', title: '腾讯视频', path: 'https://v.qq.com/'},
+                        {src: '../../image/share_video/aqy.png', title: '爱奇艺', path: 'https://www.iqiyi.com/'},
+                        {src: '../../image/share_video/mgu.png', title: '咪咕视频', path: 'http://m.miguvideo.com/'},
+                        {src: '../../image/share_video/fx.png', title: '风行视频', path: 'http://m.fun.tv/'},
+                        // {src: '../../image/share_video/bf.png', title: '暴风影音', path: 'http://m.baofeng.com/'},
+                        {src: '../../image/share_video/sh.png', title: '搜狐视频', path: 'https://m.tv.sohu.com/'},
+                        {src: '../../image/share_video/mg.png', title: '芒果TV', path: 'https://m.mgtv.com/'},
+                        {src: '../../image/share_video/1905.png', title: '1905', path: 'http://m.1905.com/'},
+                        {src: '../../image/share_video/ls.png', title: '乐视视频', path: 'http://m.le.com/'},
+                        {src: '../../image/share_video/yk.png', title: '优酷视频', path: 'http://youku.com/'},
+                        {src: '../../image/share_video/pptv.png', title: 'PPTV', path: 'http://m.pptv.com'}],
+            // logoList: [],
+        },
+        created: function() {
+            this.checkPower()
+        },
+        methods: {
+            toVideoPlay(id){
+                console.log(id)
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/share_video/videoPlay.html?id=' + id,type: 'web'})
+            },
+            //去搜索页
+            toSearch(){
+              dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/share_video/videoSearch.html?value=' + this.search+'&type=0',type: 'web'})
+            },
+            toCard(){
+              dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/share_video/videoCard.html',type: 'web'})
+            },
+            toPay(){
+              dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/share_video/videoPay.html?price=' + this.data.price,type: 'web'})
+            },
+            toVideoRecommend(type,title){
+              console.log(type,title)
+              dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/share_video/videoRecommend.html?type=' + type+'&title=' + title,type: 'web'})
+            },
+            watchVideo (item, watchType) {
+              if (this.power === 1) {
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/share_video/videoDetail.html?url=' + item.path+'&title=' + item.title,type: 'web'})
+              } else {
+                this.show = true
+              }
+            },
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            checkPower () {
+                Http.post(Http.HOST+Http.API_URL.POWERCHECK,true).then(res => {
+                        this.data = res.data
+                    if (res.code === 0) {
+                        this.power = 1
+                    } else if (res.code === 1) {
+                        this.power = 0
+                        dsBridge.call("toast", {msg: res.msg})
+                    }
+                })
+                this.getInfo()
+            },
+            getInfo () {
+                Http.post(Http.HOST+Http.API_URL.UPCONDITIONS,true).then(res => {
+                    this.vipData = res.data
+                    this.isShow = this.vipData !== '' && this.vipData.finish == 0
+                })
+            },
+            videoLogo () {
+                if (this.videoList.length > 7) {
+                    for (var i = 0; i < 7; i++) {
+                    this.logoList.push(this.videoList[i])
+                    }
+                } else {
+                    this.logoList = this.videoList
+                }
+            },
+            showAllLogoList () {
+                if (this.allLogo) {
+                    this.logoList = this.videoList
+                } else {
+                    this.logoList = []
+                    this.videoLogo()
+                }
+                this.allLogo = !this.allLogo
+            },
+            getVideoInfo () {
+                Http.post(Http.HOST+Http.API_URL.VIDEOPATH,true).then(res => {
+                    if (res.code === 0) {
+                      utils.storage.set('analysisUrl', res.data)
+                    }
+                })
+                Http.get(Http.HOST+Http.API_URL.VIDEOLIST, {page: 0, type: 5}).then(res => {
+                    if (res.code == 0) {
+                    this.banners = res.data.list
+                    this.getFilmList()
+                    }
+                })
+            },
+            getFilmList () {
+                Http.get(Http.HOST+Http.API_URL.VIDEOLIST, {page: 0,type: 1}).then(resone => {
+                    if (resone.code == 0) {
+                    this.filmList = resone.data.list
+                    this.getTvList()
+                    }
+                })
+            },
+            getTvList () {
+                Http.get(Http.HOST+Http.API_URL.VIDEOLIST, {page: 0,type: 2}).then(restwo => {
+                    if (restwo.code == 0) {
+                    this.tvList = restwo.data.list
+                    this.getVarietyList()
+                    }
+                })
+            },
+            getVarietyList () {
+                Http.get(Http.HOST+Http.API_URL.VIDEOLIST, {page: 0,type: 3}).then(resthree => {
+                    if (resthree.code == 0) {
+                    this.varietyList = resthree.data.list
+                    this.getCartoonList()
+                    }
+                })
+            },
+            getCartoonList () {
+                Http.get(Http.HOST+Http.API_URL.VIDEOLIST, {page: 0,type: 4}).then(resfour => {
+                    if (resfour.code == 0) {
+                    this.cartoonList = resfour.data.list
+                    }
+                })
+            },
+            /*
+            * 卡密确认
+            * */
+            onConfirm () {
+              Http.post(Http.HOST+Http.API_URL.MOVIEKEYCHECK, {
+                cdkey: this.card
+              }, true).then(res => {
+                if (res.code === 0) {
+                  this.power = 1
+                  dsBridge.call("toast", {msg: res.msg})
+                  this.show = false
+                }
+              })
+            },
+            
+        },
+        mounted: function () {
+            this.getVideoInfo ()
+            this.videoLogo()
+            document.addEventListener("visibilitychange", () => { 
+              if(document.hidden) {
+                  // 页面被挂起
+              }
+              else {
+                  // 页面呼出
+                  this.checkPower()
+              }
+          })
+        }
+        
+    })
+</script>
+
+</html>

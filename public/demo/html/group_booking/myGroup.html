@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>福利团</title>
+    <script>
+        (function(doc, win) {
+            var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function() {
+              var clientWidth = docEl.clientWidth;
+              if(!clientWidth) return;
+              if(clientWidth >= 750) {
+                docEl.style.fontSize = '100px';
+              } else {
+                docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+              }
+            };
+            if(!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+          })(document, window);
+      </script>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=1">
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+   
+    <style>
+        body,html{
+            background: #f7f7f7;
+        }
+     	#header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: .88rem;
+            border-bottom: 1px solid #eee;
+			background:#fff;
+			z-index: 9999;
+            line-height: .88rem;
+            display: flex;
+            align-items: center;
+        }
+        #header .left img{
+            width: .18rem;
+            padding-left: .3rem;
+        }
+        #header .left {
+            display: flex;align-items: center;
+            z-index: 1;
+            position: absolute;
+            left: 0;
+			top: .28rem
+        }
+
+        #header .center {
+            position: relative;
+            font-size: .34rem;
+            width: 100%;
+            text-align: center;
+            color: #2f2f2f;
+            font-weight: bold;
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+        .common-hight{
+            height: .88rem;
+        }
+        
+        .myGroupTab ul{
+            display:flex;
+            align-items:center;
+            justify-content: space-around;
+            height: 1rem;
+            line-height: 0.96rem;
+            background: #fff;
+            font-size: .3rem;
+            color: #666666;
+        }
+        .myGroupTab ul li{
+            display: flex;
+            flex-direction: column;
+            align-items: center
+        }
+        .myGroupTab ul li.active{
+            font-size: .32rem;
+            color: #D92121;
+        }
+        .myGroupTab ul li.active span{
+            width:.5rem;
+            height:.04rem;
+            background-color:#D92121;
+            border-radius:2px
+        }
+        .myGroupList .list {
+            margin:.2rem;
+            background-color:#fff;
+        }
+        .myGroupList .order{
+            padding:.32rem .22rem;
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .myGroupList .order .copy{
+            display: flex;
+            font-size: .26rem;
+            color: #2f2f2f;
+            align-items: center;
+        }
+        .myGroupList .order .copy p{
+            max-width: 2.7rem;
+        }
+        .myGroupList .order .copy span{
+            font-size:.2rem;
+            color:#D92121;
+            height:.3rem;
+            border:1px solid #D92121;
+            padding:0 .14rem;
+            border-radius:.18rem;
+            margin-left:.1rem
+        }
+        .myGroupList .order .status{
+            font-size:.28rem;
+            color:#D92121
+        }
+        .myGroupList .details{
+            padding:0 .22rem .26rem;
+            display:flex;
+            border-bottom: 1px solid #eee;
+        }
+        .myGroupList .details .goods img{
+            width:1.7rem;
+            height:1.7rem;
+            border-radius:5px;
+            margin-right:.12rem
+        }
+        .myGroupList .details .info{
+            width:5.2rem
+        }
+        .myGroupList .details .info .title{
+            font-size:.28rem;
+            color:#2f2f2f;
+            font-weight:normal;
+            /* line-height:.32rem; */
+            /* height:.64rem; */
+        }
+        .myGroupList .details .info .size{
+            font-size:.24rem;
+            color:#999;
+            margin: .12rem 0;
+        }
+        .myGroupList .details .info .price{
+            font-size:.32rem;
+            color:#D92121;
+            font-weight:bold;
+            display:flex;
+            justify-content: space-between;
+        }
+        .myGroupList .details .info .price i{
+            font-weight:normal;
+            font-style:normal;
+            font-size:.28rem;
+            color:#999
+        }
+        
+        .myGroupList .btm{
+            padding:.32rem .22rem;
+            text-align:right
+        }
+        .myGroupList .btm .total{
+            font-size:.3rem;
+            color:#666
+        }
+        .myGroupList .btm .total span{
+            color:#D92121
+        }
+        .myGroupList .btm .btn button{
+            height:.50rem;
+            line-height:.48rem;
+            padding:0 .24rem;
+            border:1px solid #999999;
+            font-size:.28rem;
+            color:#999;
+            border-radius:.26rem;
+            margin-top:.32rem;
+            margin-left:.22rem
+        }
+        .myGroupList .btm .btn button.active{
+            background: #D92121;
+            color:#fff;
+            border:none;
+            height:.52rem;
+            line-height:.54rem;
+        }
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: 1.88rem;
+            bottom: 0;
+            height: auto;
+        }
+
+
+        .integral { font-size:30px; color:red;}
+.decimal { font-size:18px; color:green;}
+    </style>
+</head>
+
+<body>
+
+<div id="groupBooking" v-cloak>
+    <div id="header">
+        <div class="left" @click="onBack"><img src="../../image/group_booking/back.png"></div>
+        <div class="center">我的拼团</div>
+      </div>
+      <div class="common-hight"></div>
+      <div class="myGroupTab">
+          <ul>
+              <li :class="{'active' : status == 0}" @click="selectTab(0)">全部<span></span></li>
+              <li :class="{'active' : status == 1}" @click="selectTab(1)">进行中<span></span></li>
+          </ul>
+      </div>
+      <div class="common-warp mescroll" ref="mescroll" id="mescroll" >
+        <div class="myGroupList" id="d26">
+            <div class="list" v-for="(item, index) in goodsList" :key="index">
+                <div class="order">
+                    <div class="copy"><p class="text-overflow_1-xzh">订单编号:{{item.orderId}}</p><span @click="copyValue(item.orderId)">复制</span></div>
+                    <span class="status">{{info.collageStatus[item.status]}},{{info.orderStatus[item.orderInfo.orderStatus]}}</span>
+                </div>
+                <div class="details" @click="toGroupDetail(item.orderId)">
+                    <div class="goods"><img :src="item.goodsInfo.thumb" alt=""></div>
+                    <div class="info">
+                        <h3 class="title">{{item.goodsInfo.goodsName}}</h3>
+                        <span class="size">{{item.goodsInfo.goodsField}}</span>
+                        <p class="price">
+                            <span>¥{{item.goodsInfo.goodsPrice}}</span>
+                            <i>×{{item.goodsInfo.goodsNum}}</i>
+                        </p>
+                    </div>
+                </div>
+                <div class="btm">
+                    <p class="total">共{{item.goodsInfo.goodsNum}}件&nbsp;合计：<span>¥{{item.orderInfo.payPrice}}</span></p>
+                    <div class="btn">
+                        <button v-if="item.status == '2' && (item.orderInfo.orderStatus < 0 || item.orderInfo.orderStatus == '2')" @click="deleOrder(index, item.orderInfo.orderSn)">删除订单</button>
+                        <button v-if="item.status == '2' && (item.orderInfo.orderStatus == '0' || item.orderInfo.orderStatus == '1')" @click="jumpTo('/mall/exchange?orderSn='+item.orderInfo.orderSn)">申请退款</button>
+                        <button class="active" @click="toGroupDetail(item.orderId)">拼团详情</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      
+</div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="../../js/libs/common.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: "#groupBooking",
+        data:{
+            info: '',
+            goodsList: '',
+            mescroll: null,
+            status: 0,
+        },
+        methods: {
+            onBack: function(){
+                dsBridge.call('closeWin')
+            },
+            
+            selectTab(type){
+                this.status = type
+                this.downCallback()
+            },
+            upCallback(page,mescroll){
+                Http.post(Http.HOST+Http.API_URL.MYGROUPLIST,{page: page.num, status: this.status},true).then((res)=>{
+                    if (res.code === 0) {
+                        this.info = res.data
+                        let arr = res.data.list === '' ? [] : res.data.list
+                        if (page.num === 1) this.goodsList = []
+                        this.goodsList = this.goodsList.concat(arr)
+                        this.$nextTick(() => {
+                            mescroll.endSuccess(res.data.list.length, true)
+                        })
+                    }
+                })
+            },
+            downCallback(){
+                this.mescroll.optUp.page.num = 1
+                this.upCallback(this.mescroll.optUp.page, this.mescroll)
+            },
+            toGroupDetail(orderId){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/groupDetails.html?orderId=' + orderId,type: 'web'})
+            },
+            copyValue(value){
+                dsBridge.call('clipBoard', {value: value})
+            },
+            // 删除订单
+            deleOrder(index, orderSn){
+                console.log('shanchu')
+                this.$messagebox({
+                    title: '删除订单',
+                    message: '确定要删除订单吗？',
+                    showCancelButton: true
+                }).then(action => {
+                    // console.log(action)
+                    if (action == "confirm") {
+                        Http.post(Http.HOST + Http.API_URL.GROUPORDERDELET, {
+                            orderSn: orderSn
+                        }, true).then((res) => {
+                            if(res.code == 0){
+                                this.goodsList.splice(index, 1)
+                                this.$toast({message: res.msg});
+                            }else{
+                                this.$toast({message: res.msg});
+                            }
+                        })
+                    } else {
+                        // console.log("取消")
+                    }
+                });
+            },
+            jumpTo (path) {
+                dsBridge.call('openWin', path)
+            },
+        },
+        mounted () {
+            // this.getList()
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                // "页面被挂起"
+                } else {
+                this.downCallback()
+                }
+            });
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+                down: {
+                    auto: true,
+                    callback: this.downCallback,
+                },
+                up: {
+                    auto: false,
+                    // isBounce: false,
+                    callback: this.upCallback,
+                    page: {
+                        num: 0,
+                        size:5
+                    },
+                    // htmlNodata: '<p class="upwarp-nodata">—— 我也是有底线的 ——</p>',
+                    noMoreSize: 5,
+                    empty: {
+                        warpId: 'd26',
+                        icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                        tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                    }
+                }
+            });
+        }
+      
+    })
+</script>
+
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>热门影视</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/tab/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <link rel="stylesheet" href="../../js/mint-ui/style.css">  
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .videoIndex {
+  font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Source Han Sans", "Noto Sans CJK Sc", "Microsoft YaHei", "Microsoft Jhenghei", sans-serif;
+  background: #fff;
+  height: 100%;
+}
+.videoIndex .videoContent .searchBox .box {
+  position: relative;
+  margin: auto;
+  margin-top: 0.05rem;
+  width: 6.9rem;
+  height: 0.62rem;
+  box-shadow: 0px 0.02rem 0.02rem 0px #f7f7f7;
+  background: #ffffff;
+  border-radius: .1rem;
+}
+.videoIndex .videoContent .searchBox .box .inputBox {
+  position: absolute;
+  overflow: hidden;
+  width: 5.73rem;
+  height: 0.62rem;
+  border-top: 0.01rem solid #eeeeee;
+  border-left: 0.01rem solid #eeeeee;
+  border-bottom: 0.01rem solid #eeeeee;
+  border-top-left-radius: .1rem;
+  border-bottom-left-radius: 0.1rem;
+}
+.videoIndex .videoContent .searchBox .box .inputBox input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  outline: none;
+  border: none;
+  height: 0.62rem;
+  width: 5.73rem;
+  border-bottom-left-radius: .1rem;
+  border-top-left-radius: .1rem;
+  color: #999999;
+  padding-left: .63rem;
+  box-sizing: border-box;
+  font-size: .26rem;
+}
+.videoIndex .videoContent .searchBox .box .inputBox img {
+  position: absolute;
+  top: .17rem;
+  left: .16rem;
+  width: .29rem;
+  height: .29rem;
+}
+.videoIndex .videoContent .searchBox .box span {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  width: 1.17rem;
+  height: 0.66rem;
+  line-height: 0.64rem;
+  text-align: center;
+  font-size: .32rem;
+  background: linear-gradient(-9deg, #fa9890, #fe7481, #fe5169);
+  color: #fff;
+  border-bottom-right-radius: .1rem;
+  border-top-right-radius: .1rem;
+}
+.videoIndex .videoContent .videoTabBox {
+  margin-top: 0.35rem;
+}
+.videoIndex .videoContent .videoBox {
+  margin: auto;
+  background: #fff;
+}
+.videoIndex .videoContent .videoBox .twoItemBox {
+  padding-top: 0.4rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+.videoIndex .videoContent .videoBox .twoItemBox .twoitem {
+  margin-left: 0.1rem;
+  margin-right: 0.1rem;
+  padding: 0.07rem 0.25rem 0.07rem 0.25rem;
+  border-radius: 0.2rem;
+  font-size: 0.24rem;
+  font-weight: 500;
+  line-height: 0.26rem;
+  color: #999999;
+}
+.videoIndex .videoContent .videoBox .twoItemBox .itemActive {
+  color: #fff;
+  background: #FE546B;
+}
+.videoIndex .videoContent .videoBox .twoItemBox .itemNone {
+  display: none;
+}
+.videoIndex .videoContent .videoBox .videoItemBox {
+  padding-top: 0.4rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+.videoIndex .videoContent .videoBox .videoItemBox .videoItem {
+  position: relative;
+  overflow: hidden;
+  width: 2.2rem;
+  margin-bottom: 0.2rem;
+  margin-left: 0.08rem;
+  margin-right: 0.08rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.videoIndex .videoContent .videoBox .videoItemBox .videoItem .videoImgBox {
+  position: relative;
+  overflow: hidden;
+  float: left;
+  width: 2.2rem;
+  height: 3.4rem;
+  border-radius: 0.05rem;
+}
+.videoIndex .videoContent .videoBox .videoItemBox .videoItem .videoImgBox .videoImg {
+  width: 0;
+  height: 100%;
+  padding-left: 100%;
+  overflow: hidden;
+  background-position: center center;
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+.videoIndex .videoContent .videoBox .videoItemBox .videoItem .videoName {
+  width: 80%;
+  height: 0.3rem;
+  margin-top: 0.15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.23rem;
+  font-weight: 400;
+  color: #191919;
+  line-height: 0.3rem;
+  text-align: center;
+}
+
+.vux-tab{
+    background: rgba(245, 245, 245, 0.4);
+  }
+.vux-tab .vux-tab-item.vux-tab-selected{
+    font-size: 0.32rem;
+    font-weight: 500;
+    background: none;
+    color: #191919;
+  }
+.vux-tab .vux-tab-item{
+    font-size:0.32rem;
+    font-weight:500;
+    background: none;
+  }
+.vux-tab-bar-inner{
+    background: linear-gradient(-87deg,rgba(250,152,144,1),rgba(254,116,129,1),rgba(254,81,105,1));
+    box-shadow:0px 0.02rem 0.04rem 0px rgba(254,121,132,0.5);
+  }
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: 0.88rem;
+            bottom: 0;
+            height: auto; 
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="videoIndex">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">{{headerTitle}}</div>
+        </div>
+        <div class="videoContent">
+            <div class='common-warp mescroll' ref="mescroll" id="mescroll" >
+                <div class="searchBox">
+                    <div class="box">
+                      <div class="inputBox">
+                        <input type="text" v-model="search" placeholder="请输入关键词">
+                        <img src="../../image/share_video/sousuo.png" alt="">
+                      </div>
+                      <span @click="searchList">搜索</span>
+                    </div>
+                  </div>
+                  <div class="videoTabBox">
+                    <tab custom-bar-width="1.33rem" default-color="#999999" v-model="type" class="resultTab">
+                      <tab-item @on-item-click="resetTab">电影</tab-item>
+                      <tab-item @on-item-click="resetTab">电视</tab-item>
+                      <tab-item @on-item-click="resetTab">综艺</tab-item>
+                      <tab-item @on-item-click="resetTab">动漫</tab-item>
+                    </tab>
+                  </div>
+                  <div class="videoBox">
+                    <div class="twoItemBox">
+                      <div class="twoitem" :class="{itemActive:index === twoItemNum,itemNone:index == 2 && type == 2}" v-for="(item, index) in list" :key="'twoItem'+index" @click="twoTabClick(index)">{{item}}</div>
+                    </div>
+                    <div class="videoItemBox">
+                        <div class="videoItem" v-for="(item,index) in dataList" :key="'videoItem'+index" @click="toVideoPlay(item.id)">
+                          <div class="videoImgBox">
+                            <div class="videoImg" :style="{backgroundImage: 'url(' + item.image + ')'}"></div>
+                          </div>
+                          <p class="videoName">{{item.title}}</p>
+                        </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/tab/index.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            mescroll: null,
+            dataList: [], // 列表数据
+            list: ['热门', '最新', '评分'],
+            search: '',
+            type: 0,
+            headerTitle: '',
+            twoItemNum: 0,
+            gradeShow: true            
+        },
+        created: function() {
+            this.getParameter()
+        },
+        mounted: function () {
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+              
+            },
+            
+            up: {
+              callback: this.upCallback, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 9 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+              htmlLoading: '',
+              noMoreSize: 5,
+              toTop: {
+                src: '../../image/back_top.png',
+                offset: 1000
+              },
+              empty: {
+                warpId: 'empty',
+                icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+              }
+            }
+          });
+        },
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            toVideoPlay(id){
+                console.log(id)
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/share_video/videoPlay.html?id=' + id,type: 'web'})
+            },
+            // 获取传参
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.type = Request['type']
+                this.headerTitle = decodeURIComponent(Request['title'])
+            },
+            upCallback (page, mescroll) {
+                var that = this
+                // 联网请求
+                Http.get(Http.HOST+Http.API_URL.VIDEOSEARCH, {keyword:that.search,type:that.type+1,page:page.num-1, sort: that.twoItemNum + 1}).then((res) => {
+                    // 请求的列表数据
+                    if (res.code === 0) {
+                        if(!res.data.list.length&&page.num == 1){
+                            dsBridge.call("toast", {msg: '暂无数据'})
+                        }
+                        let arr = res.data.list
+                        // 如果是第一页需手动制空列表
+                        if (page.num === 1) this.dataList = []
+                        // 把请求到的数据添加到列表
+                        this.dataList = this.dataList.concat(arr)
+                        // 数据渲染成功后,隐藏下拉刷新的状态
+                        this.$nextTick(() => {
+                            mescroll.endSuccess(arr.length)
+                        })
+                    }
+                    
+                }).catch((e) => {
+                    // 联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                    mescroll.endErr()
+                })
+            },
+            resetTab() {
+                this.search = ''
+                this.dataList = []
+                this.mescroll.optUp.htmlLoading = ''
+                this.mescroll.setPageNum(0)
+                this.mescroll.resetUpScroll()
+            },
+            twoTabClick(index) {
+                this.twoItemNum = index
+                this.search = ''
+                this.dataList = []
+                this.mescroll.optUp.htmlLoading = ''
+                this.mescroll.setPageNum(0)
+                this.mescroll.resetUpScroll()
+            },
+            searchList() {
+                this.dataList = []
+                this.mescroll.optUp.htmlLoading = ''
+                this.mescroll.setPageNum(0)
+                this.mescroll.resetUpScroll()
+            }
+            
+        },
+        
+    })
+</script>
+
+</html>

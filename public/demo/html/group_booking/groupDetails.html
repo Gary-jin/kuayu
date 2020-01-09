@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0, viewport-fit=cover">
+    <title>福利团</title>
+    <script>
+        (function(doc, win) {
+            var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function() {
+              var clientWidth = docEl.clientWidth;
+              if(!clientWidth) return;
+              if(clientWidth >= 750) {
+                docEl.style.fontSize = '100px';
+              } else {
+                docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+              }
+            };
+            if(!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+          })(document, window);
+      </script>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=1">
+    <link rel="stylesheet" href="../../css/group_booking/group.css">
+    <link rel="stylesheet" type="text/css" href="../../js/mint-ui/style.css" />
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    
+    <style>
+        body, html{
+            background: #f7f7f7;
+        }
+     	#header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: .88rem;
+			background:#fff;
+			z-index: 999;
+            line-height: .88rem;
+            display: flex;
+            align-items: center;
+        }
+        #header .left img{
+            width: .18rem;
+            padding-left: .3rem;
+        }
+        #header .left {
+            display: flex;align-items: center;
+            z-index: 1;
+            position: absolute;
+            left: 0;
+			top: .28rem
+        }
+
+        #header .center {
+            position: relative;
+            font-size: .34rem;
+            width: 100%;
+            text-align: center;
+            color: #2f2f2f;
+            font-weight: bold;
+        }
+
+        #header .right {
+            position: absolute; 
+            right: .3rem;
+            display: flex;
+            align-items: center;
+        }
+        #header .right img{
+            width: .34rem;
+        }
+        .groupDetailInfo{
+            background-color:#fff;
+            margin:.3rem;
+            box-shadow:0px 0px 30px 0px rgba(140,140,140,0.25);
+            border-radius:5px;
+            padding:.28rem .22rem;
+        }
+        .groupDetailInfo .top{
+            display:flex;
+            background-color:#F7F7F7;
+            padding:.16rem
+        }
+        .groupDetailInfo .top .img{
+            display: flex;
+            align-items: center;
+        }
+        .groupDetailInfo .top .img img{
+            width:2.18rem;
+            height:2.18rem;
+            border-radius:5px;
+            margin-right:.15rem
+        }
+        .groupDetailInfo .top .desc{
+            padding:.15rem 0;
+            position:relative
+        }
+        .groupDetailInfo .top .desc h3{
+            font-size:.3rem;
+            color:#333;
+            font-weight:normal;
+        }
+        .groupDetailInfo .top .desc .price{
+            position:absolute;
+            bottom:0
+        }
+        .groupDetailInfo .top .desc .price span{
+            font-size:.34rem;
+            color:#D92B24;
+            font-weight:bold;
+            margin-bottom:.15rem
+        }
+        .groupDetailInfo .top .desc .price p{
+            font-size:.24rem;
+            color:#999
+        }
+        .groupDetailInfo .bottom{
+            text-align:center;
+            margin:.4rem 0 .2rem
+        }
+        .groupDetailInfo .bottom .avatar img{
+            width:1.04rem;
+            height:1.04rem;
+            border-radius:50%
+        }
+        .groupDetailInfo .bottom .avatar .colonel{
+            position:relative;
+            overflow: hidden;
+            width: 1.04rem;
+            height: 1.04rem;
+            border-radius: 50%;
+            margin: 0 .2rem;
+        }
+        .groupDetailInfo .bottom .avatar .colonel i{
+            font-style:normal;
+            position:absolute;
+            bottom: 0px;
+            left: 0px;
+            right:0;
+            display:inline-block;
+            height: .3rem;
+            line-height: .3rem;
+            font-size: .2rem;
+            background-color:#000;
+            opacity:0.5;
+            color: #fff;
+        }
+        .groupDetailInfo .people .num{
+            font-size:.28rem;
+            margin:.3rem 0 .2rem
+        }
+        .groupDetailInfo .people .num span{
+            font-size:.3rem;
+            color:#D92B24;
+            
+        }
+        .groupDetailInfo .people .time{
+            font-size:.36rem;
+            line-height: .54rem;
+        }
+        .groupDetailInfo .people .time span{
+            margin:0 .08rem
+        }
+        .groupDetailInfo .people .time span i{
+            font-style:normal;
+            display:inline-block;
+            width:.34rem;
+            height:.54rem;
+            line-height:.54rem;
+            background-color:#5B5B5B;
+            border-radius:2px;
+            font-size:.30rem;
+            color:#fff;
+            margin: 0 .04rem
+        }
+        .groupDetailInfo .bottom .success{
+            font-size: .32rem;
+            color: #2f2f2f;
+            margin-top: .35rem;
+        }
+        .groupDetailInfo .shareBtn {
+            margin:.36rem 0 .34rem
+        }
+        .groupDetailInfo .shareBtn button{
+            min-width:3.26rem;
+            height:.78rem;
+            line-height:.78rem;
+            font-size:.32rem;
+            background:linear-gradient(-90deg,rgba(217,33,33,1) 0%,rgba(248,123,100,1) 99%);
+            border-radius:39px;
+            color:#fff;
+            padding: 0 .9rem
+        }
+        .groupDetailInfo .rule{
+            font-size:.24rem;
+            color:#999
+        }
+        .group-detail-title{
+            height: .9rem;
+            line-height: .9rem;
+            font-size: .28rem;
+            color: #2f2f2f;
+            text-align: center;
+            font-weight: normal;
+        }
+        /* 过期弹窗 */
+       .group-time-end .mint-popup{
+            border-radius:.15rem
+        }
+        .groupEnd{
+            text-align:center;
+            width: 5.6rem;
+        }
+        .groupEnd .logo{
+            width:1.4rem;
+            height:1.4rem;
+            margin:-.75rem auto;
+            background-color:#fff;
+            padding:.1rem;
+            border-radius:50%
+
+        }
+        .groupEnd .logo img{
+        /* 	width:100%; */
+            width:1.4rem;
+            height:1.4rem;
+            border-radius:50%
+        }
+        .groupEnd .later{
+            margin-top:1rem;
+            font-size:.28rem;
+            color:#2F2F2F
+        }
+        .groupEnd .later span{
+            font-size:.4rem;
+            color:#CFCFCF
+        }
+        .groupEnd  .tit{
+            font-size:.3rem;
+            color:#2F2F2F;
+            margin:.3rem 0 .5rem
+        }
+        .groupEnd .btn{
+            width:3.8rem;
+            height:.8rem;
+            background:linear-gradient(270deg,rgba(217,33,33,1),rgba(248,123,100,1));
+            border-radius:40px;
+            font-size:.3rem;
+            color:#fff;
+            margin-bottom:.38rem
+        }
+        .groupEndcloseBtn {
+            position: absolute;
+            width: 5.6rem;
+            text-align: center;
+            margin-top: .9rem;
+        }
+        .groupEndcloseBtn img {
+            width: .7rem;
+        }
+        /* 分享弹框 */
+        .share-platform .mint-popup-bottom{
+            width:100%;
+            border-radius:.2rem .2rem 0 0
+        }
+        .share-platform .shareType h3{
+            font-size:.3rem;
+            color:#2F2F2F;
+            text-align:center;
+            line-height:.9rem;
+            font-weight:normal;
+            border-bottom:1px solid #eee
+        }
+        .share-platform .shareType ul{
+            display:flex;
+            align-items:center;
+            justify-content: space-around;
+        }
+        .share-platform .shareType ul li{
+            padding:.32rem 0;
+            text-align:center
+        }
+        .share-platform .shareType ul li img{
+            width:.98rem
+        }
+        .share-platform .shareType ul li p{
+            font-size:.24rem;
+            color:#333;
+            margin-top:.15rem
+        }
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: 0.88rem;
+            bottom: 0;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="groupBooking">
+    <div id="header">
+        <div class="left" @click="onBack()"><img src="../../image/group_booking/back.png"></div>
+        <div class="center">拼团详情</div>
+        <div class="right" @click="shareType = !shareType"><img src="../../image/group_booking/share.png"></div>
+    </div>
+    <div class="common-hight"></div>
+    <div class="common-warp mescroll" ref="mescroll" id="mescroll" >
+        <div class="groupDetailInfo">
+            <div class="top" v-if="orderGoods">
+                <div class="img">
+                    <img :src="orderGoods.thumb" >
+                </div>
+                <div class="desc">
+                    <h3 class="text-overflow_2-xzh">{{orderGoods.goodsName}}</h3>
+                    <div class="price">
+                        <span>¥{{orderGoods.goodsPrice}}</span>
+                        <p>单人购买: <del>¥{{goodsInfo.spe_price}}</del></p>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="avatar">
+                    <span class="colonel" v-for="(item, index) in collageList" :key="index">
+                        <img :src="item.userInfo.avatar" alt="">
+                        <i v-if="index == 0">{{info.collageTitle}}</i>
+                    </span>    
+                    <span class="colonel" v-for="(item, index) in info.limitNum" :key="index">
+                        <img src="../../image/group_booking/kavatar.png" alt="">
+                    </span>
+                </div>
+                <div class="people" v-if="collageInfo.status == 1">   
+                    <p class="num">还差<span>{{info.limitNum}}</span>人拼团成功，剩余时间</p>
+                    <div class="time">
+                        <span><i>{{firstH}}</i><i>{{secondH}}</i></span>:<span><i>{{firstM}}</i><i>{{secondM}}</i></span>:<span><i>{{firstS}}</i><i>{{secondS}}</i></span>
+                    </div>
+                </div>
+                <div class="success" v-else-if="collageInfo.status == 2">拼团成功</div>
+                <div class="success" v-else-if="collageInfo.status == 9">拼团失败</div>
+                <div class="shareBtn">
+                    <button v-if="collageInfo.status == 1" @click="shareType = !shareType">邀请小伙伴拼团</button>
+                    <button v-else-if="collageInfo.status == 2" @click="toDetails(info.orderSn)">查看订单详情</button>
+                    <button v-else-if="collageInfo.status == 9" @click="toIndex">查看更多拼团活动</button>
+                </div>
+                <div class="rule">支付开团-支付参团-凑齐人数发货-凑不齐退款</div>
+            </div>
+        </div>
+        <div class="group-more common-title goods-list">
+            <h3 class="group-detail-title">查看其他拼团商品</h3>
+            <div class="list">
+                <ul>
+                    <li class="flex" v-for="(item, index) in goodsList" :key="index">
+                        <div class="left"><img :src="item.thumb" alt=""></div>
+                        <div class="right flex_1">
+                            <h3 class="title text-overflow_1-xzh">{{item.goodsName}}</h3>
+                            <div class="num"><span class="postage">{{item.freeShippingInfo}}</span><span class="piece">已拼{{item.sales}}件</span></div>
+                            <div class="btm">
+                                <div class="price">
+                                    <p><span>{{item.collageNum}}人拼团</span><b>¥{{item.collagePrice}}</b></p>
+                                    <span class="single">单人价¥{{item.spe_price}}</span>
+                                </div>
+                                <button @click="toGroupDetail(item.id)">去拼团</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 拼团过期 -->
+    <div class="group-time-end">
+        <mt-popup
+        v-model="groupEnd"
+        position="center">
+            <div class="groupEnd">
+                <div class="logo">
+                    <img src="../../image/avatar.png" alt="">
+                </div>
+                <p class="later"><span>“</span>你来晚了~我的拼团已结束<span>”</span></p>
+                <h3 class="tit">挑选心仪的商品重新发起拼团吧</h3>
+                <button class="btn">去逛逛</button>
+            </div>
+            <div class="groupEndcloseBtn"><img src="../../image/group_booking/guanbi.png" alt=""></div>
+        </mt-popup>
+    </div>
+    <!-- 分享弹窗 -->
+   <div class="share-platform">
+    <mt-popup
+    v-model="shareType"
+    position="bottom">
+        <div class="shareType">
+            <h3>分享到</h3>
+            <ul>
+                <li @click="sharePnM(1)">
+                    <img src="../../image/group_booking/wechat.png" alt="">
+                    <p>微信</p>
+                </li>
+                <li @click="sharePnM(2)">
+                    <img src="../../image/group_booking/wCircle.png" alt="">
+                    <p>朋友圈</p>
+                </li>
+                <li @click="sharePnM(3)">
+                    <img src="../../image/group_booking/QQ.png" alt="">
+                    <p>QQ</p>
+                </li>
+                <li @click="sharePnM(5)">
+                    <img src="../../image/group_booking/Qzone.png" alt="">
+                    <p>QQ空间</p>
+                </li>
+            </ul>
+        </div>
+    </mt-popup>
+   </div>
+    
+</div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="../../js/mint-ui/index.js" charset="utf-8"></script>
+<script src="../../js/libs/common.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: "#groupBooking",
+        data:{
+            info:'',
+            time:{D: '', h: '', m: '', s: ''},
+            firstH: '0',
+            secondH: '0',
+            firstM: '0',
+            secondM: '0',
+            firstS: '0',
+            secondS: '0',
+            groupEnd: false,
+            shareType: false,
+            orderId: '',
+            orderGoods: '',
+            goodsInfo: '',
+            collageList: [],
+            collageInfo: '',
+            goodsList: ''
+        },
+        methods: {
+            onBack: function(){
+                dsBridge.call('closeWin')
+            },
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.orderId = Request['orderId']
+            },
+            getInfo(){
+                Http.post(Http.HOST+Http.API_URL.MYGROUPDETAILS,{orderId: this.orderId},true).then((res)=>{
+                    if (res.code === 0) {
+                        this.info = res.data
+                        this.orderGoods = res.data.orderGoods
+                        this.goodsInfo = res.data.goodsInfo
+                        this.collageList = res.data.collageList
+                        this.collageInfo = res.data.collageInfo
+                        this.$nextTick(() => {
+                            this.setEndTime(this.collageInfo.limittime)
+                        })
+                    }
+                })
+            },
+             // 去拼团
+             toGroupDetail(id){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/goodsDetails.html?id=' + id,type: 'web'})
+            },
+            // 去详情
+            toDetails(order){
+                dsBridge.call("openWin", '/mall/orderDetail?order=' + order)
+            },
+            upCallback (page,mescroll) {
+                Http.post(Http.HOST+Http.API_URL.GROUPGOODSLIST,{page: page.num},true).then((res)=>{
+                    if (res.code === 0) {
+                        let arr = res.data.list === '' ? [] : res.data.list
+                        if (page.num === 1) this.goodsList = []
+                        this.goodsList = this.goodsList.concat(arr)
+                        this.$nextTick(() => {
+                            mescroll.endSuccess(res.data.list.length, true)
+                        })
+                    }
+                })
+            },
+             // 商品倒计时
+             setEndTime(limittime){
+                var that = this;
+                var interval = setInterval(function timestampToTime(){
+                    var date = limittime--; //计算剩余的秒数
+                    if(date <= 0){
+                        that.isEnd = true;
+                        clearInterval(interval)
+                    }else{
+                        console.log('time',that.time)
+                        that.time.D = parseInt(date / 60 / 60 / 24 , 10);
+                        that.time.h = parseInt(date / 60 / 60 % 24 , 10);
+                        if(that.time.D < 10){
+                            that.time.D = "0" +　that.time.D
+                        }
+                        if(that.time.h < 10){
+                            that.time.h = "0" +　that.time.h
+                        }
+                        that.time.m = parseInt(date / 60 % 60, 10);//计算剩余的分钟
+                        if(that.time.m < 10){
+                            that.time.m = "0" +　that.time.m
+                        } 
+                        that.time.s = parseInt(date % 60, 10);//计算剩余的秒数 
+                        if(that.time.s < 10){
+                            that.time.s = "0" +　that.time.s
+                        }
+
+                        that.firstD =  that.time.D.slice(0,1)
+                        that.secondD =  that.time.D.slice(1,2)
+                        that.firstH =  String(that.time.h).slice(0,1)
+                        that.secondH =  String(that.time.h).slice(1,2) 
+                        that.firstM =  String(that.time.m).slice(0,1)
+                        that.secondM =  String(that.time.m).slice(1,2)
+                        that.firstS =  String(that.time.s).slice(0,1)
+                        that.secondS =  String(that.time.s).slice(1,2)
+                    }
+                },1000);
+            },
+            // 分享
+            sharePnM(type) {
+                let shareinfo = {
+                    title: this.info.shareInfo.title,
+                    description: this.info.shareInfo.desc,
+                    thumb: this.info.shareInfo.thumb,
+                    contentUrl: this.info.shareInfo.url,
+                    type: type
+                }
+                dsBridge.call("inviteShareUrl", shareinfo)
+            },
+            toIndex(){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/group_booking/index.html',type: 'web'})
+            }
+        },
+        mounted () {
+            this.getParameter()
+            this.getInfo()
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+                down: {
+                    isLock: true,
+                },
+                up: {
+                    auto: true,
+                    // isBounce: false,
+                    callback: this.upCallback,
+                    page: {
+                        num: 0,
+                        size:5
+                    },
+                    // htmlNodata: '<p class="upwarp-nodata">—— 我也是有底线的 ——</p>',
+                    noMoreSize: 5,
+                    empty: {
+                        warpId: 'd26',
+                        icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                        tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                    }
+                }
+            });
+        }
+      
+    })
+</script>
+
+</html>

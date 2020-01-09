@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>商家中心-店铺信息</title>
+    <script type="text/javascript">
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 750) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <!-- uint-ui -->
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body {
+            background: #fff;
+        }
+        .title_box{
+
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 9;
+            border-bottom: .01rem rgba(238,238,238,1) solid;
+        }
+        .title {
+            padding: 0 .3rem;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .title>img {
+            height: .32rem;
+            width: auto;
+            /* margin-left: .3rem; */
+            /* margin-right: 2.43rem; */
+        }
+
+        .title_text {
+            /* width: 1.68rem; */
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+        }
+        .title_text2 {
+            /* width: 1.68rem; */
+            height: .33rem;
+            font-size: .32rem;
+            font-weight: bold;
+            color: #D92121;
+            line-height: .36rem;
+            white-space: nowrap;
+        }
+        .store_core{
+            margin-top: .88rem;
+            overflow: hidden;
+        }
+        .store_core_pic{
+            width: 1.3rem;
+            height: 1.3rem;
+            border-radius: 50%;
+            margin: .45rem  auto  .3rem;
+        }
+        .store_core_all{
+            padding: 0 .3rem;
+        }
+        .core_all_first{
+            height: 1rem;
+            display: flex;
+            align-items: center;
+            border-bottom: .01rem rgba(238,238,238,1) solid;
+        }
+        .core_all_first >div:nth-child(1){
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(51,51,51,1);
+            margin-right: .32rem;
+        }
+        .core_all_first >div:nth-child(2){
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+            width: 5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .core_all_first >div:nth-child(2)>span:nth-child(1),
+        .core_all_first >div:nth-child(2)>span:nth-child(3){
+            width: 1.75rem;
+            height: .4rem;
+            white-space:nowrap;
+            text-align: center;
+        }
+        .core_all_first >div:nth-child(2)>span:nth-child(2){
+            width: .6rem;
+            text-align: center;
+        }
+        .core_all_second{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: .01rem rgba(238,238,238,1) solid;
+        }
+        .core_all_second .core_all_first{
+            border-bottom: none;
+        }
+        .core_all_second >img{
+            width: .15rem;
+            height: .26rem;
+        }
+        /* id_pic */
+        .core_id_box{
+            padding: 0 .3rem;
+        }
+        .core_id_box .core_id_tit{
+            height: .97rem;
+            line-height:  .97rem;
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(51,51,51,1);
+        }
+        .core_id_box .core_id_pic{
+            width: 5.4rem;
+            height: 3rem;
+            border-radius: .05rem;
+        }
+        .core_id_box .core_id_pic_tow{
+            display: flex;
+            justify-content: space-between;
+        }
+        .core_id_box .core_id_pic_tow >div{
+            width: 3.36rem;
+            height: 2rem;
+            border-radius: .05rem;
+        }
+        .core_id_box .core_id_pic_three{
+            width:5.4rem;
+            height:7.4rem;
+            border-radius: .05rem;
+            margin-bottom: .52rem;
+        }
+        .core_id_tit_kong{
+            height: .5rem;
+        }
+        /* 保障弹窗 */
+        .guarantee_box .mint-popup-bottom{
+            width: 100%;
+            border-radius: .2rem .2rem 0 0;
+        }
+        .guarantee_box .guarantee_top{
+            width: 100%;
+            height: .9rem;
+            border-bottom: .01rem rgba(238,238,238,1) solid;
+            line-height: .9rem;
+            text-align: center;
+            position: fixed ;
+            top: 0 ;
+            z-index: 99999;
+        }
+        .guarantee_box .guarantee_cen{
+            width: 100%;
+            height: 4.1rem;
+            margin-top: .9rem;
+            overflow-y: scroll;
+        }
+        .guarantee_cen .guarantee_cen_list{
+            display: flex;
+            height: 1rem;
+            align-items: center;
+
+        }
+        .guarantee_cen .guarantee_cen_list img{
+            width: .3rem;
+            height: .3rem;
+            margin-left: .45rem;
+            margin-right: .18rem;
+
+        }
+        .guarantee_cen .guarantee_cen_list div{
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="title_box">
+            <div class="title">
+                <img src="./../../image/back.png" alt="" @click='onBack'>
+                <div class="title_text">商家中心</div>
+                <div class="title_text2" @click="tmePicker()" v-if="shopInfo.model == 'oto'">确定</div>
+                <div v-else></div>
+            </div>
+        </div>
+        <div class="store_core">
+            <div class="store_core_pic" :style="{background: `url(${shopInfo.logo})50% 50% / cover no-repeat`}"></div>
+            <div class="store_core_all">
+                <div class="core_all_first">
+                    <div>商家名称</div>
+                    <div>{{shopInfo.title}}</div>
+                </div>
+                <div class="core_all_first">
+                    <div>商家地址 </div>
+                    <div>{{shopInfo.birth}}</div>
+                </div>
+                <div class="core_all_first">
+                    <div>商家电话</div>
+                    <div>{{shopInfo.mobile}}</div>
+                </div>
+                <div class="core_all_second" v-if="shopInfo.model == 'oto'">
+                    <div class="core_all_first" >
+                        <div>营业时间</div>
+                        <div v-if="!shopInfo.dotimeInfo"><span @click="getTime(1)">选择开始时间</span><span>-</span><span @click="getTime(2)">选择结束时间</span></div>
+                        <div v-else><span @click="getTime(1)">{{time1}}</span><span>-</span><span @click="getTime(2)">{{time2}}</span></div>
+                    </div>
+                    <img src="./../../image/bargain/new_address.png" alt="">
+                </div>
+                <div class="core_all_second" v-if="shopInfo.serviceInfo!=''" @click="guarantee()">
+                    <div class="core_all_first">
+                        <div>服务保障</div>
+                        <div>{{service}}</div>
+                    </div>
+                    <img src="./../../image/bargain/new_address.png" alt="">
+                </div>
+                <div class="core_all_first">
+                    <div>经营类目</div>
+                    <div>{{applyfor.cname}}</div>
+                </div>
+            </div>
+            <div class="core_id_box">
+                <div v-if="shopInfo.model == 'oto'">
+                    <div class="core_id_tit">手持证件照</div>
+                    <div class="core_id_pic"  :style="{background: `url(${applyfor.hold_number})50% 50% / cover no-repeat`}"></div>
+                </div>
+                <div class="core_id_tit">身份证</div>
+                <div class="core_id_pic_tow">
+                    <div :style="{background: `url(${applyfor.number1})50% 50% / cover no-repeat`}"></div>
+                    <div :style="{background: `url(${applyfor.number2})50% 50% / cover no-repeat`}"></div>
+                </div>
+                <div v-if="applyfor.licence">
+                    <div class="core_id_tit">营业执照</div>
+                    <div class="core_id_pic_three" :style="{background: `url(${applyfor.licence})50% 50% / cover no-repeat`}"></div>
+                </div>
+                <div v-if="!applyfor.licence" class="core_id_tit_kong"></div>
+            </div>
+        </div>
+        <!-- 保障弹窗 -->
+        <div class="guarantee_box">
+            <mt-popup v-model="guarantee"   position="bottom">
+               <div class="guarantee_top">保障</div>
+               <div class="guarantee_cen">
+                   <div class="guarantee_cen_list" v-for="(item,index) in  serviceInfo" :key="index">
+                        <img src="./../../image/oto_order_detaiols/baoz.png" alt="">
+                        <div>{{item}}</div>
+                   </div>
+               </div>
+            </mt-popup>
+        </div>
+    </div>
+</body>
+<script src="../../js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            data: '',
+            applyfor :[],
+            shopInfo: [],
+            serviceInfo : '',
+            service:'',
+            guarantee: false,
+            time1:'',
+            time2:''
+        },
+        mounted: function () {
+           this.getinfo()
+        },
+        methods: {
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            getTime(num){
+                if(num == "1"){
+                    dsBridge.call("timeSelector","HH:mm",(timeSelector)=>{
+                        this.time1 =  timeSelector 
+                    })
+                }else{
+                    dsBridge.call("timeSelector","HH:mm",(timeSelector)=>{
+                        // alert(timeSelector)
+                        if(timeSelector < this.time1){
+                            this.$toast('结束时间不能小于开始时间！')
+                        }else{
+                            this.time2 =  timeSelector
+                            // alert(this.time2)
+                        }
+                    })
+                }
+            },
+            getinfo: function(){
+                Http.post(Http.HOST + Http.API_URL.STORESHOPINFO, {}, true).then((res) => {
+                    this.data = res.data
+                    this.applyfor = this.data.applyfor
+                    this.shopInfo = this.data.shopInfo
+                    this.serviceInfo = this.shopInfo.serviceInfo
+                    for(var i=0;i<this.serviceInfo.length;i++){
+                        this.service+=this.shopInfo.serviceInfo[i]+' '
+                    }
+                    let tt = this.shopInfo.dotimeInfo.split('-')
+                    this.time1 = tt[0];
+                    this.time2 = tt[1];
+                })
+            },
+            tmePicker(){
+                // console.log(this.time1 +"/"+this.time2 )
+                Http.post(Http.HOST + Http.API_URL.STORESHOPTIME, {
+                    starttime :this.time1,endtime :this.time2
+                }, true).then((res) => {
+                    if(res.code == '0'){
+                        this.$toast('修改成功！')
+                        setTimeout(()=>{dsBridge.call('closeWin')},500)
+                    }else{
+                        this.$toast('修改失败！')
+                    }
+                })
+            }
+        }
+    })
+</script>
+
+</html>

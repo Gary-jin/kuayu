@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>砍价</title>
+    <script type="text/javascript">
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <!-- uint-ui -->
+    <link rel="stylesheet" type="text/css" href="../../js/mint-ui/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body {
+            background: url(./../../image/bargain/bargainbg.png) 0 0 no-repeat;
+            background-size: 100% 100%;
+        }
+        .title {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            z-index: 9;
+        }
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+        }
+        .bargain_core_box{
+            padding: .3rem;
+            margin-top: .88rem;
+        }
+        .bargain_core{
+            /* width:6.9rem; */
+            /* height:11.4rem; */
+            background:rgba(255,255,255,1);
+            height: 100%;
+            border-radius: .2rem;
+            overflow: hidden;
+        }
+        .bargain_core_box .bargain_commodity{
+            width:6.5rem;
+            height:2.2rem;
+            background:rgba(246,244,244,1);
+            border-radius: .1rem;
+            margin-top: .24rem;
+            margin-left: .2rem;
+            display: flex;
+        }
+        .bargain_commodity .bargain_pic{
+            width: 2rem;
+            height: 2rem;
+            margin: .1rem .2rem .1rem .12rem;
+            background: #fff;
+            border-radius: .05rem;
+        }
+        .bargain_commodity .bargain_tit{
+            width:3.53rem;
+            font-size: .28rem;
+            font-weight:bold;
+            color:rgba(47,47,47,1);
+            margin-top: .15rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .bargain_commodity .bargain_count_down {
+            margin-top: .2rem;
+            display: flex;
+        }
+
+        .bargain_commodity .bargain_count_down .time {
+            width: .36rem;
+            height: .36rem;
+            background: rgba(91, 91, 91, 1);
+            border-radius: .02rem;
+            font-size: .24rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            text-align: center;
+            line-height: .36rem;
+        }
+
+        .bargain_commodity .bargain_count_down .tt {
+            font-size: .24rme;
+            font-weight: 500;
+            color: rgba(102, 102, 102, 1);
+            margin-left: .1rem;
+            height: .36rem;
+            line-height: .36rem;
+        }
+        .bargain_commodity .bargain_over{
+            font-size: .3rem;
+            font-weight:bold;
+            color:rgba(217,33,33,1);
+            margin-top: .2rem;
+        }
+        .progress_bar .stocks{
+            margin-top: .49rem;
+            text-align: center; 
+            font-size: .32rem;
+            font-weight:500
+        }
+        .progress_bar .bargain_over{
+            margin-top: .49rem;
+            text-align: center; 
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+        }
+        .progress_bar .stocks span{
+            color: #D92B24;
+        }
+        .progress_bar .progress_bar_box {
+            width:5.6rem;
+            height: .16rem;
+            background:rgba(246,244,244,1);
+            border-radius: .08rem;
+            margin-top: .24rem;
+            margin-left: .64rem;
+        }
+
+        .progress_bar .progress_bar_box .progress_bars {
+            /* width: 4.2rem; */
+            width: 0;
+            height: .16rem;
+            background:rgba(249,219,83,1);
+            border-radius: .08rem;
+        }
+        .bargain_core .bargain_button,.bargain_button_over{
+            height: 1.75rem;
+            display: flex;
+            justify-content: center;
+
+        }
+        .bargain_button_over div{
+            width: 6.5rem;
+            height: .88rem;
+            text-align: center;
+            line-height: .88rem;
+            margin-top: .24rem;
+            font-size: .32rem;
+            font-weight:bold;
+            color:rgba(217,33,33,1);
+            border: .02rem solid rgba(249,219,83,1);
+            border-radius: .44rem;
+        }
+        .bargain_core .bargain_button div{
+            width: 6.5rem;
+            height: .98rem;
+            background: url(./../../image/bargain/bargainnaxiu.png) 0 0 no-repeat;
+            background-size: 100% 100%;
+            text-align: center;
+            line-height: .98rem;
+            margin-top: .24rem;
+            font-size: .32rem;
+            font-weight:bold;
+            color:rgba(217,33,33,1);
+            position:relative;
+            animation:mymove 3s infinite;
+            -webkit-animation:mymove 3s infinite; 
+            animation-direction:alternate;
+            animation-timing-function: ease-in-out; 
+            -webkit-animation:mymove 3s infinite;
+            -webkit-animation-direction:alternate;
+            -webkit-animation-timing-function: ease-in-out; 
+        }
+       
+        @keyframes mymove
+        {
+            0%{
+            transform: scale(1); 
+            }
+            25%{
+                transform: scale(1.03); 
+            }
+            50%{
+                transform: scale(1);
+            }
+            75%{
+                transform: scale(1.03);
+            }
+        } 
+        @-webkit-keyframes mymove 
+        {
+            0%{
+            transform: scale(1);  
+            }
+            25%{
+                transform: scale(1.03); 
+            }
+            50%{
+                transform: scale(1);
+            }
+            75%{
+                transform: scale(1.03);
+            }
+        }
+        .bargain_person_lsit{
+            padding: 0 .2rem;
+        }
+        .bargain_person_lsit_tit{
+            width: 6.5rem;
+            height: .98rem;
+            background:rgba(251,230,191,1);
+            border-radius: .2rem .2rem 0 0;
+            display: flex;
+            align-items: center;
+        }
+        .bargain_person_lsit_tit_l div:nth-child(1){
+            width: 3.24rem;
+            font-size: .34rem;
+            font-weight:bold;
+            color:rgba(217,33,33,1);
+            text-align: center;
+        }
+        
+        .bargain_person_lsit_tit_l .triangle{
+            position: relative;
+            left: 1.48rem;
+        }
+        .triangle:before,.triangle:after{
+            position: absolute;
+            content: '';
+            border-top: .15rem transparent dashed;
+            border-left: .15rem transparent dashed;
+            border-right: .15rem transparent dashed;
+            border-bottom: .15rem #fff solid;
+        }
+        .triangle:after{
+            top: 1px; 
+            border-bottom: .15rem #fff solid;
+        }
+        .bargain_person_lsit_tit_c{
+            width: .02rem;
+            height: .6rem;
+            background:rgba(241,215,165,1);
+        }
+        .bargain_person_lsit_tit_r{
+            width: 3.24rem;
+            font-size: .34rem;
+            font-size: .3rem;
+            font-weight:bold;
+            color:rgba(188,116,30,1);
+            text-align: center;
+        }
+        .bargain_person_lsit .bargain_core_list_box{
+            padding: 0 .21rem;
+            min-height: 5.04rem;
+        }
+        .bargain_core_list_box .bargain_core_list{
+            display: flex;
+            margin-top: .3rem;
+        }
+        .bargain_core_list .bargain_core_list_pic{
+            width: .72rem;
+            height: .72rem;
+            background:rgba(251,230,191,1);
+            border-radius:50%;
+        }
+        .bargain_core_list .bargain_core_list_cen{
+            width: 3rem;
+            margin-left: .16rem; 
+        }
+        .bargain_core_list .bargain_core_list_cen div:nth-child(1){
+            height: .37rem;
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+            margin-bottom: .15rem;
+        }
+        .bargain_core_list .bargain_core_list_cen div:nth-child(2){
+            font-size: .22rem;
+            font-weight:500;
+            color:rgba(102,102,102,1)
+        }
+        .bargain_core_list .bargain_core_list_rig{
+            display: flex;
+            align-items: center;
+        }
+        .bargain_core_list .bargain_core_list_rig img{
+            width: .49rem;
+            height: .36rem;
+        }
+        .bargain_core_list .bargain_core_list_rig div:nth-child(2){
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+            margin-left: .07rem;
+            white-space: nowrap;
+        }
+        .bargain_core_list .bargain_core_list_rig div:nth-child(2) span{
+            color:rgba(217,33,33,1);
+        }
+        .bargain_core_list_box .bargain_list_more{
+            height: .9rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .bargain_list_more div{
+            font-size: .24rem;
+            font-weight:500;
+            color:rgba(217,33,33,1);
+        }
+        .bargain_list_more img{
+            width: .19rem;
+            height: .16rem;
+            margin-left: .07rem;
+        }
+        /* 砍价弹窗 */
+        .bargain_popup_win_box{
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background:rgba(0,0,0,0.8);
+            z-index: 5;
+        }
+        .bargain_popup_win{
+            width: 100%;
+            height: 100%;
+            background: url(./../../image/bargain/bargain_popup_win.png) 50% 2.9rem / cover no-repeat;
+            background-size: 5.6rem 6.33rem;
+            z-index: 9;
+            overflow: hidden;
+        }
+        .bargain_popup_core{
+            width: 100%;
+            margin-top: 5.25rem;
+        }
+        .bargain_popup_core .bargain_popup_core_top{
+            display: flex;
+            justify-content: center;
+            position: relative;
+            height: .76rem;
+        }
+        .bargain_popup_core .bargain_popup_core_top>div{
+            margin-top: .25rem;
+            font-size: .3rem;
+            font-weight:bold;
+            color:rgba(47,47,47,1);
+        }
+        .bargain_popup_core .bargain_popup_core_top>span{
+            height: .76rem;
+            font-size: .58rem;
+            font-weight:bold;
+            color:rgba(217,33,33,1);
+        }
+        .bargain_popup_core .progress_bar_box{
+            width:4.6rem;
+            height:.12rem;
+            background:rgba(246,244,244,1);
+            border-radius: .06rem;
+            margin-top: .23rem ;
+            margin-left: 1.43rem;
+        }
+        .bargain_popup_core .progress_bars{
+            width: 0;
+            height: .12rem;
+            background:rgba(249,219,83,1);
+            border-radius: .06rem;
+        }
+        .bargain_popup_core .progress_again{
+            height: .77rem;
+            font-size: .24rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+            text-align: center;
+            line-height: .77rem;
+        }
+        .bargain_popup_core .share_txt{
+            height: .92rem;
+            text-align: center;
+            line-height: .92rem;
+            font-size: .24rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+        }
+        .bargain_popup_core .share_botton{
+            width: 3.8rem;
+            height: .8rem;
+            background:linear-gradient(270deg,rgba(217,33,33,1),rgba(248,123,100,1));
+            border-radius: .4rem;
+            text-align: center;
+            line-height: .8rem;
+            font-size: .3rem;
+            font-weight:bold;
+            color:rgba(255,255,255,1);
+            margin-left: 1.82rem;
+        }
+        .bargain_popup_core .shut_share{
+            width: .7rem;
+            height: .7rem;
+            margin: 1.35rem 0 0 3.4rem;
+        }
+        /* 砍价过期弹窗 */
+        .bargain_overdue_box{
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background:rgba(0,0,0,0.8);
+            z-index: 5;
+        }
+        .bargain_overdue {
+            width: 100%;
+            height: 100%;
+            background: url(./../../image/bargain/bargain_guoqi.png) 50% 3.75rem / cover no-repeat;
+            background-size: 5.6rem 5.7rem;
+            z-index: 9;
+            overflow: hidden;
+        }
+        .bargain_overdue_head_box{
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            margin: 3.125rem auto 0;
+        }
+        .bargain_overdue_head {
+            width: 1.15rem;
+            height: 1.15rem;
+            border-radius: 50%;
+            background: cornflowerblue;
+        }
+        .bargain_overdue_txtone{
+            display: flex;
+            margin-top: .48rem;
+        }
+        .bargain_overdue_txtone .symbol_left{
+            width: .17rem;
+            height:  .15rem;
+            margin-left: 2.1rem ;
+            margin-right: .15rem;
+            background: url(./../../image/bargain/left.png) 0 0 / cover no-repeat;
+            background-size: .17rem .15rem;
+        }
+        .bargain_overdue_txtone .symbol_center{
+            width: 2.73rem;
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+            white-space:nowrap;
+            position: relative;
+            top: -.1rem;
+        }
+        .bargain_overdue_txtone .symbol_right{
+            width: .17rem;
+            height:  .15rem;
+            margin-left: .15rem ;
+            background: url(./../../image/bargain/right.png) 0 0 / cover no-repeat;
+            background-size: .17rem .15rem;
+        }
+        .bargain_overdue_txttwo{
+            text-align: center;
+            font-size: .3rem;
+            font-weight:bold;
+            color:rgba(47,47,47,1);
+            margin-top: .15rem;
+        }
+        .bargain_overdue_box .share_botton{
+            width: 3.8rem;
+            height: .8rem;
+            background:linear-gradient(270deg,rgba(217,33,33,1),rgba(248,123,100,1));
+            border-radius: .4rem;
+            text-align: center;
+            line-height: .8rem;
+            font-size: .3rem;
+            font-weight:bold;
+            color:rgba(255,255,255,1);
+            margin-left: 1.82rem;
+            margin-top: 2.45rem;
+        }
+        .bargain_overdue_box .shut_share{
+            width: .7rem;
+            height: .7rem;
+            margin: 1.35rem 0 0 3.4rem;
+        }
+        /* 分享弹框 */
+        .share-platform .mint-popup-bottom{
+            width:100%;
+            border-radius:.2rem .2rem 0 0
+        }
+        .share-platform .shareType h3{
+            font-size:.3rem;
+            color:#2F2F2F;
+            text-align:center;
+            line-height:.9rem;
+            font-weight:normal;
+            border-bottom:1px solid #eee
+        }
+        .share-platform .shareType ul{
+            display:flex;
+            align-items:center;
+            justify-content: space-around;
+        }
+        .share-platform .shareType ul li{
+            padding:.32rem 0;
+            text-align:center
+        }
+        .share-platform .shareType ul li img{
+            width:.98rem
+        }
+        .share-platform .shareType ul li p{
+            font-size:.24rem;
+            color:#333;
+            margin-top:.15rem
+        }
+    </style>
+</head>
+    <div id="vue-app" v-cloak >
+        <div class="title" >
+            <img src="./../../image/back.png" alt="" @click='onBack'>
+            <div class="title_text">砍价免费拿</div>
+        </div>
+        <div class="bargain_core_box" >
+            <div class="bargain_core">
+                <div class="bargain_commodity">
+                    <div class="bargain_pic" :style="{background: `url(${list.thumb})50% 50% / cover no-repeat`}"></div>
+                    <div>
+                        <div class="bargain_tit">{{list.goodsName}}</div>
+                        <div class="bargain_count_down">
+                            <div class="hh time" >{{hh}}</div>&nbsp;:&nbsp;<div class="mm time">{{mm}}</div>&nbsp;:&nbsp;<div class="ss time">{{ss}}</div>
+                            <div class="tt">后砍价过期</div>
+                        </div>
+                        <div class="bargain_over">砍到0元拿</div>
+                    </div>
+                </div>
+                <div class="progress_bar">
+                    <div class="stocks" v-if="activeAll.status != '2'">已砍<span>{{activeAll.dedPrice}}</span>元, 还差<span>{{activeAll.shengPrice}}</span>元</div>
+                    <div class="bargain_over" v-else>恭喜您砍价成功啦！即将为您安排发货~</div>
+                    <div class="progress_bar_box">
+                        <div class="progress_bars" :style="{width:activeAll.speed + '%'}">
+                        </div>
+                    </div>
+                </div>
+                <div class="bargain_button"  @click='share()' v-if="activeAll.status != '2'">
+                    <div>分享给好友，多砍一刀</div>
+                </div>
+                <div class="bargain_button_over" v-else  @click="handDetail(list.orderSn)">
+                    <div>查看订单详情</div>
+                </div>
+                <div class="bargain_person_lsit">
+                    <div class="bargain_person_lsit_tit">
+                        <div class="bargain_person_lsit_tit_l">
+                            <div>砍价帮</div>
+                            <div class="triangle"></div>
+                        </div>
+                        <div class="bargain_person_lsit_tit_c"></div>
+                        <div class="bargain_person_lsit_tit_r" @click="rules(bargainList[0].orderId)">快速砍成攻略</div>
+                    </div>
+                    <div class="bargain_core_list_box">
+                        <div class="bargain_core_list" v-for="(item,index) in bargainList" :key="index">
+                            <div class="bargain_core_list_pic" :style="{background: `url(${item.userInfo.avatar})50% 50% / cover no-repeat`}"></div>
+                            <div class="bargain_core_list_cen">
+                                <div>{{item.userInfo.nickname}}</div>
+                                <div>{{(item.created_at*1000) | formatDate}}</div>
+                            </div>
+                            <div class="bargain_core_list_rig">
+                                <img src="./../../image/bargain/knife.png" alt="">
+                                <div>砍掉<span>{{item.price}}</span>元</div>
+                            </div>
+                        </div>
+                        <div class="bargain_core_list" v-for="(item,index) in bargainListmore" :key="index" v-show="morebargain">
+                            <div class="bargain_core_list_pic" :style="{background: `url(${item.userInfo.avatar})50% 50% / cover no-repeat`}"></div>
+                            <div class="bargain_core_list_cen">
+                                <div>{{item.userInfo.nickname}}</div>
+                                <div>{{(item.created_at*1000) | formatDate}}</div>
+                            </div>
+                            <div class="bargain_core_list_rig">
+                                <img src="./../../image/bargain/knife.png" alt="">
+                                <div>砍掉<span>{{item.price}}</span>元</div>
+                            </div>
+                        </div>
+                        <div class="bargain_list_more" @click="bargainmore()" v-show="!morebargain">
+                            <div>查看更多</div>
+                            <img src="./../../image/bargain/more.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 分享好友砍一刀 弹窗 -->
+        <div class="bargain_popup_win_box"  v-show="popupWin">
+            <div class="bargain_popup_win">
+                <div class="bargain_popup_core">
+                    <div class="bargain_popup_core_top"><div>您已砍了</div><span>{{activeAll.dedPrice}}元</span></div>
+                    <div class="progress_bar_box">
+                        <div class="progress_bars" :style="{width:activeAll.speed + '%'}">
+                        </div>
+                    </div>
+                    <div class="progress_again">再砍{{activeAll.shengPrice}}就能免费得</div>
+                    <div class="share_txt">分享给好友可以多砍一刀哦~</div>
+                    <div class="share_botton" @click='share()'>立即分享</div>
+                    <img class="shut_share" @click='cancle(1)' src="./../../image/bargain/guanbi.png" alt="">
+                </div>
+            </div>
+        </div>
+        <!-- 砍价过期弹窗 -->
+        <div class="bargain_overdue_box"  v-show="overdueWin">
+            <div class="bargain_overdue">
+                <div class="bargain_overdue_head_box">
+                    <div class="bargain_overdue_head"></div>
+                </div>
+                <div class="bargain_overdue_txtone">
+                    <div class="symbol_left"></div>
+                    <div class="symbol_center">啊哦~我的砍价已过期</div>
+                    <div class="symbol_right"></div>
+                </div>
+                <div class="bargain_overdue_txttwo">送你一件免费商品，快来挑选吧</div>
+                <div class="share_botton">马上去选</div>
+                <img class="shut_share" @click='cancle(2)' src="./../../image/bargain/guanbi.png" alt="">
+            </div>
+        </div>
+         <!-- 分享弹窗 -->
+   <div class="share-platform">
+    <mt-popup
+    v-model="shareType"
+    position="bottom">
+        <div class="shareType">
+            <h3>分享到</h3>
+            <ul>
+                <li @click="shareBar(1,list)">
+                    <img src="../../image/group_booking/wechat.png" alt="">
+                    <p>微信</p>
+                </li>
+                <li @click="shareBar(2,list)">
+                    <img src="../../image/group_booking/wCircle.png" alt="">
+                    <p>朋友圈</p>
+                </li>
+                <li @click="shareBar(3,list)">
+                    <img src="../../image/group_booking/QQ.png" alt="">
+                    <p>QQ</p>
+                </li>
+                <li @click="shareBar(5,list)">
+                    <img src="../../image/group_booking/Qzone.png" alt="">
+                    <p>QQ空间</p>
+                </li>
+            </ul>
+        </div>
+    </mt-popup>
+   </div>
+    </div>
+<body>
+    
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="../../js/libs/common.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!--mint-ui  -->
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            mescroll: null,
+            list: [], //商品
+            countDownunm :'',//倒计时剩余时间
+            activeAll: [],
+            bargainList: [], //砍价记录
+            bargainListmore : [],
+            orderId : '',
+            popupWin: false,//分享砍一刀 弹窗
+            overdueWin: false,  //过期弹窗
+            shareType: false,
+            morebargain : false,
+            sharesUrl: [],
+            hh : '',
+            mm : '',
+            ss : ''
+        },
+        filters: {
+            formatDate: function (value) { // 时间戳转换日期格式方法
+                if (value == null) {
+                    return '';
+                } else {
+                    let date = new Date(value);
+                    let y = date.getFullYear(); // 年
+                    let MM = date.getMonth() + 1; // 月
+                    MM = MM < 10 ? ('0' + MM) : MM;
+                    let d = date.getDate(); // 日
+                    d = d < 10 ? ('0' + d) : d;
+                    let h = date.getHours(); // 时
+                    h = h < 10 ? ('0' + h) : h;
+                    let m = date.getMinutes(); // 分
+                    m = m < 10 ? ('0' + m) : m;
+                    let s = date.getSeconds(); // 秒
+                    s = s < 10 ? ('0' + s) : s;
+                    return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
+                }
+            }
+        },
+       mounted: function () {
+           this.getParameter()
+           this.gitstyle();
+           this.redraw();
+        },
+        // 刷新
+        methods: {
+            redraw: function()  {
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                    // "页面被挂起"
+                    } else {
+                       this.backstyle()
+                       this.shareType = false
+                       this.popupWin = false
+                    }
+                })
+            },
+            bargainmore: function(){
+                if(this.bargainListmore.length == 0){
+                    this.$toast({
+                        message: '没有更多的数据了！',
+                        position: 'center',
+                        duration: 1000
+                    });
+                }else{
+                    console.log("bukong")
+                    this.morebargain = true;
+                }
+            },
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            cancle:function(num){
+                if(num == 1){
+                    this.popupWin = false
+                }
+            },
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.orderId = Request['orderId']
+                console.log(this.orderId)
+            },
+            share: function(){
+                this.shareType = true;
+            },
+            // 分享
+            shareBar: function(type,list){
+                console.log(this.sharesUrl.url)
+                dsBridge.call("inviteShareUrl", {contentUrl: this.sharesUrl.url, type: type, thumb: list.thumb,title: list.goodsName,description : '砍价免费拿'})
+            },
+            //砍价规则
+            rules: function(orderId){
+                dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/bargain/rules.html?orderId='+orderId, type: 'web' })
+                // window.location.href = 'http://172.16.1.239:3000/uqWeb/html/bargain/rules.html?orderId='+orderId
+            },
+            backstyle(){
+                Http.post(Http.HOST + Http.API_URL.BARGAININFOCREATE, {
+                    orderId: this.orderId
+                }, true).then((response) => {
+                    let arr = response.data; //砍价商品
+                    this.dataList = arr
+                    this.list = arr.order;
+                    this.countDownunm = arr.info.limittime;
+                    this.activeAll = arr.info;
+                    this.bargainList = arr.bargainList.slice(0,4);
+                    this.bargainListmore = arr.bargainList.slice(4)
+                    this.sharesUrl = arr.shares
+                    // console.log(this.bargainList.length)
+                    this.countDown();
+                })
+            },
+            gitstyle(){
+                Http.post(Http.HOST + Http.API_URL.BARGAININFOCREATE, {
+                    orderId: this.orderId
+                }, true).then((response) => {
+                    let arr = response.data; //砍价商品
+                    this.dataList = arr
+                    this.list = arr.order;
+                    this.countDownunm = arr.info.limittime;
+                    this.activeAll = arr.info;
+                    this.bargainList = arr.bargainList.slice(0,4);
+                    this.bargainListmore = arr.bargainList.slice(4)
+                    this.sharesUrl = arr.shares
+                    // console.log(this.bargainList.length)
+                        if(this.bargainList.length == 1){
+                            this.popupWin = true ;
+                        }
+                        if(this.bargainList.length > 1){
+                            this.popupWin = false ;
+                        }
+                        this.countDown();
+                })
+            },
+            // 计时器
+            timeFormat: function (param) {
+                return param < 10 ? '0' + param : param;
+            },
+            countDown: function (it) {
+                // var that = this
+                console.log("****",this.activeAll.status)
+                if(this.activeAll.status == '1'){
+                    
+                    var TT = setInterval(() => {
+                            let time = this.countDownunm;
+                            var obj ; 
+                        if (this.countDownunm > 0) {
+                            let dd = parseInt(time / (60 * 60 * 24));
+                            let hh = parseInt(time % (60 * 60 * 24) / 3600);
+                            let mm = parseInt(time % (60 * 60 * 24) % 3600 / 60);
+                            let ss = parseInt(time % (60 * 60 * 24) % 3600 % 60);
+                            obj = {
+                                dd: this.timeFormat(dd),
+                                // hh: this.timeFormat(hh),
+                                hh: hh,
+                                mm: this.timeFormat(mm),
+                                ss: this.timeFormat(ss)
+                            };
+                            if (this.countDownunm == 0) {
+                                clearInterval(TT)
+                                return
+                            }
+                        } else {
+                            obj = {
+                                dd: '00',
+                                hh: '00',
+                                mm: '00',
+                                ss: '00'
+                            };
+                        }
+                        this.hh = obj.hh;
+                        this.mm = obj.mm;
+                        this.ss = obj.ss;
+                        this.countDownunm--;
+                    }, 1000)
+                }
+                if(this.activeAll.status == '2'){
+                    clearInterval(TT)
+                    this.hh = '00';
+                    this.mm = '00';
+                    this.ss = '00';
+                }
+
+            },
+            // 计时器结束
+            handDetail: function (order) {
+                dsBridge.call('openWin', '/mall/orderDetail?order=' + order);
+            },
+        }
+    })
+</script>
+
+
+
+</html>

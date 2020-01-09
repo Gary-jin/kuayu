@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>优惠券卡密</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <script src="../../js/global.js"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style media="screen">
+      html,body {background: #f7f7f7;font-family:PingFang SC; height: 100vh;}
+      .header { color: white; position: fixed; width: 100%; height: 0.88rem; line-height: 0.88rem; display: flex; align-items: center; justify-content: center; top: 0; left: 0; z-index: 1;}
+
+      .header .left {
+        display: flex;align-items: center; justify-content: center;
+          position: absolute;
+          bottom: 0;
+          left: .2rem;
+          height: 0.88rem;
+      }
+      .header .left .back{ height: .32rem; width: .32rem; background-size: contain; background-image: url(../../image/back_w.png); background-repeat: no-repeat; background-position: center;}
+      .header .center {font-size: 0.34rem;font-weight:bold;}
+      .header .right { position: absolute; bottom: 0; right: .29rem; height: 0.88rem; font-size: .3rem;}
+
+      #mescroll-box { padding-bottom: 1rem; box-sizing: border-box;}
+
+      .top-info {color: white; text-align: center; line-height: 1; background: url('../../image/coupon_password/bg.png') no-repeat top; background-size: 7.5rem 5.21rem; background-color: white;}
+      .top-info-desc { font-size: .26rem; margin-top: rem; margin-bottom: 0.36rem; font-weight: 500; }
+      .top-info-total { font-weight:800; font-size: .5rem; margin-bottom: .79rem;}
+      .top-info .coupon-type-list { display: flex; justify-content: space-around; }
+      .top-info .coupon-type-item { flex: 1; position: relative; }
+      .top-info .coupon-type-item:not(:last-child)::after {content: ''; position: absolute; width: 0.01rem; height: .56rem; background-color: rgba(255,255,255,0.36); right: 0; top: .06rem;}
+      .top-info .coupon-money { font-size: .3rem; font-weight: bold; margin-bottom: .2rem;}
+      .top-info .coupon-money+div { font-size: .24rem;}
+
+      .scan-box { margin-top: .74rem; padding: .48rem .3rem .4rem; text-align: left; }
+      .scan-box .scan-desc { margin-bottom: .26rem; color: #2F2F2F; font-size: .3rem;}
+      .scan-box .scan-input { display: flex; justify-content: space-between;}
+      .scan-box .scan-input .input-box { background-color: #F3F3F3; border-radius: .1rem; font-size: .26rem; padding: .18rem .24rem; display: flex; align-items: center; width: 5.5rem; justify-content: space-between; box-sizing: border-box;}
+      .scan-box .scan-input .input-box input { flex: 1;}
+      .scan-box .scan-input .input-box img { width: .34rem; height: .34rem;}
+      .scan-box .scan-input button {line-height: .7rem; width: 1.2rem; background-color: #FFE5E5; border-radius: .1rem; font-size: .32rem; color: #D92B24; font-weight: 500;}
+
+      .bottom-list-box { position: relative;}
+      .bottom-list-box .tabs-box { padding:.3rem 0; width: 100%; z-index: 2;background: rgb(247, 247, 247);}
+      .bottom-list-box .select-tabs-box { width: 5.32rem; line-height: .74rem; font-size: .3rem; border-radius: .37rem; background-color: white; color: #2F2F2F; display: flex;justify-content: center; margin: 0 auto; overflow: hidden; }
+      .bottom-list-box .tab-item { text-align: center; flex: 1; transition: font-size,color .3s; background: white;}
+      .bottom-list-box .tab-item.selected { background:linear-gradient(-90deg,rgba(217,33,33,1) 0%,rgba(248,123,100,1) 99%); font-weight: bold; font-size: .32rem; color: white; }
+      .list-type-1 { padding:0 .2rem;}
+      .coupon-item-box { margin: .2rem 0; background-color: white; border-radius: .1rem; overflow: hidden; }
+      .coupon-item-box .coupon-item-top { border-bottom: 0.01rem #eeeeee solid; display: flex; justify-content: space-between; padding: .24rem; }
+      .coupon-item-box .coupon-item-top .goods-img { width: 1.7rem; height: 1.7rem; background-size: cover; background-position: center; background-color: #fafafa; }
+      .coupon-item-box .coupon-item-top .goods-info { display: flex; flex-direction: column; justify-content: space-between; width: 4.72rem; position: relative;}
+      .coupon-item-box .goods-title img { position: absolute; width: .28rem; height: .28rem; left: 0; top: 0.06rem; } 
+      .coupon-item-box .goods-title span { text-indent: .38rem; font-size: .28rem; line-height: .4rem;}
+      .coupon-item-box .goods-coupon-value { color: #D92B24; font-size: .26rem; margin-bottom: .2rem; line-height: 1;}
+      .coupon-item-box .coupon-item-bottom { text-align: right; color: #999999; padding: .24rem; font-weight: 500; font-size: .24rem; }
+
+      .list-type-2 { padding: 0 .16rem; }
+      .list-type-2 .ticket-item-box { width: 7.19rem; height: 2.01rem; background:url(../../image/coupon_password/ticket_bg.png) no-repeat center; background-size: cover; display: flex; justify-content: space-between; padding: 0 .15rem 0 .4rem; align-items: center; box-sizing: border-box; line-height: 1;}
+      .list-type-2 .ticket-title { font-size: .3rem; color: #D92B24; font-weight: bold; }
+      .list-type-2 .ticket-left p { font-size: .24rem; color: #666; font-weight: 500;}
+      .list-type-2 .ticket-left p:nth-child(2) { margin: .21rem 0 .15rem;}
+      .list-type-2 .ticket-right { font-size: .6rem; color: white; font-weight: bold; width: 2rem; text-align: center;}
+      .list-type-2 .ticket-right span { font-size: .28rem;}
+
+    </style>
+</head>
+<body>
+  <div id="vue-app" v-cloak :style="{ paddingBottom: bot + 'px'}">
+      <div class="header" :style="{paddingTop: statusH + 'rem'}">
+          <div  v-if='isShowBackBtn' class="left">
+              <div class="back" @click="onBack"></div>
+          </div>
+          <div class="center">{{info.couponpass_name}}</div>
+          <div class="right" @click="showDesc">使用说明</div>
+      </div>
+      <div id="mescroll-box" style="height: 100vh;overflow: auto;">
+          <div class="top-info" :style="{paddingTop: 1.84 + 'rem'}">
+            <div class="top-info-desc">账户{{info.couponpass_name}}（元）</div>
+            <div class="top-info-total">
+              ￥{{info.couponpass_money}}
+            </div>
+            <div class="coupon-type-list">
+              <div class="coupon-type-item">
+                <div class="coupon-money">￥{{info.common_money}}</div>
+                <div>通用</div>
+              </div>
+              <div class="coupon-type-item">
+                  <div class="coupon-money">￥{{info.tb_money}}</div>
+                  <div>淘宝</div>
+                </div>
+              <div class="coupon-type-item">
+                  <div class="coupon-money">￥{{info.jd_money}}</div>
+                  <div>京东</div>
+                </div>
+              <div class="coupon-type-item">
+                  <div class="coupon-money">￥{{info.pdd_money}}</div>
+                  <div>拼多多</div>
+                </div>
+            </div>
+            <div class="scan-box">
+              <div class="scan-desc">兑换{{info.couponpass_name}}</div>
+              <div class="scan-input">
+                <div class="input-box">
+                  <input type="text" v-model="cdkey" placeholder="请输入卡密或扫描卡密二维码">
+                  <img v-if="isSupportScan" @click="doScan" src="../../image/coupon_password/scan_icon.png">
+                </div>
+                <button @click="doExchange">确定</button>
+              </div>
+            </div>
+          </div>
+          <div class="bottom-list-box">
+            <div class="tabs-box">
+              <div class="select-tabs-box">
+                    <div class="tab-item" :class="{selected: listType==0}" @click="changeTab(0)">领取记录</div>
+                    <div class="tab-item" :class="{selected: listType==1}" @click="changeTab(1)">兑换记录</div>
+              </div>
+            </div>
+            <div class="scroll-list-box">
+              <div class="list-type-1" v-show='listType == 0'>
+                <div class="coupon-item-box" v-for="(item, index) in list" @click="goGoodsDetail(item)">
+                  <div class="coupon-item-top">
+                    <div class="goods-img" :imgurl="item.img"></div>
+                    <div class="goods-info">
+                      <div class="goods-title"><img :src="iconSrc[item.type]"><span class="text-overflow_2-xzh">{{item.title}}</span></div>
+                      <div class="goods-coupon-value">优惠券：<b>￥<span style="font-size: .4rem;">{{item.money}}</span></b></div>
+                    </div>
+                  </div>
+                  <div class="coupon-item-bottom">领券时间：{{utils.formatDate(item.updated_at*1000, "yyyy-MM-dd hh:mm:ss")}}</div>
+                </div>
+              </div>
+              <div class="list-type-2" v-show='listType == 1'>
+                <div class="ticket-item-box" v-for="(item, index) in list">
+                  <div class="ticket-left">
+                    <div class="ticket-title">{{typeTitle[item.type]+info.couponpass_name}}</div>
+                    <p>兑换时间: {{utils.formatDate(item.used_at*1000, "yyyy-MM-dd")}}</p>
+                    <p>有效期至: {{utils.formatDate(item.end_at*1000, "yyyy-MM-dd")}}</p>
+                  </div>
+                  <div class="ticket-right">{{+item.money}}<span>元</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script>
+  // 根据全局的debug配置来决定是否请求vue.js 还是 vue_min.js
+  !GlobalConfig.debug? ajaxFile('utils_js', `${window.location.origin}/uqWeb/js/utils.js`) : ajaxFile('utils_js', '../../js/utils.js');</script>
+<script>
+  // 根据全局的debug配置来决定请求哪里的http.js?i=201911211908
+  !GlobalConfig.debug? ajaxFile('http_js', `${window.location.origin}/uqWeb/js/http.js?i=201911211908?201911090112`) : ajaxFile('http_js', '../../js/http.js?i=201911211908');
+</script>
+<script>
+    // 根据全局的debug配置来决定是否请求vue.js 还是 vue_min.js
+  !GlobalConfig.debug? ajaxFile('vue_js', `${window.location.origin}/uqWeb/js/libs/vue_min.js`) : ajaxFile('vue_js', '../../js/libs/vue.js');
+</script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            mescroll:null,
+            bot: 0,
+            list: [],
+            listType: 0,
+            isShowBackBtn: isShowBackBtn,
+            utils: utils,
+            /**标题栏状态 0：未滑动到临界点; 1: 已滑动到临界点*/
+            titleStatus: 0,
+            /**tab按钮状态  0：未滑动到临界点; 1: 已滑动到临界点*/
+            listTabStatus: 0,
+            iconSrc: {11: '../../image/rightCenter/index/tblogo.png', 12: '../../image/rightCenter/index/tmlogo.png',21: '../../image/rightCenter/index/jdlogo.png', 31: '../../image/rightCenter/index/pddlogo.png'},
+            typeTitle: {0:'通用', 11: '淘宝', 21: '京东', 31: '拼多多'},
+            info: {
+              couponpass_name: '',
+              couponpass_money: 0,
+              desc: '卡密描述',
+              common_money: 0,
+              tb_money: 0,
+              jd_money: 0,
+              pdd_money: 0
+            },
+            // 卡密
+            cdkey: '',
+            // 判断是否支持扫码。老版本app不支持，故隐藏。
+            isSupportScan: dsBridge.hasNativeMethod('FNScanner')
+        },
+        methods: {
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            /**
+             * 适配顶部底部安全区域
+            */
+            computeTopAndBottom() {
+              // 顶部安全区域
+              let safeArea = dsBridge.call('receiveParams', 'safeAreaTop') || 0
+              let size = (document.documentElement.clientWidth / 7.5)
+              this.statusH = (safeArea / size)
+
+              //ios底部安全区域
+              let saveBottom = (dsBridge.call("receiveParams", 'safeAreaBottom1')) || 0
+              if (saveBottom == '123'){
+                this.bot = 0
+              } else {
+                this.bot = saveBottom
+              }
+            },
+            //  进入使用说明
+            showDesc () {
+              utils.storage.set('richTextInfo', {title: '使用说明', content:this.info.desc});
+              dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/rich_text/index.html?sourceType=0', type: 'web'})
+            },
+            changeTab(targetType) {
+              this.list = [];
+              this.listType = targetType;
+              this.mescroll.optUp.page.num = 1;
+              this.upCallback(this.mescroll.optUp.page, this.mescroll);
+            },
+            /** 上拉加载的回调 */
+            upCallback (page, mescroll) {
+              if (page.num == 1) {
+                this.list = [];
+              }
+              let api = [Http.API_URL.COUPONPASSGETLOG, Http.API_URL.COUPONPASSCOUPONPASSLIST][this.listType];
+              Http.post(Http.HOST + api, {page: page.num}).then((res)=>{
+                this.list = this.list.concat(res.data)
+                this.mescroll.endSuccess(res.data.length, true)
+              })
+            },
+            /**监听页面滚动处理一些逻辑*/
+            listenScroll () {
+              document.getElementById('mescroll-box').addEventListener('scroll', (event) => {
+                // 标题栏的效果
+                /** scan-box 的距文档顶部的距离*/
+                let scanBoxOffsetTop = document.getElementsByClassName('scan-box')[0].offsetTop;
+                if (event.target.scrollTop >= scanBoxOffsetTop && this.titleStatus == 0) {
+                  // 当已达到临界点并且标题栏状态为0时
+                  this.titleStatus = 1;
+                  let backDom = document.getElementsByClassName('back')[0];
+                  backDom.style.backgroundImage = 'url(../../image/back1.png)';
+                  document.getElementsByClassName('header')[0].style.color = '#000';
+                  document.getElementsByClassName('header')[0].style.backgroundColor = '#fff';
+                } else if (event.target.scrollTop < scanBoxOffsetTop && this.titleStatus == 1) {
+                  // 当未达到临界点并且标题栏状态为1时
+                  this.titleStatus = 0;
+                  let backDom = document.getElementsByClassName('back')[0];
+                  backDom.style.backgroundImage = 'url(../../image/back_w.png)';
+                  document.getElementsByClassName('header')[0].style.color = '#fff';
+                  document.getElementsByClassName('header')[0].style.backgroundColor = 'transparent';
+                }
+
+                // 两个tab按钮的效果
+                /** bottom-list-box 的距文档顶部的距离*/
+                let bottomListBoxOffsetTop = document.getElementsByClassName('bottom-list-box')[0].offsetTop;
+                let headerDomOffsetHeight = document.getElementsByClassName('header')[0].offsetHeight;  // 标题栏高度
+                if (event.target.scrollTop >= (bottomListBoxOffsetTop - headerDomOffsetHeight) && this.listTabStatus == 0) {
+                  this.listTabStatus = 1;
+                  // tab 按钮固定在顶部
+                  let tabDom = document.getElementsByClassName('tabs-box')[0];
+                  // 一定要先给父元素加上占位距离，再把要操作的元素设置为吸顶效果。不然在苹果中临界点时界面可能会来回乱弹。
+                  document.getElementsByClassName('bottom-list-box')[0].style.paddingTop = tabDom.offsetHeight+ 'px';
+                  tabDom.style.position = 'fixed';
+                  tabDom.style.top = headerDomOffsetHeight + 'px';
+                } else if (event.target.scrollTop < (bottomListBoxOffsetTop - headerDomOffsetHeight) &&this.listTabStatus == 1) {
+                  this.listTabStatus = 0;
+                  let tabDom = document.getElementsByClassName('tabs-box')[0];
+                  document.getElementsByClassName('bottom-list-box')[0].style.paddingTop = 0 + 'px';
+                  tabDom.style.position = 'relative';
+                  tabDom.style.top = 0 + 'px';
+                }
+              })
+            },
+            /**初始化mescroll*/
+            initMescroll () {
+              this.mescroll = new MeScroll('mescroll-box', { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+                down: {
+                  use: false
+                },
+                up: {
+                  lazyLoad: {use:true},
+                  isBounce: true,
+                  callback: this.upCallback,
+                  page: {
+                    num: 0,
+                    size:10
+                  },
+                  // htmlNodata: '<p class="upwarp-nodata">—— 我也是有底线的 ——</p>',
+                  noMoreSize: 5,
+                  empty: {
+                    warpId: document.getElementsByClassName('scroll-list-box')[0],
+                    icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                    tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                  }
+                }
+              });	
+            },
+            /**获取卡密余额和一些配置信息*/
+            getInfo() {
+              Http.post(Http.HOST + Http.API_URL.COUPONPASSEXCHANGEINFO).then((res)=>{
+                this.info.couponpass_name = res.data.couponpass_name;
+                this.info.common_money = res.data.common_money;
+                this.info.couponpass_money = res.data.couponpass_money;
+                this.info.desc = res.data.desc;
+                this.info.jd_money = res.data.jd_money;
+                this.info.pdd_money = res.data.pdd_money;
+                this.info.tb_money = res.data.tb_money;
+              })
+            },
+            // 兑换操作
+            doExchange(){
+              if (this.cdkey == '') {
+                dsBridge.call("toast", {msg: '请输入卡密'});
+                return;
+              }
+              Http.post(Http.HOST + Http.API_URL.COUPONPASSEXCHANGEPASS, {cdkey: this.cdkey}).then((res)=>{
+                dsBridge.call("toast", {msg: res.msg});
+                this.cdkey = '';
+                this.getInfo();
+                if (this.listType == 1) { // 正在展示兑换列表时，刷新兑换列表
+                  this.changeTab(this.listType);
+                }
+              })
+            },
+            // 扫码
+            doScan () {
+              dsBridge.call('FNScanner', (res)=>{
+                this.cdkey = res;
+              })
+            },
+            // 前往原生商品详情
+            goGoodsDetail(item){
+              dsBridge.call('openGood', {type:item.type, origin_id: item.goods_id});
+            },
+            // 测试主题色
+            testColor () {
+              dsBridge.call('common', {code:3, data:{}}, ()=>{alert(1)});
+            },
+            redraw: function()  {
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                    // "页面被挂起"
+                    } else {
+                      this.changeTab(this.listType);
+                      this.getInfo();
+                    }
+                })
+            },
+        },
+        created () {
+          this.computeTopAndBottom()
+        },
+        mounted () {	
+          this.redraw();
+          this.getInfo();
+          this.listenScroll();
+          this.initMescroll();
+        }
+        
+    })
+</script>
+
+</html>

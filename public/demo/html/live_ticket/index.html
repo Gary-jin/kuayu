@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>生活优惠券</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <!-- <link rel="stylesheet" href="../../js/mint-ui/style.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../js/tab/style.css">
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+  #vue-app{
+    height: 100%;
+    width: 100%;
+  }
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:bold;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .2rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .exist .resultTab .vux-tab-item {
+          font-size: 0.3rem;
+          background: none;
+        }
+        .exist .twoTab {
+          position: relative;
+          top: 0;
+          height: 111px;
+          display: flex;
+          align-items: center;
+          padding-top: 0;
+        }
+        .exist .twoTab .vux-tab {
+          padding-top: 0.5rem;
+          padding-bottom: 0.2rem;
+        }
+        .exist .twoTab .vux-tab .vux-tab-item {
+          font-size: 0.28rem;
+          line-height: 0.28rem;
+          background: none;
+          flex: 0 0 25%;
+        }
+        .exist .twoTab .vux-tab .vux-tab-item .imgBox {
+          width: 100%;
+          max-width: 100%;
+          height: 0.84rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .exist .twoTab .vux-tab .vux-tab-item .imgBox img {
+          width: 0.84rem;
+        }
+        .exist .twoTab .vux-tab .vux-tab-item p {
+          margin-top: 0.2rem;
+        }
+        .exist .twoTab .vux-tab-container {
+          position: relative;
+          height: auto;
+          width: 100%;
+        }
+        .exist .twoTab .vux-tab-container .vux-tab {
+          height: auto;
+        }
+        .exist {
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+        }
+        .exist .tabsBox {
+          position: relative;
+          background: #fff;
+          width: 100%;
+        }
+        /* .exist .list {
+          position: absolute;
+          top: 205px;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          overflow: hidden;
+        } */
+        .exist .list .existListBox {
+          position: relative;
+          overflow: hidden;
+          width: 100%;
+        }
+        .exist .list .existListBox .existItemBox {
+          width: 6.9rem;
+          height: 1.68rem;
+          margin: auto;
+          margin-top: 0.2rem;
+          border-radius: 0.1rem;
+          background: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .exist .list .existListBox .existItemBox .itemImg {
+          width: 1.1rem;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .exist .list .existListBox .existItemBox .itemImg img {
+          width: 0.7rem;
+        }
+        .exist .list .existListBox .existItemBox .content {
+          width: 3.84rem;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          text-align: left;
+        }
+        .exist .list .existListBox .existItemBox .content .name {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 0.3rem;
+          font-weight: 500;
+          line-height: 0.32rem;
+          height: 0.32rem;
+          color: #333;
+        }
+        .exist .list .existListBox .existItemBox .content .title {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 0.3rem;
+          font-weight: 500;
+          height: 0.32rem;
+          line-height: 0.32rem;
+          color: #FF5847;
+          margin-top: 0.1rem;
+          margin-bottom: 0.1rem;
+        }
+        .exist .list .existListBox .existItemBox .content .subTitle {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 0.24rem;
+          font-weight: 500;
+          line-height: 0.26rem;
+          height: 0.26rem;
+          color: #999999;
+        }
+        .exist .list .existListBox .existItemBox .solidStyle {
+          width: 0.36rem;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .exist .list .existListBox .existItemBox .solidStyle .topbox {
+          width: 0.36rem;
+          height: 0.18rem;
+          border-bottom-left-radius: 0.18rem;
+          border-bottom-right-radius: 0.18rem;
+          background: #F7F7F7;
+        }
+        .exist .list .existListBox .existItemBox .solidStyle .contsolid {
+          flex: 1;
+          width: 0;
+          border-left: 1px dashed #EEEEEE;
+          border-right: 1px dashed #EEEEEE;
+        }
+        .exist .list .existListBox .existItemBox .solidStyle .bottombox {
+          width: 0.36rem;
+          height: 0.18rem;
+          border-top-left-radius: 0.18rem;
+          border-top-right-radius: 0.18rem;
+          background: #F7F7F7;
+        }
+        .exist .list .existListBox .existItemBox .but {
+          width: 1.54rem;
+          height: 1.68rem;
+          font-family: PingFang-SC-Medium;
+          font-size: 0.32rem;
+          font-weight: 500;
+          line-height: 1.68rem;
+          text-align: center;
+          color: #E92626;
+        }
+        .messageBox{
+          height: 100%;
+          width: 100%;
+          position: fixed;
+          top: 0;
+          left: 0;
+          background: rgba(47,47,47,0.6);
+          z-index: 9999;
+          display: flex;
+          justify-content:center;
+          align-items: center;
+        }
+        .con-box{
+          width:5.7rem;
+          height:4.12rem;
+          background:rgba(255,255,255,1);
+          border-radius:.1rem;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          /* justify-content: center; */
+        }
+        .con-box p{
+          font-size:.3rem;
+          font-weight:500;
+          color:rgba(31,31,31,1);
+          line-height:.48rem;
+          text-align: center;
+          margin: 1rem 0 0.7rem 0;
+        }
+        .con-box .goBtn{
+          width:4rem;
+          height:.88rem;
+          background:linear-gradient(-90deg,rgba(217,33,33,1),rgba(255,101,73,1));
+          border-radius:.1rem;
+          line-height: .88rem;
+          text-align: center;
+          font-size:.34rem;
+          font-weight:500;
+          color:rgba(255,255,255,1);
+        }
+        .msgClose{
+          height: 0.28rem;
+          width: 0.28rem;
+          position: absolute;
+          top: 0.2rem;
+          right: 0.2rem;
+        }
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: 205px;
+            bottom: 0;
+            height: auto; 
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="exist" v-cloak>
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">生活优惠券</div>
+        </div>
+        <div class="tabsBox">
+          <tab :line-width="1" custom-bar-width=".8rem" active-color="#FF5847" default-color="#333" v-model="type" class="resultTab" v-show="tabList">
+            <tab-item @on-item-click="resetTab" v-for="(item, index) in tabList" :key="'existtab'+index">{{item.name}}</tab-item>
+          </tab>
+          <tab :line-width="0" custom-bar-width=".8rem" active-color="#FF5847" default-color="#333" v-model="twoTypeIndex" class="twoTab" v-show="twoTabList">
+            <tab-item @on-item-click="isAll"><div class="imgBox"><img src="../../image/live_ticket/exist.png" alt=""></div><p>全部</p></tab-item>
+            <tab-item @on-item-click="reset" v-for="(item, index) in twoTabList" :key="'existtab'+index"><div class="imgBox"><img :src="item.logo" alt=""></div><p>{{item.name}}</p></tab-item>
+          </tab>
+        </div>
+        <div class="list">
+          <div class='common-warp mescroll' ref="mescroll" id="mescroll" >
+            <div class="existListBox">
+              <div class="existItemBox" v-for="(item,index) in list" :key="'existItemBox'+index">
+                <div class="itemImg">
+                  <img :src="item.logo" alt="">
+                </div>
+                <div class="content">
+                  <p class="name">{{item.brand_name}}</p>
+                  <p class="title">{{item.sub_title}}</p>
+                  <p class="subTitle">{{item.title}}</p>
+                </div>
+                <div class="solidStyle">
+                  <div class="topbox"></div>
+                  <div class="contsolid"></div>
+                  <div class="bottombox"></div>
+                </div>
+                <div class="but" @click="togoo(item.id)">领取</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 邀请不达标弹窗 -->
+        <!-- <div class="messageBox" v-if="msgBoxShow">
+          <div class="con-box">
+            <p>完成推广1人的任务后，您才能</br>使用优惠券哦~</p>
+            <div class="goBtn" @click="toInvite">立即推广</div>
+            <img class="msgClose" @click="msgClose" src="../../image/close1.png">
+          </div>
+        </div> -->
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<!-- 本地调试路径 -->
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!-- <script src="../../js/mint-ui/index.js"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/tab/index.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            isHandle:true,
+            mescroll: null,
+            // tabList:['外卖券','餐饮券','出行券','外卖券','餐饮券','出行券'],
+			      tabList:'',
+            twoTabList:'',
+            page: 1,
+            finish: false,
+            type: 0,/* 点击的标题的index */
+            twoTypeIndex: 0,
+            all: true,
+            list: [],
+            tab:'',
+            brand_id:'',
+            // msgBoxShow:false,
+        },
+        created: function() {
+          // this.aaa()
+          this.getStatus()
+        },
+        mounted: function () {
+          this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+              
+            },
+            
+            up: {
+              callback: this.getTabs, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 10 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+              htmlLoading: '',
+              noMoreSize: 5,
+              toTop: {
+                src: '../../image/back_top.png',
+                offset: 1000
+              },
+              empty: {
+                warpId: 'empty',
+                icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+              }
+            }
+          });
+        },
+        methods: {
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            togoo (id) {
+              console.log(id)
+                // 判断是否绑定手机号
+              let userPhone = dsBridge.call("getUserPhone","")
+              if( userPhone === '' || userPhone === null && this.$codeVersion >= 300){
+                dsBridge.call("toast", {msg: '您还未绑定手机号，请先去绑定！'})
+                setTimeout(function(){
+                  dsBridge.call("openWin", '/judgemobile')
+                },1000)
+                return
+              }
+              let data = {m: 'quan', id: id}
+              Http.post(Http.HOST+Http.API_URL.LIVINGCIRCLE, data, true).then((res) => {
+                if (res.data.url) {
+                  dsBridge.call('open', {url: res.data.url})
+                } else {
+                  dsBridge.call('open', {url: res.data.brand.url})
+                }
+              }).catch((e) => {
+                // mescroll.endErr()
+              })
+            },
+            resetTab() {
+              this.mescroll.optUp.htmlLoading = ''
+              this.list = []
+              this.finish = false
+              this.mescroll.setPageNum(1)
+              this.mescroll.resetUpScroll()
+              this.twoTypeIndex = 0
+              this.all = true
+            },
+            reset () {
+              this.all = false
+              this.mescroll.optUp.htmlLoading = ''
+              this.list = []
+              this.finish = false
+              this.mescroll.setPageNum(1)
+              this.mescroll.resetUpScroll()
+              // this.upCallback (1, this.mescroll,this.brand_id,this.tab,this.all)
+            },
+            isAll() {
+              this.all = true
+              this.mescroll.optUp.htmlLoading = ''
+              this.list = []
+              this.finish = false
+              this.mescroll.setPageNum(1)
+              this.mescroll.resetUpScroll()
+              this.twoTypeIndex = 0
+            },
+            getTabs (page, mescroll) {
+              // 首页标签和轮播图 品牌
+              var data = {m: 'brand', a: 'config'} /* res.data.types 所有的头部标签*/
+              // var data = {m: 'brand',a: 'config',top: 1,type: 'chuxing'}/* type是某一个标题的所有品牌 */
+              // var data = {m: 'quan',a: 'list',brand_id: 91,page: 1}/* 根据不同的品牌id调取不同的商品券 */
+              Http.post(Http.HOST+Http.API_URL.LIVINGCIRCLE, data, true).then((res) => {
+                this.tabList = res.data.types
+                this.tab = res.data.types[this.type].type
+                // this.getTwoTabs(res.data.types[this.type].type,page, mescroll,this.all)
+                this.getTwoTabs(this.tab,page, mescroll,this.all)
+              }).catch((e) => {
+                mescroll.endErr()
+              })
+            },
+            getTwoTabs(tab, page, mescroll, isAll) {
+              // 首页标签和轮播图 品牌
+              // var data = {m: 'brand',a: 'config'} /* res.data.types 所有的头部标签*/
+              var data = {m: 'brand', a: 'config', top: 1, type: tab}/* type是某一个标题的所有品牌 */
+              // var data = {m: 'quan',a: 'list',brand_id: 91,page: 1}/* 根据不同的品牌id调取不同的商品券 */
+              Http.post(Http.HOST+Http.API_URL.LIVINGCIRCLE, data, true).then((res) => {
+                this.twoTabList = res.data.brand
+                if (isAll) {
+                  this.twoTypeIndex = 1
+                }
+                this.brand_id = res.data.brand[this.twoTypeIndex - 1].id
+                if (isAll) {
+                  this.twoTypeIndex = 0
+                }
+                this.upCallback(page, mescroll,this.brand_id,tab,isAll)
+                
+              }).catch((e) => {
+                mescroll.endErr()
+              })
+            },
+            upCallback (page, mescroll,brand_id,tab,isAll) {
+              var This = this
+              this.mescroll.optUp.htmlLoading = '<p class="upwarp-progress mescroll-rotate"></p><p class="upwarp-tip">加载中..</p>'
+              let data = {m: 'quan',a: 'list',brand_id: brand_id,page: page.num}
+              if(isAll){
+                data = {m: 'quan',a: 'list',top: 1,type: tab,page: page.num}
+              }
+              Http.post(Http.HOST+Http.API_URL.LIVINGCIRCLE, data, true).then((res) => {
+                if (res.code === 0) {
+                  let arr = res.data
+                  if (page.num === 1) this.list = []
+                  let p = page.num
+                  this.list = this.list.concat(arr)
+                  this.$nextTick(() => {
+                    mescroll.endSuccess(arr.length)
+                    if (this.scrollH && p === 1) {
+                      this.mescroll.scrollTo(this.$refs.recommend.offsetTop)
+                    }
+                  })
+                } else {
+                  mescroll.endErr()
+                }
+              }).catch((e) => {
+                mescroll.endErr()
+              })
+            },
+            backTop () {
+              setTimeout(() => {
+                this.$refs.my_scroller.scrollTo(0, 0, true)
+              }, 10)
+            },
+            // getStatus(){
+            //   Http.post(Http.HOST+Http.API_URL.TICKETSTATUS,{}, true).then((res) => {
+            //     if (res.code === 0) {
+            //       if (res.data.is_open == 1 && res.data.fans_count > 0) {
+            //         this.msgBoxShow = true
+            //       }
+            //     }
+            //   })
+            // },
+            // 去立即推广
+            // toInvite(){
+            //   dsBridge.call("openWin", '/invite')
+            // }
+            
+        },
+        
+        
+    })
+</script>
+
+</html>

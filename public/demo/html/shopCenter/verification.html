@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>商家中心-验证码核销</title>
+    <script type="text/javascript">
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 750) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <!-- uint-ui -->
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body {
+            background: #fff;
+        }
+
+        .title {
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            border: .01rem solid rgba(255,255,255,1);
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+        
+        .verification_core_box{
+            overflow: hidden;
+            padding: 0 .9rem 0;
+        }
+       .verification_core_box > input{
+            width: 100%;
+            height: .98rem;
+            border-right: 0;
+            border: 0;
+            outline: none;
+            margin-top: 1.2rem;
+            background:rgba(247,247,247,1);
+            text-align: center;
+            font-size: .36rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+       }
+       .verification_core_box .verification_count{
+            width: 100%;
+            height: .88rem;
+            line-height: .83rem;
+            text-align: center;
+            margin-top: 1.2rem;
+            background:linear-gradient(270deg,rgba(217,33,33,1),rgba(248,123,100,1));
+            font-size: .36rem;
+            font-weight:bold;
+            color:rgba(255,255,255,1);
+            border-radius: .1rem;
+        }
+        .verification_core_box .verification_pic{
+            width: 100%;
+            margin-top: 4.92rem;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        .verification_core_box .verification_pic >img{
+            width: 1.22rem;
+            height: 1.22rem;
+        }
+        .verification_core_box .verification_pic >div{
+            margin-top: .23rem;
+            font-size: .28rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="title">
+            <img src="./../../image/back.png" alt="" @click='onBack'>
+            <div class="title_text">输入验证码</div>
+        </div>
+        <div class="verification_core_box">
+            <input type="number" v-model="oto_code" placeholder="请输入验证码">
+            <div class="verification_count" @click="getotoCode(oto_code)">确认</div>
+            <div class="verification_pic" @click="scanner()">
+                <img src="./../../image/merchant_bbc_oto/scan.png" alt="">
+                <div >扫码验证</div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="../../js/libs/common.js"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            oto_code:''
+        },
+        mounted: function () {
+           
+        },
+        methods: {
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            scanner(){
+                dsBridge.call("FNScanner", (ret) => {
+                    // alert(ret)
+                   this.codeSuccess(ret)
+                })
+            },
+            //手输核销码
+            getotoCode(oto_code){
+                console.log(this.oto_code)
+                Http.post(Http.HOST+Http.API_URL.ORDERDISTED,{bdelete :oto_code},true).then((res)=>{
+                    this.$toast(res.msg)
+                    this.oto_code = ''
+                })
+            },
+            codeSuccess(num){
+                Http.post(Http.HOST+Http.API_URL.OTOQRCODESECC,{code :num},true).then((res)=>{
+                    // alert(res.data.orderId)
+                    console.log(res.data)
+                    if (res.code === 0) {
+                        if (res.data.type === 'sadmin') {
+                            dsBridge.call('openWin', '/mall/payUnder?spid=' + res.data.spid + '&price=' + res.data.price)
+                        } else if (res.data.type === 'coupon') {
+                            dsBridge.call('openWin', '/mall/underCancel?spid=' + res.data.spid + '&id=' + res.data.id)
+                        } else if (res.data.type === 'goods') {
+                            dsBridge.call('open', {url: window.location.origin + '/uqWeb/html/mall/mallDetails?id=' + res.data.goodsId})
+                        } else if (res.data.type === 'shops' && res.data.model === 'bbc') {
+                            dsBridge.call('open', {url: window.location.origin + '/uqWeb/html/mall/mallShop?spid=' + res.data.spid})
+                        } else if (res.data.type === 'shops' && res.data.model === 'oto') {
+                            dsBridge.call('openWin', '/mall/Underdetail?spid=' + res.data.spid)
+                        } else if (res.data.type === 'order') {
+                        // this.jumpTo('/mall/off_order_detail?orderId=' + res.data.orderId + '&bdelete=' + res.data.bdelete)
+                           this.getotoCode(res.data.bdelete)
+                        }
+                    }
+                })
+            } 
+        }
+    })
+</script>
+
+</html>

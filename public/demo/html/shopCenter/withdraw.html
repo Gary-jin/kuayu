@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>提现</title>
+    <script>
+        (function(doc, win) {
+            var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function() {
+              var clientWidth = docEl.clientWidth;
+              if(!clientWidth) return;
+              if(clientWidth >= 750) {
+                docEl.style.fontSize = '100px';
+              } else {
+                docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+              }
+            };
+            if(!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+          })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=1">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/mint-ui/style.css" />
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body,html{
+            background: #F2F2F2;
+        }
+     	#header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: .88rem;
+            border-bottom: 1px solid #eee;
+			background:#fff;
+			z-index: 9999;
+            line-height: .88rem;
+            display: flex;
+            align-items: center;
+        }
+        #header .left img{
+            width: .18rem;
+            padding-left: .3rem;
+        }
+        #header .left {
+            display: flex;align-items: center;
+            z-index: 1;
+            position: absolute;
+            left: 0;
+			top:.28rem
+        }
+
+        #header .center {
+            position: relative;font-size: .34rem;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+        .common-height{
+            height: 0.88rem;
+        }
+        .withdrawInfo{
+            margin: .18rem 0;
+            background-color:#fff
+        }
+        .withdrawInfo .top{
+            display:flex;
+            align-items:center;
+            justify-content: space-between;
+            padding: .4rem .3rem;
+            font-size: .3rem;
+            color: #2f2f2f;
+        }
+        .withdrawInfo .top span{
+            color:#D92121
+        }
+        .withdrawInfo .price{
+            font-size:.42rem;
+            padding: 0 .3rem .18rem;
+            border-bottom:1px solid #eee
+        }
+        .withdrawInfo input{
+            border:none;
+            padding-left:.15rem;
+            outline:none
+        }
+        .withdrawInfo .btm{
+            height:.88rem;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:0 .3rem;
+            font-size:.28rem;
+            color:#666
+        }
+        .withdrawInfo .btm .left i{
+            font-style:normal;
+            color:#D92121
+        }
+        .withdrawInfo .btm .right{
+            font-size:.24rem;
+            display: inline-flex;
+            align-items: center;
+        }
+        .withdrawInfo .btm .right img{
+            width:.22rem;
+            margin-right:.06rem
+        }
+        .payMent_list{
+            margin-top:0.2rem;
+        }
+        .payMent_list .list_title{
+            padding: .18rem 0.3rem .3rem;
+            font-size:.32rem;
+            text-align: left;
+            font-weight: bold;
+            color: #2F2F2F;
+            display: flex;
+            align-items: center; 
+        }
+        .payMent_list .list_title .line{
+          width: 0.06rem;
+          height: .32rem;
+          background: #D92121;
+          display: inline-block;
+          border-radius: .03rem;
+          margin-right: .13rem;
+        }
+        .payMent_list .img_box .list{
+            display:flex;
+            align-items:center;
+            justify-content: space-between;
+            padding: 0 .3rem;
+            background: #fff;
+            height: 1.3rem;
+            border-bottom:1px solid #eee
+        }
+        .payMent_list .img_box .list p{
+            display:flex;
+            align-items:center;
+            font-size:.3rem;
+            color:#2f2f2f
+        }
+        .payMent_list .img_box .list p img{
+            width:.62rem;
+            margin-right:.2rem
+        }
+        .payMent_list .img_box .list .round{
+            width:.36rem
+        }
+        .shopWithdrawBtn{
+            text-align:center;
+            position:fixed;
+            bottom: .6rem;
+            width: 100%;
+        }
+        .shopWithdrawBtn button{
+            height:.88rem;
+            width:5.2rem;
+            background:linear-gradient(270deg,rgba(217,33,33,1),rgba(255,101,73,1));
+            border-radius:.1rem;
+            font-size:.34rem;
+            color:#fff
+        }
+        .mint-msgbox-header{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="shopCenter" v-cloak>
+    <div id="header">
+        <div class="left" @click="onBack"><img src="../../image/group_booking/back.png"></div>
+        <div class="center">提现</div>
+      </div>
+      <div class="common-height"></div>
+     <div class="withdrawInfo">
+        <div class="top">
+            <p>提现金额(元)</p>
+            <span @click="allMoney()">全部提现</span>
+        </div>
+        <div class="price">
+            <span>¥</span><input type="number" v-model="withMoney">
+        </div>
+        <div class="btm">
+            <span class="left">可提现<i>¥{{info.shopPrice}}</i></span>
+            <span class="right" @click="withDrawNote()"><img src="../../image/shopCenter/note.png" alt="">可提现最小金额为{{info.min}}元</span>
+        </div>
+     </div>
+     <div class="payMent_list">
+        <div class="list_title">
+            <span class="line"></span>
+            提现账户
+        </div>
+        <div class="img_box">
+            <div class="list" @click="selectTab('alipay')">
+                <p><img src="../../image/shopCenter/zfb.png" alt=""><span>支付宝</span></p>
+                <img class="round" :src="withdrawType == 'alipay' ? '../../image/mall/roundFilled.png' : '../../image/mall/round.png'" alt="">
+            </div>
+            <div class="list" @click="selectTab('bankCard')"> 
+                <p><img src="../../image/shopCenter/yhk.png" alt=""><span>银行卡</span></p>
+                <img class="round" :src="withdrawType == 'bankCard' ? '../../image/mall/roundFilled.png' : '../../image/mall/round.png'" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="shopWithdrawBtn" ref="withBtmBtn">  
+        <button @click="withBtn()">提现</button>
+    </div>
+</div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="../../js/mint-ui/index.js" charset="utf-8"></script>
+    
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: "#shopCenter",
+        data:{
+            info: '',
+            withdrawType: 'alipay',
+            withMoney: ''
+        },
+        methods: {
+            onBack: function(){
+                dsBridge.call('closeWin')
+            },
+            selectTab(type){
+                this.withdrawType = type
+            },
+            withDrawNote(){
+                this.$messagebox({
+                    message: '<p>提现手续费：' + this.info.percent + '</p>' + '<p>提现整数倍：' + this.info.zheng,
+                    showCancelButton: false
+                })
+            },
+            allMoney(){
+                this.withMoney = this.info.shopPrice
+            },
+            withBtn(){
+                if(!this.withMoney || this.withMoney == ''){
+                    this.$toast({message: '请输入提现金额！'});
+                    return
+                }
+                if( +this.withMoney > +this.info.shopPrice){
+                    this.$toast({message: '可提现金额不足！'});
+                    return
+                }
+                Http.post(Http.HOST+Http.API_URL.SHOPDWITHDRAW,{type: 'save', price: this.withMoney, withdrawType: this.withdrawType},true).then((res)=>{
+                    if(res.code == 0){
+                        dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/shopCenter/szmx_detail.html', type: 'web' })
+                    }else{
+                        this.$toast({message: res.msg});
+                    }
+                    
+                })
+            },
+            getInfo(){
+                Http.post(Http.HOST+Http.API_URL.SHOPDWITHDRAW,{},true).then((res)=>{
+                    if(res.code == 0){
+                        this.info = res.data
+                    }else{
+                        this.$toast({message: res.msg});
+                    }
+                })
+            }
+        },
+        mounted () {
+            this.getInfo()
+            var that = this
+            var originalHeight = document.documentElement.clientHeight || document.body.clientHeight
+            window.onresize = function(){
+                var resizeHeight = document.documentElement.clientHeight || document.body.clientHeight
+                if(resizeHeight - 0 < originalHeight-0){
+                    // that.$refs.withBtmBtn.style.display = 'none'
+                    that.$refs.withBtmBtn.style.display = 'none'
+                }else{
+                    that.$refs.withBtmBtn.style.display = 'block'
+                }
+            }
+        }
+      
+    })
+</script>
+
+</html>

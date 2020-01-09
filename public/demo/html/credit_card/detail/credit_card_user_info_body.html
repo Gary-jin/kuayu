@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>卡片详情</title>
+    <script>
+      (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../../css/common.css?i=1128?i=20191012">
+    <link rel="stylesheet" href="../../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/libs/swiper_min.css">
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css" />
+	<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910112246"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+    <style>
+      html, body { background: none; }
+	  #header {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 50px;
+            border-bottom: 1px solid #eee;
+			background:#fff;
+			z-index: 9999;
+        }
+
+        #header .left {
+          display: flex;align-items: center; justify-content: center;font-size: .36rem; color: #666; z-index: 1;
+            position: absolute;
+            bottom: 0;
+            left: .2rem;
+            height: 50px;
+        }
+
+        #header .center {
+            position: relative;font-size: .34rem;
+            width: 5.0rem;
+            height: 50px;line-height: 50px;
+            text-align: center;
+			margin: 0 auto
+        }
+
+        #header .right {
+            position: absolute; font-size: .3rem; color: #666;
+            bottom: 0;
+            right: .26rem; line-height: 50px;
+        }
+		.common-hight{height:50px}
+      #vue-app { transition: opacity .3s; opacity: 1; padding-bottom: .5rem; padding-bottom: 1rem;}
+      #vue-app .info-box{
+        margin-top: 0.2rem;
+        font-size: 0.3rem;
+        background-color: #fff;
+      }
+      #vue-app .info-box .item{
+        height: 1rem;
+        line-height: 1rem;
+        padding: 0 0.24rem;
+        box-sizing: content-box;
+        border-bottom: 0.01rem solid rgba(238,238,238,1);
+      }
+      #vue-app .info-box .item input{
+        border: none;
+        outline: inherit;
+        font-weight:500;
+        color:rgba(153,153,153,1);
+      }
+      #vue-app .info-box .item p{
+        display: inline-block;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+      }
+      #vue-app .next-btn{
+        text-align: center;
+      }
+      #vue-app .next-btn p{
+        width:5.2rem;
+        height:0.88rem;
+        background:linear-gradient(-90deg,rgba(255,0,54,1) 0%,rgba(255,114,0,1) 100%);
+        border-radius:0.44rem;
+        font-size:0.32rem;
+        font-family:PingFang-SC-Bold;
+        font-weight:bold;
+        color:rgba(255,255,255,1);
+        line-height: 0.88rem;
+        text-align: center;
+        margin: 1.5rem auto;
+      }
+    </style>
+	
+</head>
+
+<body>
+  <div id="vue-app" v-cloak>
+   <div id="header">
+      <div class="left" @click="onBack"><i class="iconfont icon-back"></i></div>
+      <div class="center text-overflow_1-xzh">申请信息</div>
+    </div>
+	<div class='common-hight'></div>
+    <div class="info-box">
+      <div class="item">
+        <p>真实姓名：</p>
+        <input type="text" placeholder="请输入姓名" v-model="userName">
+      </div>
+      <div class="item">
+        <p>身份证号：</p>
+        <input type="text" placeholder="请输入身份证号码" v-model="userCid">
+      </div>
+      <div class="item">
+        <p>联系方式：</p>
+        <input type="text" placeholder="请输入手机号" v-model="userPhone">
+      </div>
+    </div>
+    <div class="next-btn">
+      <p @click="next">下一步</p>
+    </div>
+  </div>
+</body>
+
+<script type="text/javascript">
+  //apiready = function(){
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data:{
+          cardInfo: utils.storage.get('cardInfo'),
+          userName: '',
+          userCid: '',
+          userPhone: ''
+        },
+        mounted: function(){
+          // 初始化下拉刷新
+          // this.getInfo();
+        },
+        methods: {
+		  onBack: function(ret, err){
+			dsBridge.call('closeWin')
+		  },
+          next: function(){
+            if (!this.userName) {
+			  dsBridge.call("toast", {msg: '姓名不能为空'})
+              return
+            }
+            if (!this.userPhone) {
+			  dsBridge.call("toast", {msg: '手机号不能为空'})
+              return
+            }
+            if (!this.userCid) {
+			  dsBridge.call("toast", {msg: '身份证号不能为空'})
+              return
+            }
+            let reg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/
+            if (!reg.test(this.userPhone)) {
+			  dsBridge.call("toast", {msg: '手机号格式不对'})
+              return
+            }
+            let reg1 = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+            if (!reg1.test(this.userCid)) {
+			  dsBridge.call("toast", {msg: '身份证号格式不对'})
+              return
+            }
+            Http.post(Http.HOST+Http.API_URL.HOMECARDURL,{
+                id: this.cardInfo.id,
+                bank: this.cardInfo.bank,
+                mobile: this.userPhone,
+                name: this.userName,
+                id_card: this.userCid
+               },true).then((res)=>{
+			     if(res.code === 0){
+				   dsBridge.call("open", {url: res.data})
+				 }else{
+				   dsBridge.call("toast", {msg: res.msg})
+				 }
+			   })
+			 }
+        }
+    })
+  //}
+</script>
+
+</html>

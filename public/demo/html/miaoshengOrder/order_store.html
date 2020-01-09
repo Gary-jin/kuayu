@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>活动专区订单</title>
+    <script type="text/javascript">
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <link rel="stylesheet" href="../../css/order_form_all/order_store.css?i=20191122">
+    <!-- uint-ui -->
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="order_title">
+            <div class="order_title_top" v-show="topshow">
+                <img src="./../../image/back.png" alt="" @click='onBack'>
+                <div v-for="(item,index) in titleList"  :key="index" style="width: 4.9rem;text-align: center;">
+                    {{item.text}}
+                </div>
+                <img @click="search()" src="./../../image/search.png" alt="">
+                <img @click="mdate()" id="trigger1" src="./../../image/order_all/sign.png" alt="">
+            </div>
+            <ul class="order_title_nav" v-show="topshow">
+                <li v-for="(navitem,index) in navList" v-on:click="getListIn(navitem.tab,index)"
+                    v-bind:class="{ dingwei:index== navcurrent}" :key="index" v-show="navGroupshow">
+                    {{navitem.text}}
+                    <div v-bind:class="{active:index==navcurrent}"></div>
+                </li>
+                <li></li>
+            </ul>
+        </div>
+
+        <!-- 搜索 -->
+        <div class="mescroll" ref="mescroll" id="mescroll">
+            <div class="danduso order_tab_box" id="duanduso">
+                <div>
+                    <!-- 我的模板 -->
+                        <div class="order_tab_box_list" v-for="(item, index) in dandusolist" :key="index">
+                            <div class="list_box_content">
+                                <div class="list_box_top">
+                                    <div>
+                                        <span>订单编号：{{item.trade_sn}}</span>
+                                        <div class="id_copy" @click="id_copy(item.trade_sn)"></div>
+                                    </div>
+                                    <span class="id_status">{{item.status_title}}</span>
+                                </div>
+                                <div class="lsit_box_center"
+                                    @click="handDetail(item.id)">
+                                    <div class="id_picture"
+                                        :style="{background: `url(${item.thumb})50% 50% / cover no-repeat`}">
+                                    </div>
+                                    <div class="id_title">
+                                        <p>{{item.title}}</p>
+                                        <p><span>￥</span><span>{{item.total_price}}</span></p>
+                                        <p>×{{item.goods_num}}</p>
+                                    </div>
+                                </div>
+                                <div class="list_box_bottom">
+                                    <div class="list_bottom_isshow">
+                                        <div>
+                                            <div class="isshow_button_a">
+                                            </div>
+                                            <div class="isshow_button_b">
+                                                <span>共{{item.goods_num}}件&nbsp;合计：<span>￥{{item.total_price*item.goods_num}}</span></span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="isshow_button_c">
+                                                <div v-if="item.status ==='0' "
+                                                    @click="handShow(item.id,index)">取消订单</div>
+                                                <div v-else-if="item.status ==='1' "
+                                                    @click="refund(item.id)">申请退款</div>
+                                                <div v-else-if="item.status ==='2' "
+                                                    @click="refund(item.id)">申请退款</div>
+                                                <!-- <div v-else-if="item.status ==='退款申请中' " @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div> -->
+                                            </div>
+                                            <div class="isshow_button_d">
+                                                <div v-if="item.status ==='0' "
+                                                    @click="handDetail(item.id)">去付款</div>
+                                                <div v-else-if="item.status ==='2' "
+                                                    @click="receipt(item.id)">确认收货</div>
+                                                <!-- <div v-else-if="item.status ==='待评价' "
+                                                    @click="jumpTo('/mall/appraise?orderSn='+item.orderSn)">去评价</div> -->
+                                                <!-- <div v-else-if="item.status ==='退款申请中' " @click="receipt(index,item.orderSn)">取消退款</div> -->
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <!-- 搜索end -->
+            <div class="order_tab_box">
+                <div>
+                    <!-- 我的模板 -->
+                    <div class="order_tab_box_list" v-for="(item, index) in list" :key="index">
+                        <div class="list_box_content">
+                            <div class="list_box_top">
+                                <div>
+                                    <span>订单编号：{{item.trade_sn}}</span>
+                                    <div class="id_copy" @click="id_copy(item.trade_sn)"></div>
+                                </div>
+                                <span class="id_status">{{item.status_title}}</span>
+                            </div>
+                            <div class="lsit_box_center"
+                                @click="handDetail(item.id)">
+                                <div class="id_picture"
+                                    :style="{background: `url(${item.thumb})50% 50% / cover no-repeat`}">
+                                </div>
+                                <div class="id_title">
+                                    <p>{{item.title}}</p>
+                                    <p><span>￥</span><span>{{item.total_price}}</span></p>
+                                    <p>×{{item.goods_num}}</p>
+                                </div>
+                            </div>
+                            <div class="list_box_bottom">
+                                <div class="list_bottom_isshow">
+                                    <div>
+                                        <div class="isshow_button_a">
+                                        </div>
+                                        <div class="isshow_button_b">
+                                            <span>共{{item.goods_num}}件&nbsp;合计：<span>￥{{item.total_price*item.goods_num}}</span></span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="isshow_button_c">
+                                            <div v-if="item.status ==='0' "
+                                                @click="handShow(item.id,index)">取消订单</div>
+                                            <div v-else-if="item.status ==='1' "
+                                                @click="refund(item.id)">申请退款</div>
+                                            <div v-else-if="item.status ==='2' "
+                                                @click="refund(item.id)">申请退款</div>
+                                            <!-- <div v-else-if="item.status ==='退款申请中' " @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div> -->
+                                        </div>
+                                        <div class="isshow_button_d">
+                                            <div v-if="item.status ==='0' "
+                                                @click="handDetail(item.id)">去付款</div>
+                                            <div v-else-if="item.status ==='2' "
+                                                @click="receipt(item.id)">确认收货</div>
+                                            <!-- <div v-else-if="item.status ==='待评价' "
+                                                @click="jumpTo('/mall/appraise?orderSn='+item.orderSn)">去评价</div> -->
+                                            <!-- <div v-else-if="item.status ==='退款申请中' " @click="receipt(index,item.orderSn)">取消退款</div> -->
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="order_tab_box kong" v-show="kong">
+                <img :src="imgConfig.NODATA_IMG || './../../image/kong.png'" alt="">
+                <p>{{imgConfig.NODATA_TEXT || '暂无数据~'}}</p>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!--mint-ui  -->
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/libs/common.js"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            page: 0,
+            xshou: false, //input框小x的显示隐藏
+            topshow: true,
+            groupisno: true, //小店订单列表 我的订单和团队订的的区别
+            inp_text: '', //搜索的值
+            titleList: [{
+                text: "我的订单"
+            }],
+            navList: [{ 
+                text: "全部",
+                tab:"all"
+            },  {
+                text: "待付款",
+                tab:"no_pay"
+            }, {
+                text: "待发货",
+                tab:"no_delivery"
+            }, {
+                text: "待收货",
+                tab:"no_take"
+            }, {
+                text: "已完成",
+                tab:"finish"
+            }, {
+                text: "退款售后",
+                tab:"refund"
+            }],
+            navGroupshow: true,
+            current: 0, //我的订单和团队订单的索引
+            navcurrent: 0, //我的订单下的tab索引
+            mescroll: null,
+            list: [], //我的订单
+            indexNum: null,
+            order: null,
+            showquxiao: false,
+            kong: true,
+            dataList: [],
+            dandusolist: [],
+            dandusoshow: true,
+            pagenum: 0,
+            dateValue: new Date(), //设置默认选择时间为今天
+            tabcalss: '', //tab种类
+        },
+        mounted: function () {
+            var Request = new Object();
+            Request = GetRequest();
+            this.navcurrent = Request['tabnum'] //索引下红线
+            this.tabcalss = Request['datatab']  //种类
+            console.log(this.tabcalss)
+            this.redraw()
+            // 分页
+
+            this.mescroll = new MeScroll(this.$refs
+                .mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+                down: {
+                    use: true,
+                    offset: 180
+                },
+                up: {
+                    callback: this.upCallback, //上拉加载的回调
+                    //以下是一些常用的配置,当然不写也可以的.
+                    page: {
+                        num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                        size: 10 //每页数据条数,默认10
+                    },
+                    htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+                    noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+                }
+            });
+
+        },
+        created: function () {
+        },
+        // 刷新
+        methods: {
+            redraw: function()  {
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                    // "页面被挂起"
+                    } else {
+                        console.log("呼出")
+                        this.mescroll.setPageNum(1);
+                        this.mescroll.resetUpScroll();
+                    }
+                })
+            },
+            refund (id){
+                dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/miaoshengOrder/refund.html?order_id='+id, type: 'web' })
+                // window.location.href = 'http://172.16.1.239:3000/uqWeb/html/miaoshengOrder/refund.html?order_id=' +id
+            },
+            jumpTo: function (path) {
+                dsBridge.call('openWin', path);
+                this.reset()
+            },
+            // 进商品详情
+            handDetail: function (order,) {
+                this.jumpTo('/mall/orderDetailAct?order=' + order)
+            },
+            // 我的订单下的tab
+            getListIn: function (type,index) {
+                this.navcurrent = index
+                this.tabcalss = type
+                console.log(this.tabcalss)
+                this.reset()
+            },
+            reset(){
+            this.dandusolist = []
+            this.mescroll.setPageNum(1);
+            this.mescroll.resetUpScroll()
+            },
+            //搜索
+            search: function () {
+                console.log(3)
+                dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/miaoshengOrder/order_store_chmy.html', type: 'web' })
+                // window.location.href = 'http://172.16.1.239:3000/uqWeb/html/miaoshengOrder/order_store_chmy.html'
+            },
+            // 返回
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            // 调出日期选择器
+            mdate: function () {
+                // this.$refs.datePicker.open();
+                    dsBridge.call("timeSelector", "" ,(timeSelector)=>{
+                        // alert(timeSelector)
+                        this.list = [];
+                        this.dandusolist = [];
+                        Http.post(Http.HOST + Http.API_URL.ALLORDERLIST, {
+                            order_status:"all",
+                            date: timeSelector
+                            }, true).then((res) => {
+                                this.navcurrent = 0;
+                                this.dandusoshow = false;
+                                if (res.data.length != 0) {
+                                    this.kong = false
+                                    this.dandusolist = res.data
+                                } else {
+                                    this.kong = true
+                                }
+                        })
+                    })
+            },
+            // 复制
+            id_copy: function (order_id) {
+                dsBridge.call("clipBoard", {
+                    value: order_id
+                })
+            },
+            // 订单删除
+            orderDel: function (order_id, orderSn, index) {
+                console.log(order_id);
+                this.$messagebox({
+                    title: '删除订单',
+                    message: '确定要删除订单吗？',
+                    showCancelButton: true
+                }).then(action => {
+                    // console.log(action)
+                    if (action == "confirm") {
+                        this.list.splice(index, 1)
+                        Http.post(Http.HOST + Http.API_URL.DELDINGDAN, {
+                            orderSn: orderSn
+                        }, true).then((res) => {
+                            // window. location.reload()
+                            this.reset()
+                        })
+                    } else {
+                        // console.log("取消")
+                    }
+                });
+            },
+            // 取消订单
+            handShow: function (order_id, index) {
+                // console.log(order_id,orderSn)
+                this.$messagebox({
+                    title: '取消订单',
+                    message: '确定要取消订单吗？',
+                    showCancelButton: true
+                }).then(action => {
+                    if (action == "confirm") {
+                        console.log(order_id)
+                        this.list.splice(index, 1)
+                        Http.post(Http.HOST + Http.API_URL.CANCELORDER, {
+                            order_id: order_id
+                        }, true).then((res) => {
+                            this.reset()
+                        })
+                    } else {
+                        // console.log("取消")
+                    }
+                });
+            },
+
+            // 确认收货
+            receipt: function (order) {
+                this.$messagebox({
+                    title: '确认收货',
+                    message: '确定要确认收货吗？',
+                    showCancelButton: true
+                }).then(action => {
+                    if (action == "confirm") {
+                        Http.post(Http.HOST + Http.API_URL.CONFIRMRECEIPT, {
+                            order_id: order
+                        }, true).then((response) => {
+                            this.reset()
+                            this.list.splice(index, 1)
+                        })
+                    }
+                })
+            },
+            upCallback(page) {
+                // console.log("我的",page.num)
+                Http.post(Http.HOST + Http.API_URL.ALLORDERLIST, {
+                    page: page.num,
+                    order_status: this.tabcalss
+                }, true).then((response) => {
+                    if (response.data.length != 0) {
+                        this.kong = false
+                    }
+                    let arr = response.data;
+                    //如果是第一页需手动置空列表
+                    if (page.num == 1) this.dataList = [];
+                    //把请求到的数据添加到列表
+                    this.dataList = this.dataList.concat(arr);
+                    this.list = this.dataList
+                    this.countDown();
+                    //数据渲染成功后,隐藏下拉刷新的状态
+                    this.$nextTick(() => {
+                        this.mescroll.endSuccess(arr.length);
+                    })
+                }).catch((e) => {
+                    //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                    this.mescroll.endErr();
+                })
+            },
+        },
+        // 日期选择
+    })
+</script>
+
+
+
+</html>

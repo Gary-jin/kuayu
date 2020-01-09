@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>商城订单</title>
+    <script type="text/javascript">
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <link rel="stylesheet" href="../../css/order_form_all/order_store.css?i=20191122">
+    <!-- uint-ui -->
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="order_title">
+            <div class="order_title_top" v-show="topshow">
+                <img src="./../../image/back.png" alt="" @click='onBack'>
+                <div v-for="(item,index) in titleList" v-on:click="getgroup(index,$event)"
+                    v-bind:class="{ dingwei:index==current}" :key="index">
+                    {{item.text}}
+                    <div v-bind:class="{active:index==current}"></div>
+                </div>
+                <img @click="search()" src="./../../image/search.png" alt="">
+                <img @click="mdate()" id="trigger1" src="./../../image/order_all/sign.png" alt="">
+                <!-- <input type="hidden" id="ipt_hidden" v-model="ipt_hidden"> -->
+            </div>
+            <!-- <div class="order_title_top_inp" v-show="!topshow">
+                <div class="input_search"><img src="./../../image/order_all/search2.png" alt=""></div>
+                <input type="text" placeholder="输入订单号查询" v-model="inp_text" @focus="xshou=true" @blur="xshou=false">
+                <div @click="input_search()" class="input_search"><img src="./../../image/order_all/xiaocha.png" alt=""
+                        v-show="xshou"></div>
+                <span @click="cancel()" v-if="inp_text===''">取消</span>
+                <span @click="confirm(inp_text)" v-else>确定</span>
+            </div> -->
+            <ul class="order_title_nav" v-show="topshow">
+                <li v-for="(navitem,index) in navList" v-on:click="getListIn(index)"
+                    v-bind:class="{ dingwei:index== navcurrent}" :key="index" v-show="navGroupshow">
+                    {{navitem.text}}
+                    <div v-bind:class="{active:index==navcurrent}"></div>
+                </li>
+                <li v-for="(groupitem,index) in groupList" v-on:click="groupListIn(index)"
+                    v-bind:class="{ dingwei:index== groupcurrent}" :key="index" v-show="!navGroupshow">
+                    {{groupitem.text}}
+                    <div v-bind:class="{active:index==groupcurrent}"></div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 搜索 -->
+        <div class="mescroll" ref="mescroll" id="mescroll">
+            <div class="danduso order_tab_box" id="duanduso">
+                <div>
+                    <!-- 我的模板 -->
+                    <div class="order_tab_box_list" v-for="(item, index) in dandusolist" :key="index">
+                        <div class="list_box_content">
+                            <div class="list_box_top">
+                                <div>
+                                    <span>订单编号：{{item.orderId}}</span>
+                                    <div class="id_copy" @click="id_copy(item.orderId)"></div>
+                                </div>
+                                <span class="id_status">{{item.statusInfo}}</span>
+                            </div>
+                            <div class="lsit_box_center" v-for="(items,index) in item.goodsList" :key="index"
+                                @click="handDetail(item.orderSn,item.orderStatus)">
+                                <div class="id_picture"
+                                    :style="{background: `url(${items.thumb})50% 50% / cover no-repeat`}">
+                                    <!-- <img :src="items.thumb ||'./../../image/order_all/111.png'" alt=""> -->
+                                </div>
+                                <div class="id_title">
+                                    <p>{{items.goodsName}}</p>
+                                    <p><span>￥</span><span>{{items.goodsPrice}}</span></p>
+                                    <p>×{{items.goodsNum}}</p>
+                                </div>
+                            </div>
+                            <div class="list_box_bottom">
+                                <div class="list_bottom_isshow">
+                                    <div>
+                                        <div class="isshow_button_a">
+                                            <span v-if="item.statusInfo=== '待付款' ">待付款剩余时间：{{item.djs}}</span>
+                                            <span><img @click="orderDel(item.orderId,item.orderSn,index)" v-if="item.statusInfo=== '已完成' || item.statusInfo=== '已取消' 
+                                            || item.statusInfo=== '退款完成' "
+                                                    src="./../../image/order_all/dingdanshanchu.png" alt=""></span>
+                                            <span v-less></span>
+                                        </div>
+                                        <div class="isshow_button_b">
+                                            <span>共{{item.goodsNum}}件&nbsp;合计：<span>￥{{item.payPrice}}</span></span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="isshow_button_c">
+                                            <div v-if="item.statusInfo ==='待付款' "
+                                                @click="handShow(item.orderId,item.orderSn,index)">取消订单</div>
+                                            <div v-else-if="item.statusInfo ==='待发货' "
+                                                @click="jumpTo('/mall/exchange?orderSn='+item.orderSn,index)">申请退款</div>
+                                            <div v-else-if="item.statusInfo ==='待收货' "
+                                                @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div>
+                                            <!-- <div v-else-if="item.statusInfo ==='退款申请中' " @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div> -->
+                                        </div>
+                                        <div class="isshow_button_d">
+                                            <div v-if="item.statusInfo ==='待付款' "
+                                                @click="jumpTo('/mall/payMent?orderId='+item.orderId)">去付款</div>
+                                            <div v-else-if="item.statusInfo ==='待收货' "
+                                                @click="receipt(index,item.orderSn)">确认收货</div>
+                                            <div v-else-if="item.statusInfo ==='待评价' "
+                                                @click="jumpTo('/mall/appraise?orderSn='+item.orderSn)">去评价</div>
+                                            <!-- <div v-else-if="item.statusInfo ==='退款申请中' " @click="receipt(index,item.orderSn)">取消退款</div> -->
+
+                                        </div>
+                                        <!-- <div class="isshow_button_c">
+                                            <div v-if="item.orderStatus == 0 " @click="handShow(item.orderId,item.orderSn,index)">取消订单</div>
+                                            <div v-else-if="item.payStatus == 1&&item.orderStatus == 0 " @click="jumpTo('/mall/exchange?orderSn='+item.orderSn,index)">申请退款</div>
+                                            <div v-else-if="item.payStatus == 1&&item.orderStatus == 1 " @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div>
+                                            <div v-else-if="item.payStatus == 1&&item.orderStatus == 1" @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div>
+                                        </div>
+                                        <div class="isshow_button_d">
+                                            <div v-if="item.statusInfo ==='待付款' " @click="jumpTo('/mall/payMent?orderId='+item.orderId)">去付款</div>
+                                            <div v-else-if="item.payStatus == 1&&item.orderStatus == 1 " @click="receipt(index,item.orderSn)">确认收货</div>
+                                            <div v-else-if="item.payStatus == 1 && item.orderStatus == 2 && item.isDiscuss == 0 " @click="jumpTo('/mall/appraise?orderSn='+item.orderSn)">去评价</div>
+                                            <div v-else-if="item.payStatus == 1&&item.orderStatus == 1 " @click="receipt(index,item.orderSn)">确认收货</div>
+                                        </div> -->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 团队模板 -->
+                    <div class="order_tab_box_list" v-for="(item, index) in dandusogrouplist" :key="index">
+                        <div class="list_box_content">
+                            <div class="list_box_top">
+                                <div>
+                                    <span>订单编号：{{item.orderId}}</span>
+                                    <div class="id_copy" @click="id_copy(item.orderId)"></div>
+                                </div>
+                                <span class="id_status">{{item.statusInfo}}</span>
+                            </div>
+                            <div class="lsit_box_center" v-for="(items,index) in item.goodsList" :key="index"
+                                @click="handDetail(item.orderSn,item.orderStatus)">
+                                <div class="id_picture"
+                                    :style="{background: `url(${items.thumb})50% 50% / cover no-repeat`}">
+                                    <!-- <img :src="items.thumb ||'./../../image/order_all/111.png'" alt=""> -->
+                                </div>
+                                <div class="id_title_group">
+                                    <p>{{items.goodsName}}</p>
+                                    <p>{{item.shopName}}</p>
+                                    <p>订单来源：{{item.rebate.disUser.nickname}}</p>
+                                    <p>付款金额：{{(items.goodsPrice*items.goodsNum).toFixed(2)}}</p>
+                                </div>
+                            </div>
+                            <div class="list_box_bottom">
+                                <div class="list_bottom_group">
+                                    <div class="list_bottom_group_b">
+                                        <div class="yuguzhuan" v-model="createdtime=item.created_at">
+                                            {{(item.paytime*1000) | formatDate}}付款</div>
+                                        <div class="fenxiang" v-if="item.statusInfo==='已结算'">
+                                            {{item.rebate.updated_at*1000 | toDate}}结算</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 搜索end -->
+
+            <!-- <div class="order_tab_box mescroll" ref="mescroll" id="mescroll" > -->
+            <div class="order_tab_box">
+                <div>
+                    <!-- 我的模板 -->
+                    <div class="order_tab_box_list" v-for="(item, index) in list" :key="index">
+                        <div class="list_box_content">
+                            <div class="list_box_top">
+                                <div>
+                                    <span>订单编号：{{item.orderId}}</span>
+                                    <div class="id_copy" @click="id_copy(item.orderId)"></div>
+                                </div>
+                                <span class="id_status">{{item.statusInfo}}</span>
+                            </div>
+                            <div class="lsit_box_center" v-for="(items,index) in item.goodsList" :key="index"
+                                @click="handDetail(item.orderSn,item.orderStatus)">
+                                <div class="id_picture"
+                                    :style="{background: `url(${items.thumb})50% 50% / cover no-repeat`}">
+                                    <!-- <img :src="items.thumb ||'./../../image/order_all/111.png'" alt=""> -->
+                                </div>
+                                <div class="id_title">
+                                    <p>{{items.goodsName}}</p>
+                                    <p><span>￥</span><span>{{items.goodsPrice}}</span></p>
+                                    <p>×{{items.goodsNum}}</p>
+                                </div>
+                            </div>
+                            <div class="list_box_bottom">
+                                <div class="list_bottom_isshow">
+                                    <div>
+                                        <div class="isshow_button_a">
+                                            <span v-if="item.statusInfo=== '待付款' ">待付款剩余时间：{{item.djs}}</span>
+                                            <span><img @click="orderDel(item.orderId,item.orderSn,index)" v-if="item.statusInfo=== '已完成' || item.statusInfo=== '已取消' 
+                                        || item.statusInfo=== '退款完成' " src="./../../image/order_all/dingdanshanchu.png"
+                                                    alt=""></span>
+                                            <span v-less></span>
+                                        </div>
+                                        <div class="isshow_button_b">
+                                            <span>共{{item.goodsNum}}件&nbsp;合计：<span>￥{{item.payPrice}}</span></span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="isshow_button_c">
+                                            <div v-if="item.statusInfo ==='待付款' "
+                                                @click="handShow(item.orderId,item.orderSn,index)">取消订单</div>
+                                            <div v-else-if="item.statusInfo ==='待发货' "
+                                                @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div>
+                                            <div v-else-if="item.statusInfo ==='待收货' "
+                                                @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div>
+                                            <!-- <div v-else-if="item.statusInfo ==='退款申请中' " @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div> -->
+                                        </div>
+                                        <div class="isshow_button_d">
+                                            <div v-if="item.statusInfo ==='待付款' "
+                                                @click="jumpTo('/mall/payMent?orderId='+item.orderId)">去付款</div>
+                                            <div v-else-if="item.statusInfo ==='待收货' "
+                                                @click="receipt(index,item.orderSn)">确认收货</div>
+                                            <div v-else-if="item.statusInfo ==='待评价' "
+                                                @click="jumpTo('/mall/appraise?orderSn='+item.orderSn)">去评价</div>
+                                            <!-- <div v-else-if="item.statusInfo ==='退款申请中' " @click="receipt(index,item.orderSn)">取消退款</div> -->
+                                        </div>
+                                        <!-- <div class="isshow_button_c">
+                                        <div v-if="item.orderStatus == 0 " @click="handShow(item.orderId,item.orderSn,index)">取消订单</div>
+                                        <div v-else-if="item.payStatus == 1&&item.orderStatus == 0 " @click="jumpTo('/mall/exchange?orderSn='+item.orderSn,index)">申请退款</div>
+                                        <div v-else-if="item.payStatus == 1&&item.orderStatus == 1 " @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div>
+                                        <div v-else-if="item.payStatus == 1&&item.orderStatus == 1" @click="jumpTo('/mall/exchange?orderSn='+item.orderSn)">申请退款</div>
+                                    </div>
+                                    <div class="isshow_button_d">
+                                        <div v-if="item.statusInfo ==='待付款' " @click="jumpTo('/mall/payMent?orderId='+item.orderId)">去付款</div>
+                                        <div v-else-if="item.payStatus == 1&&item.orderStatus == 1 " @click="receipt(index,item.orderSn)">确认收货</div>
+                                        <div v-else-if="item.payStatus == 1 && item.orderStatus == 2 && item.isDiscuss == 0 " @click="jumpTo('/mall/appraise?orderSn='+item.orderSn)">去评价</div>
+                                        <div v-else-if="item.statusInfo ==='退款申请中' " @click="receipt(index,item.orderSn)">确认收货</div>
+                                    </div> -->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 团队模板 -->
+                    <div class="order_tab_box_list" v-for="(item, index) in listgroup" :key="index">
+                        <div class="list_box_content">
+                            <div class="list_box_top">
+                                <div>
+                                    <span>订单编号：{{item.orderId}}</span>
+                                    <div class="id_copy" @click="id_copy(item.orderId)"></div>
+                                </div>
+                                <span class="id_status">{{item.statusInfo}}</span>
+                            </div>
+                            <div class="lsit_box_center" v-for="(items,index) in item.goodsList" :key="index"
+                                @click="handDetail(item.orderSn,item.orderStatus)">
+                                <div class="id_picture"
+                                    :style="{background: `url(${items.thumb})50% 50% / cover no-repeat`}">
+                                    <!-- <img :src="items.thumb ||'./../../image/order_all/111.png'" alt=""> -->
+                                </div>
+                                <div class="id_title_group">
+                                    <p>{{items.goodsName}}</p>
+                                    <p>{{item.shopName}}</p>
+                                    <p>订单来源：{{item.rebate.disUser.nickname}}</p>
+                                    <p>付款金额：{{(items.goodsPrice*items.goodsNum).toFixed(2)}}</p>
+
+                                </div>
+                            </div>
+                            <div class="list_box_bottom">
+                                <div class="list_bottom_group">
+                                    <div class="list_bottom_group_b">
+                                        <div class="yuguzhuan" v-model="createdtime=item.created_at">
+                                            {{(item.paytime*1000) | formatDate}}付款</div>
+                                        <div class="fenxiang" v-if="item.statusInfo==='已结算'">
+                                            {{item.rebate.updated_at*1000 | toDate}}结算</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="order_tab_box kong" v-show="kong">
+                <img :src="imgConfig.NODATA_IMG || './../../image/kong.png'" alt="">
+                <p>{{imgConfig.NODATA_TEXT || '暂无数据~'}}</p>
+            </div>
+        </div>
+        <!-- 时间选择 -->
+        <!-- <mt-datetime-picker v-model="dateValue" type="date" ref="datePicker" year-format="{value}"
+            month-format="{value}" date-format="{value}" :startDate="new Date()" :endDate="new Date()"
+            @confirm="handleConfirm">
+        </mt-datetime-picker> -->
+    </div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!--mint-ui  -->
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            page: 0,
+            xshou: false, //input框小x的显示隐藏
+            topshow: true,
+            ipt_hidden: '', //必须得有的 接收时间
+            groupisno: true, //小店订单列表 我的订单和团队订的的区别
+            inp_text: '', //搜索的值
+            titleList: [{
+                text: "我的订单"
+            }, {
+                text: "团队订单"
+            }],
+            navList: [{
+                text: "全部"
+            }, {
+                text: "待付款"
+            }, {
+                text: "待发货"
+            }, {
+                text: "待收货"
+            }, {
+                text: "已完成"
+            }, {
+                text: "退款售后"
+            }],
+            groupList: [{
+                text: "全部"
+            }, {
+                text: "已结算"
+            }, {
+                text: "已付款"
+            }, {
+                text: "已失效"
+            }],
+            navGroupshow: true,
+            current: 0, //我的订单和团队订单的索引
+            navcurrent: 0, //我的订单下的tab索引
+            groupcurrent: 0, //团队订单下的tab索引
+            mescroll: null,
+            list: [], //我的订单
+            listgroup: [], //团队订单
+            daojishi: [],
+            indexNum: null,
+            order: null,
+            showquxiao: false,
+            kong: true,
+            dataList: [],
+            dandusolist: [],
+            dandusogrouplist: [],
+            dandusoshow: true,
+            pagenum: 0,
+            dateValue: new Date(), //设置默认选择时间为今天
+        },
+        filters: {
+            formatDate: function (value) { // 时间戳转换日期格式方法
+                if (value == null) {
+                    return '';
+                } else {
+                    let date = new Date(value);
+                    let y = date.getFullYear(); // 年
+                    let MM = date.getMonth() + 1; // 月
+                    MM = MM < 10 ? ('0' + MM) : MM;
+                    let d = date.getDate(); // 日
+                    d = d < 10 ? ('0' + d) : d;
+                    let h = date.getHours(); // 时
+                    h = h < 10 ? ('0' + h) : h;
+                    let m = date.getMinutes(); // 分
+                    m = m < 10 ? ('0' + m) : m;
+                    let s = date.getSeconds(); // 秒
+                    s = s < 10 ? ('0' + s) : s;
+                    return y + '/' + MM + '/' + d + ' ' + h + ':' + m;
+                }
+            },
+            toDate: function (value) { // 时间戳转换日期格式方法
+                if (value == null) {
+                    return '';
+                } else {
+                    let date = new Date(value);
+                    let y = date.getFullYear(); // 年
+                    let MM = date.getMonth() + 1; // 月
+                    MM = MM < 10 ? ('0' + MM) : MM;
+                    let d = date.getDate(); // 日
+                    d = d < 10 ? ('0' + d) : d;
+                    let h = date.getHours(); // 时
+                    h = h < 10 ? ('0' + h) : h;
+                    let m = date.getMinutes(); // 分
+                    m = m < 10 ? ('0' + m) : m;
+                    let s = date.getSeconds(); // 秒
+                    s = s < 10 ? ('0' + s) : s;
+                    return MM + '/' + d + ' ' + h + ':' + m;
+                }
+            }
+        },
+        mounted: function () {
+            // this.getStyle();
+            // 分页
+
+            this.mescroll = new MeScroll(this.$refs
+                .mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+                down: {
+                    use: true,
+                    offset: 180
+                },
+                up: {
+                    callback: this.upCallback, //上拉加载的回调
+                    //以下是一些常用的配置,当然不写也可以的.
+                    page: {
+                        num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                        size: 10 //每页数据条数,默认10
+                    },
+                    htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+                    noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+                }
+            });
+
+        },
+        created: function () {
+            // this.getStyle();
+        },
+        // 刷新
+        methods: {
+            reset() {
+                this.goodsList = [];
+                // this.mescrollUp.page.num = 1;
+                this.mescroll.setPageNum(1);
+                this.mescroll.resetUpScroll();
+            },
+            getStyle: function () {
+                // console.log(this.token)
+                this.list = [];
+                this.listgroup = [];
+                this.dandusolist = [];
+                this.dandusogrouplist = [];
+                Http.post(Http.HOST + Http.API_URL.ORDERSHOP, {
+                    token: this.token
+                }, true).then((res) => {
+                    if (res.data.list != 0) {
+                        this.kong = false
+                        this.list = res.data.list;
+                    } else {
+                        this.kong = true
+                    }
+                    // 计时器
+                    this.countDown();
+                })
+            },
+            getgroup: function (type, event) {
+                console.log(type, event);
+                this.current = type;
+                if (type == 1) {
+                    // console.log("团队订单")
+                    this.kong = false;
+                    this.groupisno = false;
+                    this.navGroupshow = false;
+                    this.groupcurrent = 0;
+                    this.list = [];
+                    this.listgroup = [];
+                    this.dandusolist = [];
+                    this.dandusogrouplist = [];
+                    Http.post(Http.HOST + Http.API_URL.ORDERGROUPSHOP, {
+                        token: this.token
+                    }, true).then((res) => {
+                        if (res.data.list.length != 0) {
+                            this.kong = false
+                            this.listgroup = res.data.list
+                        } else {
+                            this.kong = true
+                        }
+                        // console.log("团队",this.listgroup)
+                    })
+                }
+                if (type == 0) {
+                    this.kong = false;
+                    this.groupisno = true;
+                    this.navGroupshow = true;
+                    this.navcurrent = 0;
+                    this.list = [];
+                    this.listgroup = [];
+                    this.dandusolist = [];
+                    this.dandusogrouplist = [];
+                    Http.post(Http.HOST + Http.API_URL.ORDERSHOP, {
+                        token: this.token
+                    }, true).then((res) => {
+                        if (res.data.list.length != 0) {
+                            this.kong = false
+                            this.list = res.data.list
+                        } else {
+                            this.kong = true
+                        }
+                    })
+                }
+            },
+            jumpTo: function (path) {
+                dsBridge.call('openWin', path);
+                // this.list.splice(index, 1)
+                // window. location.reload()
+                this.reset()
+            },
+            // 进商品详情
+            handDetail: function (order, orderStatus) {
+                this.jumpTo('/mall/orderDetail?order=' + order)
+                // if (orderStatus !== '-1') {
+                //     // this.$router.push({
+                //     //   name: 'mallOrderDetail',
+                //     //   query: {
+                //     //     order: order
+                //     //   }
+                //     // })
+                // }
+            },
+            // 我的订单下的tab
+            getListIn: function (type) {
+                this.kong = false;
+                this.navcurrent = type;
+                this.dandusoshow = true;
+                this.list = [];
+                this.listgroup = [];
+                this.dandusolist = [];
+                this.dandusogrouplist = [];
+                // console.log('我的订单下的tab:',this.navcurrent)
+                Http.post(Http.HOST + Http.API_URL.ORDERSHOP, {
+                    token: this.token,
+                    status: this.navcurrent
+                }, true).then((res) => {
+                    if (res.data.list.length != 0) {
+                        this.kong = false
+                        this.list = res.data.list
+                    } else {
+                        this.kong = true
+                    }
+                })
+            },
+            // 团队订单下的tab
+            groupListIn: function (type) {
+                this.kong = false;
+                this.groupcurrent = type;
+                this.list = [];
+                this.listgroup = [];
+                this.dandusolist = [];
+                this.dandusogrouplist = [];
+                // console.log('团队订单下的tab:',type,this.groupcurrent)
+                Http.post(Http.HOST + Http.API_URL.ORDERGROUPSHOP, {
+                    token: this.token,
+                    status: type
+                }, true).then((res) => {
+                    if (res.data.list.length != 0) {
+                        this.kong = false
+                        this.listgroup = res.data.list
+                    } else {
+                        this.kong = true
+                    }
+                })
+            },
+            //搜索
+            search: function () {
+                if (this.current == "0") {
+                    dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/order_form_all/order_store_chmy.html', type: 'web' })
+                }
+                if (this.current == "1") {
+                    dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/order_form_all/order_store_chgroup.html', type: 'web' })
+                }
+            },
+            // 返回
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            // 调出日期选择器
+            mdate: function () {
+                // this.$refs.datePicker.open();
+                if(this.current == "0"){
+                    dsBridge.call("timeSelector", "" ,(timeSelector)=>{
+                        // alert(timeSelector)
+                        this.list = [];
+                        this.listgroup = [];
+                        this.dandusolist = [];
+                        this.dandusogrouplist = [];
+                        Http.post(Http.HOST + Http.API_URL.ORDERSHOP, {
+                                date: timeSelector
+                            }, true).then((res) => {
+                                this.navcurrent = 0;
+                                this.dandusoshow = false;
+                                if (res.data.list.length != 0) {
+                                    this.kong = false
+                                    this.dandusolist = res.data.list
+                                } else {
+                                    this.kong = true
+                                }
+                        })
+                    })
+                }
+                if(this.current == "1"){
+                    dsBridge.call("timeSelector", "", (timeSelector)=>{
+                        // alert(timeSelector)
+                        this.list = [];
+                        this.listgroup = [];
+                        this.dandusolist = [];
+                        this.dandusogrouplist = [];
+                        Http.post(Http.HOST + Http.API_URL.ORDERGROUPSHOP, {
+                                date: timeSelector
+                            }, true).then((res) => {
+                            this.groupcurrent = 0;
+                            this.dandusoshow = false;
+                            if (res.data.list.length != 0) {
+                                this.kong = false
+                                this.dandusogrouplist = res.data.list
+                            } else {
+                                this.kong = true
+                            }
+                        })
+                    })
+                }
+            },
+            // 日期选择器确认触发
+            // handleConfirm: function (value) {
+            //     this.dateValue = new Date();
+            //     this.year = value.getFullYear();
+            //     this.month = this.timeFormat(value.getMonth() + 1);
+            //     this.date = this.timeFormat(value.getDate());
+            //     let SelectedTime = this.year + '-' + this.month + '-' + this.date
+            //     console.log(SelectedTime);
+            //     this.list = [];
+            //     this.listgroup = [];
+            //     this.dandusolist = [];
+            //     this.dandusogrouplist = [];
+            //     if (this.current == "0") {
+            //         Http.post(Http.HOST + Http.API_URL.ORDERSHOP, {
+            //             date: SelectedTime
+            //         }, true).then((res) => {
+            //             this.navcurrent = 0;
+            //             this.dandusoshow = false;
+            //             console.log("发送了我的订单一次时间", SelectedTime)
+            //             if (res.data.list.length != 0) {
+            //                 this.kong = false
+            //                 this.dandusolist = res.data.list
+            //             } else {
+            //                 this.kong = true
+            //             }
+            //         })
+            //     }
+            //     if (this.current == "1") {
+            //         Http.post(Http.HOST + Http.API_URL.ORDERGROUPSHOP, {
+            //             date: SelectedTime
+            //         }, true).then((res) => {
+            //             this.groupcurrent = 0;
+            //             this.dandusoshow = false;
+            //             console.log("发送了团队订单一次时间", SelectedTime)
+            //             if (res.data.list.length != 0) {
+            //                 this.kong = false
+            //                 this.dandusogrouplist = res.data.list
+            //             } else {
+            //                 this.kong = true
+            //             }
+            //         })
+            //     }
+            // },
+            // 复制
+            id_copy: function (order_id) {
+                // console.log(order_id);
+                // this.$toast({message: '复制成功',duration:'1000'});
+                dsBridge.call("clipBoard", {
+                    value: order_id
+                })
+            },
+            // 订单删除
+            orderDel: function (order_id, orderSn, index) {
+                console.log(order_id);
+                this.$messagebox({
+                    title: '删除订单',
+                    message: '确定要删除订单吗？',
+                    showCancelButton: true
+                }).then(action => {
+                    // console.log(action)
+                    if (action == "confirm") {
+                        this.list.splice(index, 1)
+                        Http.post(Http.HOST + Http.API_URL.DELDINGDAN, {
+                            orderSn: orderSn
+                        }, true).then((res) => {
+                            // window. location.reload()
+                            this.reset()
+                        })
+                    } else {
+                        // console.log("取消")
+                    }
+                });
+            },
+            // 取消订单
+            handShow: function (order_id, orderSn, index) {
+                // console.log(order_id,orderSn)
+                this.$messagebox({
+                    title: '取消订单',
+                    message: '确定要取消订单吗？',
+                    showCancelButton: true
+                }).then(action => {
+                    // console.log(action)
+                    if (action == "confirm") {
+                        this.list.splice(index, 1)
+                        // window. location.reload() 
+                        Http.post(Http.HOST + Http.API_URL.QUXIAODINGDAN, {
+                            orderSn: orderSn
+                        }, true).then((res) => {
+                            // window. location.reload()
+                            this.reset()
+                        })
+                    } else {
+                        // console.log("取消")
+                    }
+                });
+            },
+
+            // 确认收货
+            receipt: function (index, order) {
+                this.$messagebox({
+                    title: '确认收货',
+                    message: '确定要确认收货吗？',
+                    showCancelButton: true
+                }).then(action => {
+                    if (action == "confirm") {
+                        Http.post(Http.HOST + Http.API_URL.QUERENSHOUHUO, {
+                            orderSn: order
+                        }, true).then((response) => {
+                            this.reset()
+                            this.list.splice(index, 1)
+                        })
+                    }
+                })
+            },
+            upCallback(page) {
+                if (this.current == "0") {
+                    // console.log("我的",page.num)
+                    Http.post(Http.HOST + Http.API_URL.ORDERSHOP, {
+                        page: page.num,
+                        status: this.navcurrent
+                    }, true).then((response) => {
+                        if (response.data.list.length != 0) {
+                            this.kong = false
+                        }
+                        let arr = response.data.list;
+                        //如果是第一页需手动置空列表
+                        if (page.num == 1) this.dataList = [];
+                        //把请求到的数据添加到列表
+                        this.dataList = this.dataList.concat(arr);
+                        this.list = this.dataList
+                        this.countDown();
+                        //数据渲染成功后,隐藏下拉刷新的状态
+                        this.$nextTick(() => {
+                            this.mescroll.endSuccess(arr.length);
+                        })
+                    }).catch((e) => {
+                        //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                        this.mescroll.endErr();
+                    })
+                }
+                if (this.current == "1") {
+                    // console.log("团队")
+                    Http.post(Http.HOST + Http.API_URL.ORDERGROUPSHOP, {
+                        page: page.num,
+                        status: this.groupcurrent
+                    }, true).then((response) => {
+                        if (response.data.list.length != 0) {
+                            this.kong = false
+                        }
+                        let arr = response.data.list;
+                        //如果是第一页需手动置空列表
+                        if (page.num == 1) this.dataList = [];
+                        //把请求到的数据添加到列表
+                        this.dataList = this.dataList.concat(arr);
+                        this.listgroup = this.dataList
+                        //数据渲染成功后,隐藏下拉刷新的状态
+                        this.$nextTick(() => {
+                            this.mescroll.endSuccess(arr.length);
+                        })
+                    }).catch((e) => {
+                        //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                        this.mescroll.endErr();
+                    })
+                }
+            },
+            // 计时器
+            timeFormat: function (param) {
+                return param < 10 ? '0' + param : param;
+            },
+            countDown: function (it) {
+                var TT = setInterval(() => {
+                    for (let key in this.list) {
+                        let ordertime = parseInt(this.list[key]["created_at"] * 1000); //下单时间戳
+                        // console.log("下单时间戳:",ordertime)
+                        let nowtime = new Date().getTime(); //现在时间戳
+                        // console.log("现在时间戳:",nowtime)
+                        //下单后30分钟后
+                        let sdate = new Date(ordertime);
+                        sdate.setMinutes(sdate.getMinutes() + 30);
+                        let fnow = sdate.getFullYear() + "/" + (sdate.getMonth() + 1) + "/" + sdate
+                            .getDate() + " " + sdate.getHours() + ":" + sdate.getMinutes() + ":" +
+                            sdate.getSeconds();
+                        let futuretamp = new Date(fnow).getTime(); //下单后30分钟后的时间戳
+                        // console.log("下单后30分钟后的时间戳:",futuretamp)
+                        let rightTime = futuretamp - ordertime;
+                        if (nowtime > ordertime && nowtime < futuretamp) {
+                            let time = (futuretamp - nowtime) / 1000;
+                            let dd = parseInt(time / (60 * 60 * 24));
+                            let hh = parseInt(time % (60 * 60 * 24) / 3600);
+                            let mm = parseInt(time % (60 * 60 * 24) % 3600 / 60);
+                            let ss = parseInt(time % (60 * 60 * 24) % 3600 % 60);
+                            obj = {
+                                dd: this.timeFormat(dd),
+                                hh: this.timeFormat(hh),
+                                mm: this.timeFormat(mm),
+                                ss: this.timeFormat(ss)
+                            };
+                            if (nowtime > futuretamp) {
+                                clearInterval(TT)
+                                return
+                            }
+                        } else {
+                            obj = {
+                                dd: '00',
+                                hh: '00',
+                                mm: '00',
+                                ss: '00'
+                            };
+                        }
+                        let djs = obj.mm + ":" + obj.ss;
+                        // console.log(djs)
+                        this.$set(this.list[key], 'djs', djs) //下单倒计时
+                        // if(djs=='00:00'){
+                        //     // this.list[key].statusInfo = '已取消'
+                        // }
+                    }
+                }, 1000)
+                // console.log(this.list)
+
+            }
+            // 计时器结束
+        },
+        // 日期选择
+
+        // 监听日期选择
+        // watch: {
+        //     'ipt_hidden': function (newdate, olddate) {
+        //         if (this.current == "0") {
+        //             if (newdate != '') {
+        //                 Http.post(Http.HOST + Http.API_URL.ORDERSHOP, {
+        //                     date: newdate
+        //                 }, true).then((res) => {
+        //                     this.navcurrent = 0;
+        //                     this.dandusoshow = false;
+        //                     // let top_height= window.document.getElementById("duanduso");
+        //                     // top_height.style.marginTop=1.9+"rem";
+        //                     // console.log("发送了我的订单一次时间",newdate)
+        //                     if (res.data.list.length != 0) {
+        //                         this.kong = false
+        //                         this.dandusolist = res.data.list
+        //                     } else {
+        //                         this.kong = true
+        //                     }
+
+        //                     var TTs = setInterval(() => {
+        //                         for (let key in this.dandusolist) {
+        //                             let ordertime = parseInt(this.dandusolist[key][
+        //                                 "created_at"
+        //                             ] * 1000); //下单时间戳
+        //                             // console.log("下单时间戳:",ordertime)
+        //                             let nowtime = new Date().getTime(); //现在时间戳
+        //                             // console.log("现在时间戳:",nowtime)
+        //                             //下单后30分钟后
+        //                             let sdate = new Date(ordertime);
+        //                             sdate.setMinutes(sdate.getMinutes() + 30);
+        //                             let fnow = sdate.getFullYear() + "/" + (sdate
+        //                                 .getMonth() + 1) + "/" + sdate.getDate() + " " +
+        //                                 sdate.getHours() + ":" + sdate.getMinutes() + ":" +
+        //                                 sdate.getSeconds();
+        //                             let futuretamp = new Date(fnow)
+        //                         .getTime(); //下单后30分钟后的时间戳
+        //                             // console.log("下单后30分钟后的时间戳:",futuretamp)
+        //                             let rightTime = futuretamp - ordertime;
+        //                             if (nowtime > ordertime && nowtime < futuretamp) {
+        //                                 let time = (futuretamp - nowtime) / 1000;
+        //                                 let dd = parseInt(time / (60 * 60 * 24));
+        //                                 let hh = parseInt(time % (60 * 60 * 24) / 3600);
+        //                                 let mm = parseInt(time % (60 * 60 * 24) % 3600 /
+        //                                 60);
+        //                                 let ss = parseInt(time % (60 * 60 * 24) % 3600 %
+        //                                 60);
+        //                                 obj = {
+        //                                     dd: this.timeFormat(dd),
+        //                                     hh: this.timeFormat(hh),
+        //                                     mm: this.timeFormat(mm),
+        //                                     ss: this.timeFormat(ss)
+        //                                 };
+        //                                 if (nowtime > futuretamp) {
+        //                                     clearInterval(TTs)
+        //                                     return
+        //                                 }
+        //                             } else {
+        //                                 obj = {
+        //                                     dd: '00',
+        //                                     hh: '00',
+        //                                     mm: '00',
+        //                                     ss: '00'
+        //                                 };
+        //                             }
+        //                             let djs = obj.mm + ":" + obj.ss;
+        //                             this.djsgroup = obj.mm + ":" + obj.ss
+        //                             // console.log(djs)
+        //                             this.$set(this.dandusolist[key], 'djs', djs) //下单倒计时
+        //                             // if(djs=='00:00'){
+        //                             //     this.dandusolist[key].statusInfo = '已取消'
+        //                             // }
+        //                         }
+        //                     }, 1000)
+
+        //                 })
+
+        //             }
+        //         }
+        //         if (this.current == "1") {
+        //             if (newdate != '') {
+        //                 Http.post(Http.HOST + Http.API_URL.ORDERGROUPSHOP, {
+        //                     date: newdate
+        //                 }, true).then((res) => {
+        //                     this.groupcurrent = 0;
+        //                     this.dandusoshow = false;
+        //                     // console.log("发送了团队订单一次时间",newdate)
+        //                     if (res.data.list.length != 0) {
+        //                         this.kong = false
+        //                         this.dandusogrouplist = res.data.list
+        //                     } else {
+        //                         this.kong = true
+        //                     }
+        //                 })
+        //             }
+        //         }
+        //     }
+        // }
+    })
+</script>
+
+
+
+</html>

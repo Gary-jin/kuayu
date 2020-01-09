@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>礼包</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=1">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    
+    <style >
+        html,body{
+            background: #fff;
+            height: 100vh;
+        }
+        #header{
+            position: absolute;
+            z-index: 999;
+            left: 0;
+			right:0;
+            padding: 0 .3rem .3rem .26rem;
+            background: url(../../image/rightCenter/index/headerBg.png) no-repeat;
+            background-size: 100% 100%;
+        }
+        #header .left i{
+            color:#fff;
+            font-size:0.4rem;
+        }
+        #header .title {
+            display: block;
+            width:100%;
+            text-align: center;
+            font-size: .34rem;
+            color: #fff;
+			margin-left: -0.4rem
+        }
+		#vue-app{
+			height:100%
+		}
+		#vue-app .content{
+			height:100%;
+			overflow:auto
+		}
+        .right-top{
+            background: url('../../image/rightCenter/index/rightBg.png') no-repeat 100% .3rem;
+            background-size: 100% 100%;
+            margin-bottom: 1.2rem;
+            height: 4.6rem;
+			padding-top: 1.88rem
+        }
+        .right-top .info{
+            text-align:center
+        }
+        .right-top .swiper-warp{
+            margin: 0 .5rem 0;
+        }
+        .right-top .swiper-warp{
+            background: -webkit-linear-gradient(left, #EFDAA2, #ECBE77);
+            border-radius: .3rem;
+            text-align: center;
+        }
+        .right-top .swiper-warp ul li{
+            float:left;
+            width:33.33%;
+            margin-bottom: .33rem;
+        }
+        .right-top .swiper-warp .warp{
+            padding: 0 .15rem;
+        }
+        .right-top .swiper-warp .title{
+            font-size:.3rem;
+            color:#2F2F2F;
+            font-weight:normal;
+            padding: .35rem 0 .40rem
+        }
+        .right-top .swiper-warp ul{
+            padding-bottom: .20rem;
+        }
+        .right-top .swiper-warp li .img img{
+            width:.88rem;
+            height: .88rem;
+        }
+        .right-top .swiper-warp li .tit{
+            color:#2f2f2f;
+            padding:.16rem 0 .1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .right-top .swiper-warp li .tit img{
+            width: 0.16rem;
+            height: 0.2rem;
+        }
+        .right-top .swiper-warp li .tit h4{
+            /*font-size: .24rem;*/
+            font-weight:normal;
+        }
+        .right-top .swiper-warp li .desc{
+            font-size:.22rem;
+            color:#666;
+        }
+        .upgrade-pay{
+            background: #F7F7F7;
+        }
+        .upgrade-pay  .title{
+            color:#333333;
+            font-size:.34rem;
+            display:flex;
+            align-items:center;
+            justify-content: center;
+            height: 1rem;
+            line-height: 1rem;
+            border-bottom: 1px solid #E4E4E4;
+        }
+        .upgrade-pay  .title:before, .upgrade-pay  .title:after{
+            content: '';
+            display:inline-block;
+            width:.56rem;
+            background-color:#D0D0D0;
+            height:.02rem;
+
+        }
+        .upgrade-pay  .title:before{
+            margin-right: .20rem;
+        }
+        .upgrade-pay  .title:after{
+            margin-left: .20rem;
+        }
+        .upgrade-pay .level{
+            padding:.34rem 0 .32rem;
+            font-size:0;
+            display:flex;
+            justify-content: space-around;
+        }
+        .upgrade-pay .level span{
+            height:0.6rem;
+            line-height:.6rem;
+            padding:0 .46rem;
+            border-radius:.3rem;
+            background: #fff;
+            font-size:.28rem;
+            color:#666666;
+            box-shadow:0 0 .16rem 0 rgba(156,156,156,0.15);
+        }
+        .upgrade-pay .level span.active{
+            background: linear-gradient(to left, #D92121, #F87B64);
+            color:#fff
+        }
+        .gift-goods ul{
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            padding: 0 0.1rem 0.1rem 0.1rem;
+        }
+        .gift-goods ul li{
+            overflow: hidden;
+            width: 3.45rem;
+            margin-bottom: 0.15rem;
+            margin-left: 0.1rem;
+            margin-right: 0.1rem;
+            border-radius: 0.1rem;
+            background: #fff;
+            font-size: 0;
+        }
+        .gift-goods ul li .goodsImg{
+            width: 3.45rem;
+            height: 3.5rem;
+            display: inline-block;
+        }
+        .gift-goods ul li .goodsImg img{
+            border-top-left-radius: 0.1rem;
+            border-top-right-radius: 0.1rem;
+            width: 100%;
+            height: 100%;
+        }
+        .gift-goods ul li .info{
+            height: 1.5rem;
+            padding: 0.18rem 0.15rem 0.24rem;
+        }
+        .gift-goods ul li .info .goodsTitle{
+            font-size: .28rem;
+            color: #2F2F2F;
+        }
+        .gift-goods ul li .info .money{
+            font-size: .38rem;
+            color: #D92B24;
+            padding: .2rem 0 .18rem;
+        }
+        .gift-goods ul li .info .money span{
+            font-size: .24rem;
+        }
+        .gift-goods ul li .info .desc{
+            font-size:.24rem;
+            color:#BC741E;
+            background-color:#F8F1E7;
+            display:inline-flex;
+            align-items:center;
+            padding: 0 .15rem;
+            border-radius: .05rem;
+        }
+        .gift-goods ul li .info .desc img{
+            width:.26rem;
+            height:.24rem;
+            margin-right: .06rem;
+        }
+
+        .waysBox{
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: rgba(0,0,0,0.5);
+            width: 100%;
+            height: 100%;
+            z-index: 99999;
+        }
+        .waysBox .info{
+            text-align: center;
+            background: #fff;
+            border-radius: .1rem;
+            position: fixed;
+            left: .8rem;
+            top: 50%;
+            margin-top: -1.2rem;
+            width: 5.9rem;
+            font-size: .3rem;
+            z-index: 100001;
+            font-size: .32rem;
+        }
+        .waysBox .info p{
+            padding: .57rem .1rem .5rem .1rem;
+            color:#2F2F2F;
+            border-bottom: 1px solid #EEEEEE;
+        }
+        .waysBox .info button{
+            height: .9rem;
+            line-height: .9rem;
+            color: #1675E1;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+<div id="vue-app" >
+	<div id="header" class="flex"  :style="{paddingTop: statusH + 'px'}">
+            <div class="left" @click="onBack()"><i class="iconfont icon-back"></i></div>
+            <div class="title flex_1">礼包</div>
+        </div>
+    <!-- <div class="yujiazai" v-if="yujiazai"  :style="{paddingTop: statusH+ 'px'}">
+        <div class="top"></div>
+        <div class="middle" v-for="x in 10"></div>
+    </div> -->
+    <div class='content'>
+        <div class="right-top" >
+            <div class="swiper-warp">
+                <div class="warp">
+                    <h3 class="title">买礼包可享</h3>
+                    <ul class="content clr">
+                        <li v-if="cashPay && cashPay.length >= 0" v-for="item in cashPay[0].rights" :key="item.id">
+                            <div class="img"><img :src="item.img" alt=""></div>
+                            <div class="tit"><h4>{{item.tip}}{{item.tipAppend}}</h4><img v-if="item.tipAppend" src="../../image/rightCenter/index/top.png" alt=""></div>
+                            <p class="desc">{{item.text}}</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="height: .64rem;"></div>
+        <div class="upgrade-pay">
+            <h3 class="title">付费标准</h3>
+            <div class="level">
+                <span v-if="giftPay && giftPay.gifts" v-for="(item, index) in giftPay.gifts" :class="tab == index ? 'active' : ''" @click="selectTab(index)" :key="index">{{item.type}}</span>
+                <!-- <span>年VIP</span>
+                <span>永久VIP</span> -->
+            </div>
+            <div class="gift-goods">
+                <ul>
+                    <li v-if="giftPay && giftPay.gifts" v-for="goods in giftPay.gifts[tab].goods" @click="jumpTo('/giftBag?id=' + goods.id)">
+                        <div class="goodsImg">
+                            <img :src="goods.img" alt="">
+                        </div>
+                        <div class="info">
+                            <p class="goodsTitle text-overflow_1-xzh">{{goods.title}}</p>
+                            <p class="money"><span>¥</span>{{goods.price}}</p>
+                            <div class="desc" v-if="goods.text">
+                                <img src="../../image/rightCenter/index/vip.png" alt="">
+                                <span>{{goods.text}}</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="waysBox" v-if="dialog">
+        <div class="info">
+            <p>{{giftPay.payTip}}</p>
+            <div @click="dialog = !dialog">
+                <button>确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=201911181720"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+    //apiready = function(){
+    // Vue.use(window.VueAwesomeSwiper)
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            // yujiazai: true,
+            id: '',
+            tab: 0,
+            cashPay:[],
+            giftPay:'',
+            dialog: false
+        },
+        mounted: function(){
+            this.getParameter()
+            this.getList()
+        },
+		created () {
+			let bodyHeight = document.body.clientHeight
+			let safeArea = dsBridge.call('receiveParams', 'safeAreaTop1')
+			let size = (document.documentElement.clientWidth / 7.5)
+			//this.statusH = (safeArea / size)
+			this.statusH = safeArea
+		},
+        methods: {
+            selectTab(index){
+                this.tab = index
+            },
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.id = Request['id']
+            },
+            onBack: function(ret, err){
+                dsBridge.call('closeWin')
+            },
+            jumpTo: function(path){
+                dsBridge.call('openWin', path);
+            },
+            getList: function(refresh) {
+                Http.post(Http.HOST+Http.API_URL.RIGHTERPAY,{id: this.id},true,true).then((res)=>{
+                    // this.yujiazai = false
+                    if(res.code === 0){
+                       this.cashPay = res.data.rightsList
+                       this.giftPay = res.data.payRights
+                       if(this.giftPay.payTip){
+                            this.dialog = true
+                       }
+                    }
+                })
+            },
+            
+        }
+    })
+    //}
+</script>
+
+</html>

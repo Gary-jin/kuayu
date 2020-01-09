@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <title>商家中心-核销人员管理</title>
+    <script type="text/javascript">
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 750) {
+                        docEl.style.fontSize = '100px';
+                    } else {
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/api.css">
+    <!-- uint-ui -->
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css">
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style>
+        body {
+            background: #f7f7f7;
+        }
+
+        .title {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            z-index: 9;
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+        }
+        .people_core_box{
+            margin-top: .88rem;
+            overflow: hidden;
+        }
+        .people_core{
+            padding: 0 .3rem;
+            background: #fff;
+        }
+        .people_core .people_core_switch{
+            height: 1rem;
+            border-bottom: .01rem rgba(238,238,238,1) solid;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .people_core .people_core_switch>div{
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+        }
+        .people_core .people_core_switch .mint-switch .mint-switch-core{
+            zoom: 110%;
+        }
+        .people_core .people_core_switch .mint-switch-input:checked + .mint-switch-core{
+            border-color: #76D672;
+            background-color: #76D672;
+        }
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: .2rem;
+            bottom: 0;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="title">
+            <img src="./../../image/back.png" alt="" @click='onBack'>
+            <div class="title_text">核销人员管理</div>
+        </div>
+        <div class="couponPop mescroll" ref="mescroll" id="mescroll">
+            <div class="warp" id="d26">
+                <div class="people_core_box">
+                    <div class="people_core">
+                        <div class="people_core_switch" v-for="(item,index) in list" :key='index'>
+                            <div>{{item.username}}</div>
+                            <mt-switch v-model="item.isOpen" @change="offno(item.id)"></mt-switch>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="./../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            value: true,
+            list: []
+        },
+        mounted: function () {
+           this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+                down: {
+                    
+                },
+                up: {
+                callback: this.upCallback, //上拉加载的回调
+                //以下是一些常用的配置,当然不写也可以的.
+                page: {
+                    num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                    size: 10 //每页数据条数,默认10
+                },
+                htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+                noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+                empty: {
+                        warpId: 'd26',
+                        icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                        tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                    }
+                }
+          })
+        },
+        methods: {
+            onBack: function (ret, err) {
+                dsBridge.call('closeWin')
+            },
+            offno : function(id){
+                Http.post(Http.HOST + Http.API_URL.USERPEOPLE, {id:id}, true).then((res) => {})
+            },
+            upCallback(page, mescroll){
+                Http.post(Http.HOST+Http.API_URL.USERPEOPLE,{page: page.num},true).then((res)=>{
+                    if(res.code == 0){
+                        let arr = res.data.list
+                        if (page.num === 1) this.list = []
+                        this.list = this.list.concat(arr)
+                        this.$nextTick(() => {
+                            mescroll.endSuccess(res.data.list.length, true)
+                        })
+                    }
+                })
+            }
+        }
+    })
+</script>
+
+</html>

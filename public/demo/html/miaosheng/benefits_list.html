@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>收益榜单</title>
+    <meta name="description" content="U券_淘宝客系统">
+    <meta name="keywords" content="U券_淘宝客系统">
+    <meta name="apple-mobile-web-app-capable" content="yes" /> <!-- apple devices fullscreen -->
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <link rel="stylesheet" href="../../js/tab/style.css">
+    <style>
+        html, body{
+            background: #f7f7f7;
+            height: 100vh;
+        }
+        .title_box{
+            position: fixed;
+            top: 0;
+            z-index: 9;
+            width: 100%;
+        }
+        .title {
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .nav_tab_box{
+            width: 100%;
+            height: .88rem;
+            background: #ffffff;
+            position: relative;
+        }
+        .nav_tab_box .vux-tab-wrap{
+            width: 100%;
+            padding-top: 0;
+        }
+        .nav_tab_box .vux-tab-container{
+            height: .78rem;
+        }
+        .nav_tab_box .vux-tab-container .vux-tab{
+            height: .78rem;
+        }
+        .vux-tab .vux-tab-item{
+            line-height: .78rem;
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+        }
+        .vux-tab .vux-tab-item.vux-tab-selected{
+            font-size: .3rem;
+            font-weight:bold;
+            color:#D92121;
+        }
+        .nav_tab_box .vux-tab .vux-tab-item{
+            background: none;
+        }
+        .warp{
+            padding: 0 .2rem;
+        }
+        .benefits_first{
+            background: #ffffff;
+            width: 100%;
+            height:2.8rem;
+            border-radius: .1rem;
+            margin-top: .2rem;
+            margin-bottom: .2rem;
+            text-align: center;
+
+        }
+        .benefits_first_top{
+            position: relative;
+            height: 1.57rem;
+
+        }
+        .benefits_first_top div:nth-child(1){
+            position: absolute;
+            top: .3rem;
+            left: 50%;
+            transform: translate(-50%);
+            width: 1rem;
+            height: 1rem;
+            border-radius: .5rem;
+            overflow: hidden;
+        }
+        .benefits_first_top img:nth-child(2){
+            position: absolute;
+            top: .15rem;
+            left: 55%;
+            transform: translate(-50%);
+        }
+        .benefits_first_cen1{
+            font-size: .28rem;
+            font-weight:bold;
+            color:rgba(51,51,51,1);
+        }
+        .benefits_first_cen1 span{
+            font-size: .24rem;
+            font-weight:bold;
+            color:rgba(102,102,102,1);
+        }
+        .benefits_first_cen2{
+            font-size: .32rem;
+            font-weight:bold;
+            color:rgba(217,33,33,1);
+            margin-top: .2rem;
+        }
+        .benefits_other_box{
+            width: 100%;
+            border-radius: .1rem;
+            background: #ffffff;
+        }
+        .benefits_other_box .benefits_other{
+            width: 100%;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            border-bottom: .01rem rgba(238,238,238,1) solid;
+        }
+        .benefits_other .benefits_core_left{
+            width: .55rem;
+        }
+        .benefits_other .benefits_core_left >img{
+            width: .42rem;
+            height: .33rem;
+            margin-left: .07rem;
+        }
+        .benefits_other .benefits_core_left>div{
+            width: .42rem;
+            text-align: center;
+            margin-left: .07rem;
+            font-size: .28rem;
+            font-weight:bold;
+            color:rgba(51,51,51,1);
+        }
+        .benefits_other .benefits_core_pic{
+            width: 1rem;
+            height: 1rem;
+            border-radius: .5rem;
+            overflow: hidden;
+        }
+        .benefits_core_numbox{
+            width: 5.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .benefits_other .benefits_core_phone{
+            font-size: .3rem;
+            /* font-weight:bold; */
+            color:rgba(102,102,102,1);
+            margin-left: .2rem;
+        }
+        .benefits_other .benefits_core_price{
+            font-size: .3rem;
+            /* font-weight:bold; */
+            color:rgba(217,33,33,1);
+            margin-right: .4rem;
+        }
+        .benefits_other:nth-child(1) .benefits_core_left>div,
+        .benefits_other:nth-child(2) .benefits_core_left>div{
+            color: rgba(255,0,54,1);
+        }
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: 1.86rem;
+            bottom: 0;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+       
+    <div id="prefecture" v-cloak>
+        <div class="title_box">
+            <div class="title">
+                <img src="./../../image/back.png" alt="" @click='onBack'>
+                <div class="title_text">收益榜单</div>
+            </div>
+            <div style="height: .1rem;"></div>
+            <div class="nav_tab_box">
+                <tab :line-width="3" custom-bar-width=".4rem" active-color="#D92121" 
+                default-color="#333" v-model="type" class="resultTab" >
+                    <tab-item @on-item-click="resetTab('today')">收益日推榜</tab-item>
+                    <tab-item @on-item-click="resetTab('regimentalMonth')">团长月收益榜单</tab-item>
+                    <tab-item @on-item-click="resetTab('chiefInspectorMonth')">总监月收益榜单</tab-item>
+                </tab>
+            </div>
+        </div>
+        <!-- <div style="height: .88rem;"></div> -->
+        <div class="common-warp mescroll" ref="mescroll" id="mescroll" >
+            <div class="warp" id="d26">
+                <div class="benefits_first" v-for="(item,index) in goodsListFirst" :key="index" >
+                    <div class="benefits_first_top">
+                        <div v-if="item.wx_avatar" :style="{background: `url(${item.wx_avatar})50% 50% / cover no-repeat`}" ></div>
+                        <div v-else :style="{background: `url(${item.wx_avatar})50% 50% / cover no-repeat`}"></div>
+                        <img src="./../../image/miaosheng/benefits1.png" alt="">
+                    </div>
+                    <div v-if="item.nickname" class="benefits_first_cen1">{{item.nickname}}</div>
+                    <div v-else class="benefits_first_cen1">匿名</div>
+                    <div class="benefits_first_cen2">￥{{item.money}}</div>
+                </div>
+                <div class="benefits_other_box">
+                    <div class="benefits_other" v-for="(item,index) in goodsListOther" :key="index">
+                        <div class="benefits_core_left">
+                            <img v-if="index == 0 " src="./../../image/miaosheng/benefits2.png" alt="">
+                            <img v-if="index == 1 " src="./../../image/miaosheng/benefits3.png" alt="">
+                            <div>{{index +2}}</div>
+                        </div>
+                        <!-- <div class="benefits_core_pic" :style="{background: `url(${'./../../image/miaosheng/activebanner.png'})50% 50% / cover no-repeat`}" ></div> -->
+                        <div class="benefits_core_pic" v-if="item.wx_avatar" :style="{background: `url(${item.wx_avatar})50% 50% / cover no-repeat`}" ></div>
+                        <div class="benefits_core_pic" v-else :style="{background: `url(${item.wx_avatar})50% 50% / cover no-repeat`}"></div>
+                        <div class="benefits_core_numbox">
+                            <div v-if="item.nickname" class="benefits_core_phone">{{item.nickname}}</div>
+                            <div v-else class="benefits_core_phone">匿名</div>
+                            <div class="benefits_core_price">￥{{item.money}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=201910112231"></script> -->
+<script src="../../js/http.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<script src="../../js/tab/index.js"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: "#prefecture",
+        data:{
+            type: 0,/* 点击的标题的index */
+            mescroll: null,
+            goodsList: [],
+            goodsListFirst : [],
+            goodsListOther : [],
+            typing:"today", //数据类型 today收益日榜推 regimentalMonth 团长月收益榜单 chiefInspectorMonth 总监月收益榜单  
+        },
+        mounted(){
+            // window.addEventListener('scroll', this.handleScroll, true);
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+                isLock: false,  //true 关闭下拉加载
+            },
+            up: {
+                lazyLoad: {
+		        	use: true, // 是否开启懒加载,默认false
+			        attr: 'imgurl', // 网络地址的属性名 (图片加载成功会移除该属性): <img imgurl='网络图  src='占位图''/>
+			        showClass: 'mescroll-lazy-in', // 图片加载成功的显示动画: 渐变显示,参见mescroll.css
+			        delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
+			        offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
+                },
+                toTop: {
+                    //回到顶部按钮
+                    src: "../../image/group_booking/backTop.png", //图片路径,默认null,支持网络图
+                    offset: 1000 //列表滚动1000px才显示回到顶部按钮	
+                },
+              callback: this.upCallback, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 10 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+              noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+              empty: {
+                    warpId: 'd26',
+                    icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                    tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+                }
+            }
+          })
+        },
+        methods: {
+			onBack: function(){
+				dsBridge.call('closeWin')
+			},
+            resetTab (tab){
+                console.log(this.type)
+                this.typing = tab
+                this.reset()
+            },
+            reset(){
+            this.goodsList = []
+            this.mescroll.setPageNum(1);
+            this.mescroll.resetUpScroll()
+            },
+             upCallback (page,mescroll) {
+                Http.post(Http.HOST+Http.API_URL.INCOMRANK,{page: page.num ,type: this.typing},true).then((res)=>{
+                    if (res.code === 0) {
+                        let arr = res.data === '' ? [] : res.data
+                        if (page.num === 1) this.goodsList = []
+                        this.goodsList = this.goodsList.concat(arr)
+                        this.goodsListFirst = this.goodsList.slice(0,1)
+                        this.goodsListOther = this.goodsList.slice(1)
+                        console.log(this.goodsListFirst)
+                        console.log(this.goodsListOther)
+                        this.$nextTick(() => {
+                            mescroll.endSuccess(arr.length, true)
+                        })
+                    }
+                }).catch((e) => {
+                    //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                    this.mescroll.endErr();
+                })
+            },
+            
+        },
+        
+    })
+</script>
+
+</html>

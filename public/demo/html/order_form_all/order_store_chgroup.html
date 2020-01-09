@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+        <meta content="telephone=no" name="format-detection" />
+        <title>商城-团队订单</title>
+        <script type="text/javascript">
+            (function(doc, win) {
+                var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function() {
+                    var clientWidth = docEl.clientWidth;
+                    if(!clientWidth) return;
+                    if(clientWidth >= 750) {
+                    docEl.style.fontSize = '100px';
+                    } else {
+                    docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+                if(!doc.addEventListener) return;
+                win.addEventListener(resizeEvt, recalc, false);
+                doc.addEventListener('DOMContentLoaded', recalc, false);
+            })(document, window);
+        </script>
+        <link rel="stylesheet" href="../../css/common.css?i=1128">
+        <link rel="stylesheet" href="../../css/api.css">
+        <link rel="stylesheet" href="../../css/order_form_all/order_store.css">
+        <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+        <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+        <style>
+            .order_title_top_inp.bg{
+                background: #fff;
+            }
+        </style>
+    </head>
+<body>
+    <div id="vue-app" v-cloak>
+        <div class="order_title_top_inp bg" >
+            <div class="input_search"><img src="./../../image/order_all/search2.png" alt=""></div>
+            <input type="text" placeholder="输入订单号查询" v-model="inp_text" @focus="xshou=true" @blur="xshou=false">
+            <div @click="input_search()" class="input_search"><img src="./../../image/order_all/xiaocha.png" alt=""
+                    v-show="xshou"></div>
+            <span @click="cancel()" v-if="inp_text===''">取消</span>
+            <span @click="confirm(inp_text)" v-else>确定</span>
+        </div>
+        <!-- 搜索列表 -->
+        <div>
+            <div class="danduso order_tab_box">
+                <!-- 团队模板 -->
+                <div class="order_tab_box_list" v-for="(item, index) in dandusogrouplist" :key="index">
+                    <div class="list_box_content">
+                        <div class="list_box_top">
+                            <div>
+                                <span>订单编号：{{item.orderId}}</span>
+                                <div class="id_copy" @click="id_copy(item.orderId)"></div>
+                            </div>
+                            <span class="id_status">{{item.statusInfo}}</span>
+                        </div>
+                        <div class="lsit_box_center" v-for="(items,index) in item.goodsList" :key="index"
+                            @click="handDetail(item.orderSn,item.orderStatus)">
+                            <div class="id_picture"
+                                :style="{background: `url(${items.thumb})50% 50% / cover no-repeat`}">
+                                <!-- <img :src="items.thumb ||'./../../image/order_all/111.png'" alt=""> -->
+                            </div>
+                            <div class="id_title_group">
+                                <p>{{items.goodsName}}</p>
+                                <p>{{item.shopName}}</p>
+                                <p>订单来源：{{item.rebate.disUser.nickname}}</p>
+                                <p>付款金额：{{(items.goodsPrice*items.goodsNum).toFixed(2)}}</p>
+                            </div>
+                        </div>
+                        <div class="list_box_bottom">
+                            <div class="list_bottom_group">
+                                <div class="list_bottom_group_b">
+                                    <div class="yuguzhuan" v-model="createdtime=item.created_at">
+                                        {{(item.paytime*1000) | formatDate}}付款</div>
+                                    <div class="fenxiang" v-if="item.statusInfo==='已结算'">
+                                        {{item.rebate.updated_at*1000 | toDate}}结算</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 搜索end -->
+        <div class="order_tab_box kong" v-show="kong">
+            <img :src="imgConfig.NODATA_IMG || './../../image/kong.png'" alt="">
+            <p>{{imgConfig.NODATA_TEXT || '暂无数据~'}}</p>
+        </div>   
+    </div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908"></script> -->
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script type="text/javascript">
+   window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            xshou: false, //input框小x的显示隐藏
+            inp_text: '',//搜索的值
+            dandusogrouplist: [],
+            kong: true
+        },
+        methods: {
+            //小叉
+            input_search: function () {
+                this.inp_text = "";
+            },
+            // 确定搜索
+            confirm: function (inp_text) {
+                Http.post(Http.HOST + Http.API_URL.ORDERGROUPSHOP, { keyword: this.inp_text }, true).then((res) => {
+                        if (res.data.list.length != 0) {
+                            this.kong = false
+                            this.dandusogrouplist = res.data.list
+                        } else {
+                            this.kong = true
+                        }
+                    })
+                this.inp_text = "";
+            },
+            cancel: function (){
+                dsBridge.call('closeWin')
+            }
+        }
+    })
+</script>
+</html>

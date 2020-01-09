@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>专题</title>
+    <script>
+      (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">  
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <style media="screen">
+	html,body { background: #f7f7f7;}
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color: #333333;
+            line-height: 1rem;
+            font-size:0.36rem;
+            font-family:PingFang SC;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .2rem;
+            height: 0.88rem;
+        }
+        .headerBanner{
+            width: 100%;
+            height: 4.9rem;
+        }
+        .headerBanner img{
+            width: 100%;
+            height: 100%;
+        }
+        .goodsListContent{
+          /* background:#FBECE8; */
+          width: 100%;
+          padding-top: 0.45rem;
+        }
+        .goodsListContent .goods-header{
+          width: 7.1rem;
+          height: 4.3rem;
+          background: #FFFFFF;
+          margin: 0 0 0 0.2rem;
+          overflow: hidden;
+          display: flex;
+        }
+        .goodsListContent .goods-header .goods-header-item{
+          width: 2.06rem;
+          height: 3.66rem;
+          background:rgba(255,255,255,1);
+          box-shadow:0px 6px 10px 0px rgba(0, 0, 0, 0.05);
+          border-radius:10px;
+          margin-left: 0.2rem;
+          margin-top: 0.32rem;
+        }
+        .goodsListContent .goods-header .goods-header-item .goods-header-item-img{
+          border-radius:10px 10px 0 0;
+          width: 2.06rem;
+          height: 2.06rem;
+        }
+        .goodsListContent .goods-header .goods-header-item .goods-header-item-img img{
+          border-radius:10px 10px 0 0;
+          height: 100%;
+          width: 100%;
+        }
+        .goodsListContent .goods-header .goods-header-item .goods-header-item-content{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .goodsListContent .goods-header .goods-header-item .goods-header-item-content .goods-header-name{
+          width:1.66rem;
+          font-size:0.24rem;
+          font-family:PingFang SC;
+          font-weight:500;
+          color:rgba(51,51,51,1);
+          line-height:0.46rem;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .goodsListContent .goods-header .goods-header-item .goods-header-item-content .goods-header-ticket{
+          width: 1.09rem;
+          text-align: center;
+          height: 0.42rem;
+          line-height: 0.42rem;
+          font-size:0.22rem;
+          font-family:PingFang SC;
+          font-weight:500;
+          color:rgba(255,0,54,1);
+          background:url(../../image/quanbj.png) no-repeat;
+          background-size: cover;
+          margin: 0.12rem 0; 
+        }
+        .goodsListContent .goods-header .goods-header-item .goods-header-item-content .goods-header-price{
+          width: 100%;
+          display: flex;
+          justify-content: space-around;
+        }
+        .goods-header-price .nowPrice{
+          font-size:0.2rem;
+          color: #FF0036;
+          font-weight:500;
+          
+        }
+        .goods-header-price .nowPrice span{
+          font-size:0.26rem;
+        }
+        .goods-header-price .zhuan{
+          height:0.3rem;
+          padding: 0 0.1rem;
+          border:1px solid rgba(255,0,54,1);
+          border-radius:0.05rem;
+          font-size:0.2rem;
+          font-family:PingFang SC;
+          font-weight:500;
+          color:rgba(255,0,54,1);
+        }
+        .goodsListContent .goods-bottom{
+          width: 7.1rem;
+          background: #FFFFFF;
+          margin: 0.45rem 0 0 0.2rem;
+          display: flex;
+          flex-wrap: wrap;
+          padding-top: 0.3rem;
+          padding-left: 0.04rem;
+        }
+        .goods-bottom .goods-bottom-item{
+          width: 3.2rem;
+          height: 5rem;
+          background:rgba(255,255,255,1);
+          box-shadow:0px 3px 14px 0px rgba(152,152,152,0.2);
+          border-radius:10px;
+          margin: 0 0 0.21rem 0.2rem;
+        }
+        .goods-bottom-item .goods-bottom-item-img{
+          width: 3.2rem;
+          height: 3.2rem;
+          border-radius:10px 10px 0px 0px;
+        }
+        .goods-bottom-item .goods-bottom-item-img img{
+          width: 100%;
+          height: 100%;
+          border-radius:10px 10px 0px 0px;
+        }
+        .goods-bottom-item .goods-bottom-item-content{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .goods-bottom-item .goods-bottom-item-content .goods-bottom-name{
+          width:2.82rem;
+          font-size:0.24rem;
+          font-family:PingFang SC;
+          font-weight:500;
+          color:rgba(51,51,51,1);
+          line-height:0.46rem;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .goods-bottom-item .goods-bottom-item-content .goods-bottom-ticket{
+          width: 1.09rem;
+          text-align: center;
+          height: 0.42rem;
+          line-height: 0.42rem;
+          font-size:0.22rem;
+          font-family:PingFang SC;
+          font-weight:500;
+          color:rgba(255,0,54,1);
+          background:url(../../image/quanbj.png) no-repeat;
+          background-size: cover;
+          margin: 0.12rem 0; 
+        }
+        .goods-bottom-item .goods-bottom-item-content .goods-bottom-price{
+          width: 100%;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+        }
+        .goods-bottom-price .nowPrice{
+          font-size:0.2rem;
+          color: #FF0036;
+          font-weight:500;
+        }
+        .goods-bottom-price .nowPrice span{
+          font-size:0.38rem;
+          font-weight:bold;
+        }
+        .goods-bottom-price .zhuan{
+          height:0.38rem;
+          padding: 0 0.14rem;
+          border:1px solid rgba(255,0,54,1);
+          border-radius:0.05rem;
+          font-size:0.24rem;
+          font-family:PingFang SC;
+          font-weight:500;
+          color:rgba(255,0,54,1);
+        }
+        #mescroll{
+        width: 100%;
+        position: fixed;
+        /* top: 0.88rem; */
+        bottom: 0;
+        height: auto;
+      }
+
+    </style>
+</head>
+
+<body>
+  <div id="vue-app"  v-cloak>
+    <div class="header" :style="{paddingTop:pdTop+'rem'}">
+        <div  v-if='isShowBackBtn' class="left" @click="onBack"><i class="iconfont icon-back" :style="{color: styleInfo.textColor}"></i></div>
+        <div class="center" :style="{color: styleInfo.textColor}">{{styleInfo.title}}</div>
+    </div>
+    <div class='common-warp mescroll' ref="mescroll" id="mescroll"  :style="{top:0.88+pdTop+'rem'}">
+      <div v-if="styleInfo && styleInfo.img != ''" class="headerBanner">
+          <img :src="styleInfo.img">
+      </div>
+      <div class="goodsListContent" :style="{background:styleInfo.color}">
+        <div class="goods-header">
+          <div class="goods-header-item" v-for="(item, index) in goodsListHeader" :key="index"  @click="toDetail(item)">
+            <div class="goods-header-item-img">
+              <img :src="item.thumb">
+            </div>
+            <div class="goods-header-item-content">
+              <div class="goods-header-name">{{item.title}}</div>
+              <div class="goods-header-ticket">{{item.coupon_money}}元券</div>
+              <div class="goods-header-price">
+                <div class="nowPrice">￥<span>{{item.coupon_price}}</span></div>
+                <div class="zhuan">赚{{item.commission_money}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="goods-bottom">
+          <div class="goods-bottom-item" v-for="(item, index) in goodsList" :key="index" @click="toDetail(item)">
+              <div class="goods-bottom-item-img">
+                <img :src="item.thumb">
+              </div>
+              <div class="goods-bottom-item-content">
+                <div class="goods-bottom-name">{{item.title}}</div>
+                <div class="goods-bottom-ticket">{{item.coupon_money}}元券</div>
+                <div class="goods-bottom-price">
+                  <div class="nowPrice">￥<span>{{item.coupon_price}}</span></div>
+                  <div class="zhuan">赚{{item.commission_money}}</div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>  
+	</div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910112230"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+		      page:0,
+          dataList: [],
+          mescroll: null,
+          flag: 0,
+          styleInfo:'',
+          goodsListHeader:[],
+          goodsList:[],
+          id:'',
+          pdTop:0,
+          type:'', //商品源类型
+          materialId:'' //分类id
+        },
+        created: function() {
+          var url = window.location.href
+          var info = url.match(/(^[a-z]|\\?|&)id=([0-9]*)/);
+          this.id = info[2]
+          //获取商品分类列表
+          // this.getOptimusId()
+          
+        },
+        mounted: function(){
+          //沉浸式，获取状态栏高度
+          let safeArea = dsBridge.call('receiveParams', 'safeAreaTop')
+          let size = (document.documentElement.clientWidth / 7.5)
+          this.pdTop = (safeArea / size)
+          console.log('safeArea',safeArea)
+          console.log('size',size)
+          // 获取自定义样式
+          this.getStyle()
+
+          this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+            down: {
+              use: true
+            },
+            up: {
+              callback: this.upCallback, //上拉加载的回调
+              //以下是一些常用的配置,当然不写也可以的.
+              page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 10 //每页数据条数,默认10
+              },
+              htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+              noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+            }
+          });
+          // 获取商品源类型
+          this.getGoodsType()
+        },
+        methods: {
+          //获取商品源类型
+          getGoodsType:function(){
+            Http.post(Http.HOST+Http.API_URL.APPSUBJECTTYPE,{id: this.id},true).then((res)=>{
+              if(res.code == 0){
+                this.type = res.data.type
+                // type = 1没有分类的尚品源 2有分类 
+                if (this.type == 1) {
+                  this.reset()
+                } else {
+                  //获取商品分类列表
+                  this.getOptimusId()
+                }
+              }
+            })
+          },
+          // 获取分类列表
+          getOptimusId:function(){
+            Http.post(Http.HOST+Http.API_URL.OPTIMUSID,{id: this.id},true).then((res)=>{
+              if(res.code == 0){
+                this.materialId = res.data[0].value
+                this.reset()
+              }
+            })
+          },
+          // 获取自定义样式
+          getStyle:function(){
+            Http.post(Http.HOST+Http.API_URL.APPSUBJECTSTYLE,{id: this.id},true).then((res)=>{
+            // Http.post('http://172.16.1.10:8004/api/120/amoy_v2/app/subject-style',{id: 2},true).then((res)=>{            
+              if(res.code == 0){
+                this.styleInfo = res.data
+              }
+            })
+          },
+          onBack: function(ret, err){
+            dsBridge.call('closeWin')
+          },
+          upCallback (page) {
+            if (this.type == 1) {
+                //联网请求
+              Http.post(Http.HOST+Http.API_URL.APPSUBJECTGOODS,{id: this.id, page:page.num},true).then((response)=> {
+                //请求的列表数据
+                let arr = response.data.list;
+                //如果是第一页需手动置空列表
+                if (page.num == 1) this.dataList = [];
+                //把请求到的数据添加到列表
+                this.dataList = this.dataList.concat(arr);
+                //数据渲染成功后,隐藏下拉刷新的状态
+                this.goodsListHeader = this.dataList.slice(0,3)
+                this.goodsList = this.dataList.slice(4)
+                this.$nextTick(() => {
+                  this.mescroll.endSuccess(arr.length);
+                })
+              }).catch((e)=> {
+                //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                this.mescroll.endErr();
+              })
+            } else if (this.type == 2) {
+              Http.post(Http.HOST+Http.API_URL.OPTIMUS,{material_id: this.materialId, page:page.num},true).then((response)=> {
+                //请求的列表数据
+                let arr = response.data;
+                //如果是第一页需手动置空列表
+                if (page.num == 1) this.dataList = [];
+                //把请求到的数据添加到列表
+                this.dataList = this.dataList.concat(arr);
+                //数据渲染成功后,隐藏下拉刷新的状态
+                this.goodsListHeader = this.dataList.slice(0,3)
+                this.goodsList = this.dataList.slice(4)
+                this.$nextTick(() => {
+                  this.mescroll.endSuccess(arr.length);
+                })
+              }).catch((e)=> {
+                //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+                this.mescroll.endErr();
+              })
+            }
+			      
+          },
+          reset () {
+            this.goodsList = []
+            // this.mescrollUp.page.num = 1
+            this.mescroll.setPageNum(1);
+            this.mescroll.resetUpScroll()
+          },
+          // 跳转详情
+          toDetail: function(item){
+            console.log(item)
+            dsBridge.call('openGood', item)
+          },
+        }
+        
+    })
+</script>
+
+</html>

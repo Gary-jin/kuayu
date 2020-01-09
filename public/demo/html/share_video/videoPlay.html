@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>影视播放</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <link rel="stylesheet" href="../../js/mint-ui/style.css">  
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" > -->
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+            z-index: 999999999;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .header .right{
+            width: 1.2rem;
+            height: 0.32rem;
+            position: absolute;
+            right: 0.3rem;
+            top: 0.29rem;
+            font-size: 0.28rem;
+            font-weight: 500;
+            line-height: 0.32rem;
+            color:  #999999;
+        }
+        .videoPlay {
+            font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Source Han Sans", "Noto Sans CJK Sc", "Microsoft YaHei", "Microsoft Jhenghei", sans-serif;
+            background: #fff;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            }
+
+            .videoPlay .contentBox {
+            width: 100%;
+            flex: 1;
+            overflow-y: scroll;
+            }
+            .videoPlay .contentBox .videoBox {
+            position: relative;
+            width: 100%;
+            height: 3.82rem;
+            }
+            .videoPlay .contentBox .playTitle {
+            position: relative;
+            overflow: hidden;
+            width: 6.9rem;
+            height: 0.86rem;
+            margin: auto;
+            margin-top: 0.22rem;
+            border-bottom: 0.01rem solid #EEEEEE;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.32rem;
+            font-weight: bold;
+            line-height: 0.86rem;
+            color: #191919;
+            }
+            .videoPlay .contentBox .setBox {
+            position: relative;
+            width: 6.9rem;
+            margin: auto;
+            padding: 0.21rem 0.025rem;
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 0.01rem solid #EEEEEE;
+            }
+            .videoPlay .contentBox .setBox .setItem {
+            width: 1.36rem;
+            height: 0.44rem;
+            border-radius: 0.1rem;
+            margin: 0.14rem 0.175rem;
+            background: #F5F5F5;
+            font-size: 0.26rem;
+            font-weight: 400;
+            line-height: 0.44rem;
+            text-align: center;
+            color: #555555;
+            }
+            .videoPlay .contentBox .setBox .setActive {
+            color: #FE5169;
+            }
+            .videoPlay .contentBox .descBox {
+            width: 6.9rem;
+            margin: auto;
+            margin-top: 0.26rem;
+            margin-bottom: 0.88rem;
+            font-size: 0.26rem;
+            font-weight: 400;
+            line-height: 0.48rem;
+            color: #555555;
+            }
+            .videoPlay .analysisBox {
+            position: absolute;
+            padding: 0.8rem 0 0.5rem 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-top-left-radius: 0.2rem;
+            border-top-right-radius: 0.2rem;
+            background: rgba(0, 0, 0, 0.26);
+            }
+            .videoPlay .analysisBox .analysisItemBox {
+            width: 6.7rem;
+            margin: auto;
+            border-radius: 0.1rem;
+            background: #fff;
+            }
+            .videoPlay .analysisBox .analysisItemBox .analysisItem {
+            height: 0.77rem;
+            font-size: 0.3rem;
+            font-weight: 500;
+            line-height: 0.77rem;
+            text-align: center;
+            color: #666;
+            }
+            .videoPlay .analysisBox .analysisItemBox .analysisItemBor {
+            border-bottom: 0.01rem solid rgba(217, 217, 217, 0.5);
+            }
+            .videoPlay .analysisBox .analysisItemBox .analysisItemActive {
+            color: #FE7481;
+            }
+            .videoPlay .analysisBox .noBut {
+            width: 6.7rem;
+            height: 0.77rem;
+            background: #fff;
+            border-radius: 0.1rem;
+            margin: auto;
+            margin-top: 0.3rem;
+            font-size: 0.3rem;
+            font-weight: 500;
+            line-height: 0.77rem;
+            text-align: center;
+            color: #191919;
+            }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="videoPlay">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">{{videoTitle}}</div>
+            <div class="right" @click="analysisShow()">切换路径</div>
+        </div>
+        <div class="contentBox">
+            <div class="videoBox">
+              <iframe width="100%" height="100%" border="0" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowfullscreen="true" ref="ifram" name="iframe">
+              </iframe>
+            </div>
+            <div class="playTitle">正在播放：{{videoTitle}}</div>
+            <div class="setBox" v-show="setList">
+              <div class="setItem" :class="{setActive:setItemActive == index}" v-for="(item,index) in setList" :key="'setitem'+index" @click="setItemClick(index)">
+                第{{index + 1}}集
+              </div>
+            </div>
+            <div class="descBox" v-html="desc">
+            </div>
+        </div>
+        <div class="analysisBox" v-show="analysisShowHidde">
+            <div class="analysisItemBox">
+              <div class="analysisItem" :class="{analysisItemBor:analysisUrl.length != index +1,analysisItemActive:analysisUrlIndex == index}" v-for="(item,index) in analysisUrl" :key="'analysisUrl'+index" @click="analysisClick(index)">线路{{index+1}}</div>
+            </div>
+            <div class="noBut" @click="analysisShow()">取消</div>
+        </div>
+        
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="../../js/mint-ui/index.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script> -->
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            id: '',
+            goBackNumber: 0,
+            setItemActive: 0,
+            analysisShowHidde: false,/* 切换路径弹窗 */
+            setList:[],
+            analysisUrl:["http://kmyjx8.mfr1.cn/kmy/?url=", "https://api.8bjx.cn/?url=", "https://okjx.lrkdzx.com/?url="],
+            desc: '',
+            videoTitle: '',
+            analysisUrlIndex: 0,
+            analysisSetUrl: '',
+            episodes:[]
+        },
+        created: function() {
+
+        },
+        
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            // 获取传参
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.id = Request['id']
+            },
+            getInfo() {
+                var that = this
+                Http.get(Http.HOST+Http.API_URL.VIDEOINFO, {id:this.id}).then(res => {
+                    if(res.code == 0){
+                    this.videoTitle = res.data.title
+                    this.desc = res.data.text
+                    this.analysisSetUrl = res.data.link
+                    this.episodes = res.data.episodes
+                    if(res.data.episodes.length >0) {
+                        this.setList = res.data.episodes
+                    } else {
+                        this.setList = null
+                    }
+                    that.setItemClick(0)
+                    }
+                })
+            },
+            setItemClick(value) {
+                var that = this
+                that.setItemActive = value
+                that.isSetList()
+            },
+            isSetList() {
+                var that = this
+                if(that.episodes.length > 0) {
+                    that.$refs.ifram.contentWindow.location.replace(that.analysisUrl[that.analysisUrlIndex] + that.setList[that.setItemActive])
+                    console.log(that.analysisUrl)
+                    console.log(that.analysisUrl[that.analysisUrlIndex] + that.setList[that.setItemActive],that.setItemActive+1+'集')
+                } else {
+                    that.$refs.ifram.contentWindow.location.replace(that.analysisUrl[that.analysisUrlIndex] + that.analysisSetUrl)
+                    console.log(that.analysisUrl)
+                    console.log(that.analysisUrl[that.analysisUrlIndex] + that.analysisSetUrl)
+                }
+            },
+            // 切换路径弹窗
+            analysisShow() {
+                this.analysisShowHidde = !this.analysisShowHidde
+            },
+            analysisClick(index) {
+                var that = this
+                this.analysisUrlIndex = index
+                that.isSetList()
+                this.analysisShowHidde = !this.analysisShowHidde
+            }
+        },
+        beforeMount() {
+            var that = this
+            this.getParameter()
+            this.analysisUrl = utils.storage.get('analysisUrl')
+        },
+        mounted: function () {
+            this.getInfo()
+        }
+        
+    })
+</script>
+
+</html>

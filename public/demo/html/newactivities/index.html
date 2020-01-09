@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拉新奖励</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" href="./index.css">
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css"> -->
+    <!-- <link rel="stylesheet" href="../../js/mint-ui/style.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" > -->
+    <style media="screen">
+    html,body { background: #f7f7f7;font-family:PingFang SC;}
+    #vue-app{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:500;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .new-center{
+            flex: 1;
+            overflow-y: scroll; 
+        }
+        .new-center img{
+            width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="newactivities">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">拉新活动</div>
+        </div>
+        <div class="new-center">
+            <div class="banner">
+                <img :src="banners" alt="">
+                <div class="times">
+                    <i class="time">
+                        <img :src="times" alt="">
+                    </i>
+                    <div class="datetime" v-if="infolists">
+                        活动时间&nbsp; {{createdate | revisedatecreate}} -- {{enddate | revisedateend}}
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="activityinfo">
+                    <div class="titlelogo">
+                        <img :src="infos" alt="">
+                    </div>
+                    <div class="activityinfo_child">
+                    <ul>
+                        <li v-if="infolists" v-html="infolists.gift_content">
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+                <div class="laxin">
+                    <img :src="mynums" alt="">
+                </div>
+                <!-- 上面的样式   mynum-->
+                <div class="laxinnum" v-if="newlist">
+                    <!-- 头像 -->
+                    <div class="logobox lt">
+                    <div v-if="!newlist.avatar" class="log">
+                        <img :src="holder" alt="">
+                    </div>
+                    <div v-if="newlist.avatar" class="log">
+                        <img :src="newlist.avatar" alt="">
+                    </div>
+                    <!-- 名称 -->
+                    <div class="title_box">
+                        <!-- 默认昵称 -->
+                        <div v-if="!newlist.nickname" class="title">用户{{newlist.mobile | reverse}}</div>
+                        <div v-else class="title">{{newlist.nickname}}</div>
+                        <div class="tel">{{newlist.mobile}}</div>
+                    </div>
+                    </div>
+                        <div class="nums rt">
+                        <div class="titles">拉新人数</div>
+                        <div class="numres">{{newlist.num}}</div>
+                    </div>
+                </div>
+                <div class="laxin">
+                    <img :src="mynews " alt="">
+                </div>
+                <!-- 下面的样式 -->
+                <div class="laxinmun_box">
+                    <div class="laxinmun_hua">
+                        <div class="laxinnums" v-for="(item,index) in newvan" :key="index">
+                            <div class="logobox lt">
+                                <div class="ranking" v-if="(index+1) == '1'">
+                                    <img :src="priseone" alt="">
+                                </div>
+                                <div class="ranking" v-if="(index+1) == '2'">
+                                    <img :src="prisetow" alt="">
+                                </div>
+                                <div class="ranking" v-if="(index+1) == '3'">
+                                    <img :src="prisetherr" alt="">
+                                </div>
+                                <div class="ranking" v-if="(index+1 ) > '3'">
+                                    <div class="rankingnum">{{index+1}}</div>
+                                </div>
+                                <div v-if="!item.avatar" class="log">
+                                    <img :src="holder" alt="">
+                                </div>
+                                <div v-if="item.avatar" class="log">
+                                    <img :src="item.avatar" alt="">
+                                </div>
+                                <div class="title_box">
+                                    <!-- 默认昵称 -->
+                                    <div v-if="!item.nickname" class="title">用户{{item.mobile | reverse}}</div>
+                                    <div v-if="item.nickname" class="title">{{item.nickname}}</div>
+                                    <div class="tel">{{item.mobile | reverse}}</div>
+                                </div>
+                            </div>
+                                <div class="nums rt">
+                                <div class="titles">拉新人数</div>
+                                <div class="numres">{{item.num}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btnis" @click="Invitation" :style="{paddingBottom: bot + 'px'}">
+                    <img :src="btnis" alt="">
+                </div>
+            </div>
+
+            <!-- 中奖积分 -->
+            <div class="prizealert"  v-show="showalert  === 1"  @click.stop="close()">
+                <div class="alert">
+                    <div class="guang">
+                        <img :src="guang"   alt="">
+                    </div>
+                    <div class="prizetitle">
+                        <div class="pictxt">
+                            <div class="he">恭喜你</div>
+                            <div class="hetit">此次活动获得第一名</div>
+                        </div>
+                        <img :src="yeszj" alt="">
+                    </div>
+                    <div class="prizecontent">
+                        <div v-if="prizeinfo.num !== null" class="contents">你邀请了<span class="corred">{{prizeinfo.num}}</span>位好友</div>
+                        <div v-if="prizeinfo.num === null" class="contents">你邀请了<span class="corred">0</span>位好友</div>
+                        <div v-if="prizeinfo.num !== null" class="contents"><span class="corred">{{prizeinfo.y_num}}</span>位有效好友</div>
+                        <div v-if="prizeinfo.num === null" class="contents"><span class="corred">0</span>位有效好友</div>
+                        <div class="prize" >奖品是：{{prizeinfo.gift}}元现金红包</div>
+                        <div class="tishi">（3个工作日内直接显示在可提现余额内）</div>
+                        <div class="lijibtn" @click.stop="close()" >立即领取</div>
+                        <div  class="clos" @click.stop="close()" >关闭</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 获奖的  实物-->
+            <div class="prizealert"  v-show="showalert  === 2"  @click.stop="close()">
+                <div class="alert">
+                    <div class="guang">
+                        <img :src="guang"   alt="">
+                    </div>
+                    <div class="prizetitle">
+                        <div class="pictxt">
+                            <div class="he">恭喜你</div>
+                            <div class="hetit">此次活动获得第一名</div>
+                        </div>
+                        <img :src="yeszj" alt="">
+                    </div>
+                    <div class="prizecontent">
+                        <div class="contents">你邀请了<span class="corred">{{prizeinfo.num}}</span>位好友</div>
+                        <div class="contents"><span class="corred">{{prizeinfo.y_num}}</span>位有效好友</div>
+                        <div class="prize" >奖品是：{{prizeinfo.gift}}</div>
+                        <!-- <div class="tishi">（3个工作日内直接显示在可提现余额内）</div> -->
+                        <div class="lijibtn" @click="jumpTo('/setuserinfo')">立即领取</div>
+                        <div  class="clos" @click.stop="close()" >关闭</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 没获奖 -->
+            <div class="prizealert"  v-show="showalert === 3"  @click.stop="close()">
+                <div class="alert">
+                    <div class="prizetitle">
+                        <div class="pictxts ">
+                            <div class="he">很遗憾！</div>
+                            <div class="hetit">此次活动没有中奖</div>
+                        </div>
+                        <img :src="nozj" alt="">
+                    </div>
+                    <div class="prizecontent">
+                        <div class="contents">你邀请了<span class="corred">{{prizeinfo.num}}</span>位好友</div>
+                        <div class="contents"><span class="corred">{{prizeinfo.y_num}}</span>位有效好友</div>
+                        <div class="prize">下次活动继续努力哦~</div>
+                        <!-- <div class="tishi">（3个工作日内直接显示在可提现余额内）</div> -->
+                        <div class="lijibtn" @click.stop="close()">继续努力</div>
+                        <div class="clos" @click.stop="close()" >关闭</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分享 -->
+            <div class="share_to" v-if="showToast ===true">
+                <div class="weui-mask" @click="showToast = false" v-if="showToast === true">
+                    <img :src="imgs">
+                </div>
+                <div class="classBox">
+                    <div><img src="../../image/icon/weixin.png" alt="" @click="shareFri(1)"><p>微信好友</p></div>
+                    <div><img src="../../image/icon/pengyouquan.png" alt="" @click="shareFri(2)"><p>朋友圈</p></div>
+                    <div><img src="../../image/icon/QQ1.png" alt="" @click="shareFri(3)"><p>QQ</p></div>
+                    <div><img src="../../image/icon/baocun.png" alt="" @click="shareFri(4)"><p>保存图片</p></div>
+                </div>
+            </div>
+
+            <div class="remind" v-show="remind"  >
+                <div class="alerts">
+                    <div class="remindtitle">提醒</div>
+                    <div class="remindcontent">
+                        <div class="remindcontents">{{remindcontent}} </div>
+                        <div class="remindnext" @click.stop="closenext()">返回</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js?i=1" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script>
+<!-- 本地调试路径 -->
+<!-- <script src="../../js/http.js?i=201911211908"></script> -->
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!-- <script src="../../js/mint-ui/index.js"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script> -->
+<script type="text/javascript">
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            bot: '',
+            banners: "../../image/newactivities/banners.png",
+            infos: "../../image/newactivities/infos.png",
+            btnis: "../../image/newactivities/btnis.png",
+            yeszj: "../../image/newactivities/yeszj.png",
+            guang: "../../image/newactivities/guang.png",
+            mynews: "../../image/newactivities/mynews.png",
+            mynums: "../../image/newactivities/mynums.png",
+            priseone: "../../image/newactivities/priseone.png",
+            prisetow: "../../image/newactivities/prisetow.png",
+            prisetherr: "../../image/newactivities/prisetherr.png",
+            pic: "../../image/newactivities/shoucang.png",
+            nozj: "../../image/newactivities/nozj.png",
+            times: "../../image/newactivities/time.png",
+            holder: "../../image/newactivities/holder.png",
+            showalert: false,
+            // showalertno:false,
+            showToast: false,
+            // info: this.$store.state.user.userInfo,
+            data: '',
+            type: 1,
+            shareurl: "",
+            infolists: "",
+            prizeinfo: {
+                id: "7",
+                uid: "1",
+                mobile:null,
+                num: "20",
+                gift: "iPhone X",  // 中奖物品
+                gift_sku: "实物",
+                gift_name: "拉新活动",
+                biz_id: "1",
+                username: null,
+                state: "0",
+                y_num: "2",
+                state: "1" // 1 实物 2积分
+            },
+            infolist: [
+                {
+                avatar: "../../image/newactivities/shoucang.png",
+                nickname: "小姑凉",
+                mobile: "15003873032",
+                num: "10"
+                }
+            ],
+            enddate: "",
+            createdate: "",
+            newlist: '',
+            newvan: '',
+            remind: false,
+            remindcontent: "",
+            nums: {
+                numid: "0"
+            },
+            imgs: ''
+        },
+        created: function() {
+            //ios底部安全区域
+            let saveBottom = (dsBridge.call("receiveParams", 'safeAreaBottom1'))
+            let size = (document.documentElement.clientWidth / 7.5)
+            if (saveBottom == '123'){
+                this.bot = 0
+            } else {
+                this.bot = (saveBottom/size)
+            }
+        },
+        
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            close () {
+                this.showalert = false
+            },
+            closenext () {
+                this.remind = false
+                dsBridge.call('closeWin')
+            },
+            // 立即邀请
+            Invitation () {
+                if (utils.isPhone()) {
+                    if (this.imgs === ''){
+                        dsBridge.call("toast", {msg: '邀请海报图加载失败'})
+                    } else {
+                        this.showToast = true
+                    }
+                }
+                
+            },
+            // 活动说明
+            getnewlist () {
+                Http.post(Http.HOST+Http.API_URL.HOMENEWLIST, {
+                }, true).then(res => {
+                    //  2没有活动 1结束 0成功
+                    if (res.code === 0) {
+                    if (res.data.p_state == '2') {
+                        console.log("执行了")
+                        this.remind = true
+                        this.remindcontent = '暂无活动'
+                    } else if (res.data.p_state == '1') {
+                        // this.$vux.toast.text(res.msg)
+                        this.remind = true
+                        this.remindcontent = '活动已结束'
+                    }
+                    if (res.data.arr) {
+                        this.infolists = res.data.arr
+                        this.createdate = res.data.arr.created_time
+                        this.enddate = res.data.arr.stop_time
+                    }
+                    // this.infolists = res.data.arr;
+                    // this.createdate = res.data.arr.created_time;
+                    // this.enddate = res.data.arr.stop_time;
+                    if (res.data.mynum && res.data.mynum.mobile) {
+                        this.newlist = res.data.mynum
+                    }
+                    this.newvan = res.data.van
+                    //  this.$vux.toast.text(res.msg)
+                    }
+                })
+            },
+            // 获取中奖信息 amoy/home/show
+            // 2  中奖   3未中奖   0未到开奖
+            getprizeinfo () {
+                Http.post(Http.HOST+Http.API_URL.HOMENESHOW, {
+                }, true).then(res => {
+                    if (res.code === 0) {
+                    this.prizeinfo = res.info
+                    this.showalert = res.data.state
+                    // this.showalert = 2
+                    // console.log( this.prizeinfo,"prizeinfo");
+                    }
+                })
+            },
+            // 分享
+            shareFri (type) {
+                const that = this
+                if (type != 4) {
+                    dsBridge.call("inviteShare", {url: that.imgs, type: type})
+                } else {
+                    dsBridge.call("saveMediaToAlbum", {url: that.imgs})
+                    // 之前的分享链接
+                    // dsBridge.call("inviteShare", {content: that.shareurl, type: type})
+                }
+                that.showToast = false      
+            },
+            getSwiper () {
+                Http.post(Http.HOST+Http.API_URL.INVITE,true).then((res)=>{
+                    if (res.code === 0) {
+                        if (res.data.img) {
+                            this.imgs = res.data.img[0]
+                        }
+                    }
+                })
+                // 原来的获取邀请海报的接口，已废弃
+                // Http.post(Http.HOST+Http.API_URL.USERINVITE, {}, true).then(res => {
+                //     if (res.code === 0) {
+                //         this.imgs = []
+                //         res.data.img.forEach((item) => {
+                //             this.imgs.push(item)
+                //         })
+                //         this.data = res.data
+                //         // this.shareurl = '知省联盟下载链接:' + res.data.downloadUrl + '\n邀请码:11'
+                //         this.shareurl = '知省联盟下载链接:' + res.data.downloadUrl + '\n邀请码:' + dsBridge.call("receiveParams", 'invite_code')
+                //         console.log("this.data", this.data)
+                //     }
+                // })
+            }
+            
+        },
+        filters: {
+            revisedatecreate: function (val) {
+                return val.slice(0, (val.indexOf(" ")))
+            },
+            revisedateend: function (valend) {
+                return valend.slice(0, (valend.indexOf(" ")))
+            },
+            reverse: function (moe) {
+                let moestate = moe.slice(0, 3)
+                let moeend = moe.slice(7)
+                return moestate + '****' + moeend
+            }
+        },
+        
+        mounted: function () {
+            this.getSwiper()
+            this.getnewlist()
+            this.getprizeinfo()
+        }
+        
+    })
+</script>
+
+</html>

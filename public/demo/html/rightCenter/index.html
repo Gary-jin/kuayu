@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>新手攻略+赚钱吧</title>
+    <meta name="description" content="U券_淘宝客系统">
+    <meta name="keywords" content="U券_淘宝客系统">
+    <meta name="apple-mobile-web-app-capable" content="yes" /> <!-- apple devices fullscreen -->
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" href="./../../js/mint-ui/style.css">
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    
+    <style>
+        html, body{
+            background: #F3F3F3;
+            height: 100vh;
+        }
+        button{
+            outline:none;
+        }
+        .flex {
+            display: -webkit-box;
+            display: box;
+        }
+        .flex_1 {
+            -webkit-box-flex: 1.0;
+            box-flex: 1.0;
+        }
+        #header{
+            position: absolute;
+            z-index: 999;
+            left: 0;
+			right: 0;
+            padding: 0 0 .3rem 0;
+            background: url(../../image/rightCenter/index/headerBg.png) no-repeat;
+            background-size: 100% 100%;
+        }
+		#header .left{
+			position:absolute;
+			left:.26rem
+		}
+        #header .left i{
+            color:#fff;
+            font-size:0.4rem;
+        }
+        #header .title {
+            display: block;
+            width:100%;
+            text-align: center;
+            font-size: .34rem;
+            color: #fff;
+        }
+        .right-top{
+            background: url('../../image/rightCenter/index/rightBg.png') no-repeat;
+            background-size: 100% 100%;
+            height: 8.6rem;
+        }
+        .right-top .info{
+            text-align:center;
+			padding-top: .88rem
+        }
+        .right-top .info .avatar img{
+            width:1.34rem;
+            height:1.34rem;
+            border-radius:50%
+        }
+        .right-top .info .nickname{
+            font-size:.32rem;
+            color:#fff;
+            margin: .28rem 0 .22rem
+        }
+        .right-top .info .level{
+              font-size:.36rem;
+              color:#FFA82B;
+            display: inline-flex;
+            align-items: center;
+          }
+        .right-top .info .notice{
+            width: .38rem;
+            height: .32rem;
+            margin-left: .07rem;
+        }
+        .right-top .swiper-warp{
+            margin-top: .45rem;
+        }
+        .right-top .swiper-slide{
+            background: -webkit-linear-gradient(left, #EFDAA2, #ECBE77);
+            border-radius: .3rem;
+            text-align: center;
+            transition: 300ms
+        }
+        .right-top .swiper-slide ul li{
+            float:left;
+            width:33.33%;
+            margin-bottom: .33rem;
+        }
+        .right-top .swiper-slide .warp{
+            padding: 0 .15rem;
+        }
+        .right-top .swiper-slide .title{
+            font-size:.3rem;
+            color:#2F2F2F;
+            font-weight:normal;
+            padding: .35rem 0 .40rem
+        }
+        .right-top .swiper-slide li .img img{
+            width:.88rem;
+            height: .88rem;
+        }
+        .right-top .swiper-slide li .tit{
+            color:#2f2f2f;
+            padding:.16rem 0 .1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .right-top .swiper-slide li .tit img{
+            width: 0.16rem;
+            height: 0.2rem;
+        }
+        .right-top .swiper-slide li .tit h4 {
+            font-size: .23rem;
+            font-weight:normal;
+        }
+        .right-top .swiper-slide li .desc{
+            font-size:.22rem;
+            color:#666;
+        }
+        .right-top .swiper-warp .swiper-slide .btn{
+            padding:.12rem 0 .36rem;
+            font-size:.28rem;
+
+        }
+        .right-top .swiper-warp .swiper-slide .btn button{
+            color:#D92B24;
+			display: inline-flex;
+			align-items: center;
+
+        }
+        .right-top .swiper-warp .swiper-slide .btn img{
+            padding-left:.08rem;
+            width:.11rem;
+            height: .18rem;
+        }
+        .right-top .swiper-slide:not(.swiper-slide-active){
+            transform: scale(0.9);
+        }
+        .right-title .title{
+            text-align:center;
+            position: relative;
+        }
+        .right-title .title h3{
+            font-size:.34rem;
+            color:#2F2F2F;
+            position: absolute;
+            left: 50%;
+            margin-left: -0.5rem;
+            bottom: 0
+        }
+        .right-title .title span{
+            display:inline-block;
+            width:1.6rem;
+            height:.08rem;
+            background:rgba(231,215,192,1);
+            border-radius:2px;
+        }
+        .right-title .title p{
+            width:1.5rem;
+            height:0.3rem;
+            font-size:0.28rem;
+            font-weight:500;
+            text-decoration:underline;
+            color:rgba(204,150,38,1);
+            position: absolute;
+            right: 0.36rem;
+            bottom: 0.1rem;
+        }
+        .updateLevel ul{
+            padding: 0 .3rem
+        }
+        .updateLevel ul li{
+            border-bottom:1px solid #EEEEEE;
+            padding:.4rem 0
+        }
+        .updateLevel ul li .level-info{
+            display: flex;
+            align-items: center;
+        }
+        .progressBox .weui-progress__bar {
+            height: .12rem;
+            border-radius: .06rem;
+            background-color: #F1F1F1;
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+        }
+        .weui-progress__inner-bar{
+            border-radius: .1rem;
+            background: #F7CE02;
+            height: 100%;
+        }
+        .updateLevel{
+            margin-top: .10rem;
+        }
+        .updateLevel li .right .num{
+            font-size:.3rem;
+            color:#2F2F2F;
+            margin-bottom:.2rem
+        }
+        .updateLevel li .right .percent{
+            font-size:.26rem;
+            color:#818181
+        }
+        .updateLevel li img{
+            width: .8rem;
+            height: .8rem;
+        }
+        .updateLevel li .right{
+            padding-right: .22rem;
+            width: 100%;
+            margin-left:.15rem;
+        }
+        .progressBox1{
+            display:flex;
+            align-items:center;
+            justify-content: space-between;
+        }
+        .progressBox1 .weui-progress{
+            width:2.38rem;
+        }
+        .updateLevel li .btn{
+            display: flex;
+            align-items: center;
+        }
+        .updateLevel li .btn button{
+            height: .60rem;
+            padding: 0 .30rem;
+            font-size: 0.26rem;
+            border-radius: .30rem;
+            border: 1px solid #D92B24;
+            color: #D92B24;
+        }
+        .updateLevel li .btn button.end{
+            border: 1px solid #858585;
+            color: #818181;
+        }
+        .updateLevel .desc{
+            text-align:center;
+            padding:.36rem 0 .42rem
+        }
+        .updateLevel .desc .conditions{
+            font-size:.24rem;
+            color:#999
+        }
+        .updateLevel .desc .allLevel{
+            font-size:.30rem;
+            color:#CC9626;
+            margin-top:.22rem
+        }
+        /*升级运营商*/
+        .right-bottom{
+            background: linear-gradient(0deg,rgba(254,234,173,1) 0%,rgba(255,255,255,1) 100%);
+            padding-top: .50rem;
+        }
+        .operate-people{
+            margin-bottom: .6rem;
+        }
+        .persons {
+            background: #fff;
+            background: url("../../image/rightCenter/index/operateBg.png") no-repeat;
+            background-size: 100% 100%;
+            padding-bottom: .32rem;
+        }
+        .persons .title{
+            font-size: .36rem;
+            text-align: center;
+            padding: .42rem 0 .32rem;
+            color: #2F2F2F;
+            font-weight: bold;
+        }
+        .persons .name{
+            font-size: .26rem;
+            text-align: center;
+            padding: .20rem 0 .16rem;
+            color: #2F2F2F;
+			height: .6rem;
+			line-height:.7rem
+        }
+        .persons .level {
+            height: .36rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0.1rem auto;
+            border-radius: .18rem;
+        }
+        .persons .level span{
+            background: #fff;
+            border-radius: .21rem;
+            padding: 0 .22rem;
+            line-height: 0.42rem;
+            display: inline-block;
+            border: 1px solid #F7D69E;
+            color: #E09E3A;
+            font-size: .26rem;
+        }
+        .persons .moneyBox {
+            position: relative;
+            background: #fff;
+            width: 5.8rem;
+            /*height: 1.7rem;*/
+            margin: .35rem auto;
+            text-align: center;
+            border-radius: .1rem;
+            box-shadow:0px 4px 10px 0px rgba(221,196,119,0.5);
+        }
+        .persons .moneyBox  .money {
+            color: #E09E3A;
+            font-size: .50rem;
+            font-weight: bold;
+            padding: .18rem 0 .08rem;
+        }
+        .persons .moneyBox  .time {
+            font-size: .26rem;
+            color: #333;
+        }
+        .persons .moneyBox .info{
+            color: #999999;
+            font-size: .22rem;
+            padding: .16rem 0 .20rem;
+        }
+        .persons .moneyBox .triangle{
+            position: absolute;
+            left: 2.8rem;
+            top: -0.2rem;
+            width: 0;
+            height: 0;
+            border-left: .14rem solid transparent;
+            border-bottom: .2rem solid #fff;
+            border-right: .14rem solid transparent;
+        }
+        .personSwiper{
+            width: 3rem;
+            margin: 0 auto;
+        }
+        .personSwiper .swiper-slide {
+            width: 1.04rem !important;
+            height: 1.04rem;
+            border-radius: .52rem;
+            overflow: hidden;
+        }
+        .personSwiper .swiper-slide img{
+            width: 100%;
+            height: 100%;
+        }
+        /*赚钱吧*/
+        .GoodsList{
+            margin-top: .34rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background:linear-gradient(0deg,rgba(254,234,173,1) 0%,rgba(255,255,255,1) 100%);
+        }
+        .GoodsList .recommend{
+            width: 6.7rem;
+        }
+        .GoodsList .recommend-title{
+            height: 0.54rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .GoodsList .recommend-title div:nth-child(1){
+            font-size:0.3rem;
+            font-weight:bold;
+            color:rgba(51,51,51,1);
+        }
+        .GoodsList .recommend-title div:nth-child(2){
+            font-size:.26rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+            display: flex;
+            align-items: center;
+        }
+        .GoodsList .recommend-title div:nth-child(2) img{
+            width: .28rem;
+            height: .28rem;
+            margin-left: .08rem;
+        }
+        .recommend-img{
+            width:6.7rem;
+            height:1.7rem;
+            border-radius:.1rem;
+            margin-top: 0.2rem;
+        }
+        .recommend-img img{
+            height: 100%;
+            width: 100%;
+            border-radius:.1rem;
+        }
+        .GoodsList .moneyApp{
+            width: 6.7rem;
+        }
+        .GoodsList .moneyApp .recommend-title{
+            margin-top: 0.2rem;
+        }
+        .moneyApp .appInfo{
+            width: 100%;
+            height: 1.48rem;
+            border-bottom: 1px solid rgba(255,250,235,1);
+            display: flex;
+            align-items: center;
+        }
+        .moneyApp .appInfo:last-child{
+            border: none;
+        }
+        .moneyApp .appInfo img{
+            width:.88rem;
+            height:.88rem;
+            border-radius:.1rem;
+            margin-right: 0.3rem;
+        }
+        .moneyApp .appInfo .info{
+            height: .88rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .moneyApp .appInfo .info p:nth-child(1){
+            font-size:.3rem;
+            font-weight:500;
+            color:rgba(51,51,51,1);
+            line-height: 0.4rem;
+            margin: 0 0 0.1rem 0;
+        }
+        .moneyApp .appInfo .info p:nth-child(2){
+            font-size:.24rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+        }
+        .waysBox{
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: rgba(0,0,0,0.5);
+            width: 100%;
+            height: 100%;
+            z-index: 99999;
+        }
+        .waysBox .info{
+            text-align: center;
+            background: #fff;
+            border-radius: .1rem;
+            position: fixed;
+            left: .8rem;
+            top: 50%;
+            margin-top: -1.2rem;
+            width: 5.9rem;
+            font-size: .3rem;
+            z-index: 100001;
+            font-size: .32rem;
+        }
+        .waysBox .info p{
+            padding: .57rem .1rem .5rem .1rem;
+            color:#2F2F2F;
+            border-bottom: 1px solid #EEEEEE;
+        }
+        .waysBox .info button{
+            height: .9rem;
+            line-height: .9rem;
+            color: #1675E1;
+            border: none;
+        }
+        .yujiazai{
+            padding: .2rem
+        }
+        .yujiazai .top{
+            width: 100%;
+            height:3.4rem;
+            background: #eee;
+            border-radius: .1rem
+        }
+        .yujiazai .middle{
+            width: 100%;
+            height: .5rem;
+            background: #eee;
+            margin: .2rem 0;
+            border-radius: .1rem
+        }
+        .messageBox{
+          height: 100%;
+          width: 100%;
+          position: fixed;
+          top: 0;
+          left: 0;
+          background: rgba(47,47,47,0.6);
+          z-index: 9999;
+          display: flex;
+          justify-content:center;
+          align-items: center;
+        }
+        .con-box{
+          width:5.7rem;
+          height:4.12rem;
+          background:rgba(255,255,255,1);
+          border-radius:.1rem;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          /* justify-content: center; */
+        }
+        .con-box p{
+          font-size:.3rem;
+          font-weight:500;
+          color:rgba(31,31,31,1);
+          line-height:.48rem;
+          text-align: center;
+          margin: 1rem 0 0.7rem 0;
+        }
+        .con-box .goBtn{
+          width:4rem;
+          height:.88rem;
+          background:linear-gradient(-90deg,rgba(217,33,33,1),rgba(255,101,73,1));
+          border-radius:.1rem;
+          line-height: .88rem;
+          text-align: center;
+          font-size:.34rem;
+          font-weight:500;
+          color:rgba(255,255,255,1);
+        }
+        .msgClose{
+          height: 0.28rem;
+          width: 0.28rem;
+          position: absolute;
+          top: 0.2rem;
+          right: 0.2rem;
+        }
+        #mescroll{
+			width: 100%;
+			position: fixed;
+			top: 0rem;
+			bottom: 0;
+			height: auto;
+		}
+        #header .right {
+            position: absolute;
+            right: .3rem;
+            font-size: .30rem;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+       
+    <div id="freeUpgrade">
+		<div id="header" class="flex"  :style="{paddingTop: statusH + 'rem'}">
+            <div class="left"><i class="iconfont icon-back"  v-if='isShowBackBtn' @click="onBack()"></i></div>
+            <div class="title flex_1">新手攻略+赚钱吧</div>
+            <!-- <div class="right" @click="toOrderList()">订单</div> -->
+            <div class="right" @click="toOrderList()"></div>
+        </div>
+        <!-- <div class="yujiazai" v-if="yujiazai" :style="{paddingTop: statusH + 'rem'}">
+            <div class="top"></div>
+            <div class="middle" v-for="x in 10"></div>
+        </div> -->
+        <!-- <div v-if="!yujiazai"> -->
+            <div class="mescroll" ref="mescroll" id="mescroll" >
+                <div>
+                    <div style="background: #fff">
+                        <div class="right-top" :style="{paddingTop: statusH + 'rem'}">
+                            <!--<div id="header">
+                                <div class="left" @click="onBack()"><i class="iconfont icon-back"></i></div>
+                            </div>-->
+                            <div class="info">
+                                <div class="avatar"><img :src="userInfo.avatar" alt=""></div>
+                                <p class="nickname">{{userInfo.nickname}}</p>
+                                <h3 class="level">{{userInfo.lv}}<img class="notice" @click="showNotice()" src="../../image/rightCenter/index/tishi.png" alt=""></h3>
+                            </div>
+                            <div class="swiper-warp">
+                                <div class="successNav swiper-container">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide" v-for="(items, index) in rightsList" :key="index">
+                                            <div class="warp">
+                                                <h3 class="title">{{items.title}}</h3>
+                                                <ul class="content clr">
+                                                    <li v-for="(item,index) in items.rights" :key="index">
+                                                        <div class="img"><img :src="item.img" alt=""></div>
+                                                        <div class="tit"><h4>{{item.tip}}{{item.tipAppend}}<img src="../../image/rightCenter/index/top.png" alt="" v-if="item.tipAppend"></h4></div>
+                                                        <p class="desc">{{item.text}}</p>
+                                                    </li>
+                                                </ul>
+                                                <!-- <div class="btn">
+                                                    <button v-if="items.canPay == 1" class="toBtn">去付费升级 <img src="../../image/rightCenter/index/right.png"></button>
+                                                    <button v-if="items.canPay == 2" class="toBtn">去礼包升级 <img src="../../image/rightCenter/index/right.png"></button>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="height: 2.3rem;"></div>
+                        <div class="right-title">
+                            <div class="title"><h3>升级条件</h3><span></span><p @click="toUpgrade">升级挑战></p></div>
+                        </div>
+                        <div class="updateLevel">
+                            <ul>
+                                <li class="flex" v-for="(item, index) in ungradelevel" :key="index">
+                                    <div class="flex_1 level-info">
+                                        <div>
+                                            <img :src="item.icon" alt="">
+                                        </div>
+                                        <div class="right">
+                                            <h4 class="num">{{item.text}}</h4>
+                                            <div class="progressBox progressBox1">
+                                                <p class="percent">完成{{item.now}}/{{item.need}}</p>
+                                                <div class="weui-progress">
+                                                    <div class="weui-progress__bar">
+                                                        <div class="weui-progress__inner-bar" :style="{width:(item.now / item.need) * 100 > 100 ? 100  + '%' : (item.now / item.need) * 100 + '%'}"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="btn">
+                                        <button v-if="Number(item.now) >= Number(item.need)" class="end">已完成</button>
+                                        <button v-else @click="toInvite(index)">去完成</button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="desc">
+                                <!-- <p class="conditions">有效VIP是指：  首单消费满1元以上的</br>有效团队是指：  1代加2代vip大于等于200人</p> -->
+                                <p class="allLevel">满足条件即可自动升级</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right-bottom">
+                        <div class="right-title">
+                            <div class="title"><h3>赚钱吧</h3><span></span></div>
+                        </div>
+                        <div class="GoodsList">
+                            <!-- 优质推荐 -->
+                            <div class="recommend" v-if="recommendList && recommendList.length > 0">
+                                <div class="recommend-title">
+                                    <div>优质推荐</div>
+                                    <div @click="recommendChange()">换一批<img src="../../image/rightCenter/index/change.png"></div>
+                                </div>
+                                <div @click="openUrl(item.id,item.url)" class="recommend-img" v-for="(item, index) in recommendList" :key="index"><img :src="item.src"></div>
+                            </div>
+                            <!-- 赚钱APP -->
+                            <div class="moneyApp" v-if="appList && appList.length > 0">
+                                <div class="recommend-title">
+                                    <div>赚钱APP</div>
+                                    <div @click="appChange()">换一批<img src="../../image/rightCenter/index/change.png"></div>
+                                </div>
+                                <div @click="openUrl(item.id,item.url)" class="appInfo" v-for="(item, index) in appList" :key="index">
+                                    <img :src="item.logo">
+                                    <div class="info">
+                                        <p>{{item.title}}</p>
+                                        <p>{{item.desc}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        <!-- </div> -->
+        <div class="waysBox" v-if="dialog">
+            <div class="info">
+                <p>{{info.userInfo.due}}</p>
+                <div @click="surBtn()">
+                    <button>确定</button>
+                </div>
+            </div>
+        </div>
+         <!-- 挑战成功弹窗 -->
+         <div class="messageBox" v-if="msgBoxShow">
+            <div class="con-box">
+              <p>{{wintext}}</p>
+              <div class="goBtn" @click="msgClose">知道了</div>
+              <img class="msgClose" @click="msgClose" src="../../image/close1.png">
+            </div>
+          </div>
+    </div>
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=201910112231"></script> -->
+<script src="../../js/http.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="./../../js/mint-ui/index.js"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: "#freeUpgrade",
+        data:{
+            yujiazai: true,
+            dialog: false,
+            info: '',
+            title: '',
+            id: '',
+            payWays: '',
+            bsID: 1,
+            income: '',
+            mySwipernum: '',
+            initialSlide: '',
+            goodsInfo: '',
+            mescroll:null,
+            userInfo: '',
+            ungradelevel: '',
+            rightsList: '',
+            id: '1648',
+            initSwiper1Slide: '',
+            initswiper: '',
+            recommendList:[],
+            appList:[],
+            msgBoxShow: false,
+            winIs_alert : '',
+            wintext : ''
+        },
+		created () {
+			let bodyHeight = document.body.clientHeight
+			let safeArea = dsBridge.call('receiveParams', 'safeAreaTop')
+			let size = (document.documentElement.clientWidth / 7.5)
+			this.statusH = (safeArea / size)
+		},
+        methods: {
+			onBack: function(){
+				dsBridge.call('closeWin')
+             },
+             // 秒省1期，升级跳转暂未开放
+             toUpgrade(){
+                 dsBridge.call("open", { url: Http.HOST+'/uqWeb/html/miaosheng/rule.html', type: 'web' })
+                //  window.location.href = 'http://172.16.1.239:3000/uqWeb/html/miaosheng/rule.html'
+             },
+            _initSwiper1(){
+                this.initswiper = new Swiper ('.successNav', {
+                    slidesPerView: 1.3,
+                    spaceBetween: 8,
+                    centeredSlides: true,
+                    loop: true,
+                    loopAdditionalSlides:1,
+                    initialSlide: this.initSwiper1Slide,
+					on: {
+                        click: (e)=> {
+                            var canPay = this.rightsList[this.initswiper.realIndex].canPay
+                            var id = this.rightsList[this.initswiper.realIndex].id
+                            if(e.target.className == 'toBtn'){
+                                if(canPay == 1){
+                                    this.toCashPay(id)
+                                }else if(canPay == 2){
+                                    this.toGiftPay(id)
+                                }
+                            }
+                        },
+                    }
+                });
+            },
+            // 隐藏我的运营商
+            // _initSwiper2(){
+            //     this.mySwipernum = new Swiper ('.personSwiper', {
+            //         effect: 'coverflow',
+            //         grabCursor: true,
+            //         watchSlidesProgress: true,
+            //         centeredSlides: true,
+            //         loop: false,
+            //         loopedSlides: 3,
+            //         slidesPerView: 3,
+            //         initialSlide: this.initialSlide,
+            //         coverflowEffect: {
+            //             rotate: 2,
+            //             stretch: 5,
+            //             depth: 50,
+            //             modifier: 3,
+            //             slideShadows: false
+            //         },
+            //         on: {
+            //             transitionEnd: ()=> {
+            //                 if (this.mySwipernum) {
+            //                     this.income = this.info ? this.info.managerList[this.mySwipernum.activeIndex] : '';
+            //                 }
+            //             },
+            //             sliderMove: function (event) {
+            //                 window.canRightSlipBack = false
+            //             },
+            //             touchEnd: function (event) {
+            //                 setTimeout(() => {
+            //                     window.canRightSlipBack = true
+            //                 }, 600)
+            //             }
+            //         }
+            //     });
+            // },
+            toInvite: function(index){
+				if(dsBridge.call('receiveParams', 'token')){
+                    if(index!= 2){
+                        dsBridge.call("openWin", '/invite')
+                    }else{
+                        dsBridge.call("openWin", '/profit')
+                    }
+				}else{
+					dsBridge.call("toLogin")
+				}
+                
+            },
+            toDetail: function(type, id){
+                dsBridge.call('openGood', {type: type, origin_id: id})
+            },
+            // 去付费升级
+            toCashPay: function(id){
+				if(dsBridge.call('receiveParams', 'token')){
+					dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/rightCenter/upgradePay.html?id=' + id,type: 'web'})
+				}else{
+					dsBridge.call("toLogin")
+				}
+                
+            },
+            // 去礼包升级
+            toGiftPay: function(id){
+				if(dsBridge.call('receiveParams', 'token')){
+					dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/rightCenter/giftBag.html?id=' + id,type: 'web'})
+				}else{
+					dsBridge.call("toLogin")
+				}
+                
+            },
+            // 去订单详情
+            toOrderList(){
+                var token = dsBridge.call("receiveParams", 'token')
+                if (token) {
+                    dsBridge.call("openWin", '/rightsRecord')
+                } else {
+                    dsBridge.call("toLogin")
+                }
+            },
+            getList: function() {
+                let codeVersion = dsBridge.call('receiveParams', 'codeVersion')
+                // 显示loading
+                if (codeVersion >= 310) {
+                    dsBridge.call('common',{code:2,data:{type:1}},(ret) => {
+                
+                    })
+                }
+                Http.post(Http.HOST+Http.API_URL.RIGHTERINDEX,{},true).then((res)=>{
+                    // 隐藏loading
+                    if (codeVersion >= 310) {
+                        dsBridge.call('common',{code:2,data:{type:0}},(ret) => {
+                    
+                        })
+                    }
+                    this.yujiazai = false
+                    if(res.code === 0){
+                        this.info = res.data;
+                        this.ungradelevel = res.data.up.rulesGroup[0].rules
+                        this.rightsList = res.data.rightsList
+                        this.userInfo = res.data.userInfo
+                        //弹窗状态 1弹 0 不弹
+                        this.winIs_alert = res.data.is_alert
+                        // this.initialSlide = Math.ceil(res.data.managerList.length / 2) - 1
+                        // this.income = res.data.managerList ? res.data.managerList[this.initialSlide] : ''
+                        // 升级条件完成及时更新权益状态
+                        this.update()
+                        for(i=0; i < res.data.rightsList.length; i++){
+                            if(this.rightsList[i].id ==  this.userInfo.rightsId){
+                                this.initSwiper1Slide = i
+                            }
+                        }
+                        this.$nextTick(function(){
+                           !this.initswiper && this._initSwiper1()
+                            // !this.mySwipernum && this._initSwiper2()
+                        })
+                    }
+                })
+            },
+            // 后台计时任务没跑 但是升级条件已经完成  及时更新权益状态
+            update () {
+                console.log(this.ungradelevel)
+                let ungradelevelist = this.ungradelevel
+                let need1 = ungradelevelist[0].need
+                let need2 = ungradelevelist[1].need
+                let need3 = ungradelevelist[2].need
+                let now1 = ungradelevelist[0].now
+                let now2 = ungradelevelist[1].now
+                let now3 = ungradelevelist[2].now
+                console.log(need1,need2,need3,now1 ,now2 ,now3 )
+                if(now1>=need1 && now2>=need2 && now3>=need3){
+                    console.log("升级成功")
+                    Http.post(Http.HOST+Http.API_URL.UPDATECHALLENGETASK,{type : 'success'},true).then((res)=>{
+                        if(res.code == 0){
+                            console.log(112)
+                            this.wintext = res.msg
+                            this.winupdata()
+                        }
+                    })
+                }
+            },
+            // 升级成功弹窗
+            winupdata () {
+                if(this.winIs_alert == 1){
+                    console.log(223)
+                    this.msgBoxShow = true
+                    Http.post(Http.HOST+Http.API_URL.UODATEALERTSTATUS,{},true).then((res)=>{
+
+                    })
+                }
+            },
+            upCallback () {
+                // Http.post(Http.HOST+Http.API_URL.OPTIONALGOODS,{page: page.num},true).then((res)=>{
+                //     if (res.code === 0) {
+                //         let arr = res.data === '' ? [] : res.data
+                //         if (page.num === 1) this.goodsInfo = []
+                //         this.goodsInfo = this.goodsInfo.concat(arr)
+                //         this.$nextTick(() => {
+                //             // this.mescroll.endSuccess(arr.length);
+                //             mescroll.endSuccess(res.data.length, true)
+                //         })
+                //     }
+                // })
+            },
+            getMediaOther(){
+                Http.post(Http.HOST+Http.API_URL.INFOMEDIAOTHER,{},true).then((res)=>{
+                    if (res.code == 0) {
+                        this.appList = res.data.appList
+                        this.recommendList = res.data.recommendList
+                    }
+                })
+            },
+            // 推荐切换
+            recommendChange(){
+                Http.post(Http.HOST+Http.API_URL.INFOMEDIAADTOP,{},true).then((res)=>{
+                    if (res.code == 0) {
+                        // this.appList = res.data.appList
+                        this.recommendList = res.data.recommendList
+                    }
+                })
+            },
+            // app切换
+            appChange(){
+                Http.post(Http.HOST+Http.API_URL.INFOMEDIAADBOT,{},true).then((res)=>{
+                    if (res.code == 0) {
+                        this.appList = res.data.appList
+                        // this.recommendList = res.data.recommendList
+                    }
+                })
+            },
+            // 打开推广链接
+            openUrl(id,url){
+                console.log(id,url)
+                Http.post(Http.HOST+Http.API_URL.INFOMEDIARECORD,{id:id},true).then((res)=>{
+                    if (res.code == 0) {
+                        dsBridge.call('open', {url:url,type: ''})
+                    }
+                })
+            },
+            showNotice: function(){
+                this.dialog = true
+            },
+            surBtn: function(){
+                this.dialog = false
+            },
+			addEvent(){
+                // 找到当前浏览器支持的hidden属性名和visibilitychange事件名
+                var hidden, visibilityChange;
+                if (typeof document.hidden !== "undefined") {
+                    hidden = "hidden";
+                    visibilityChange = "visibilitychange";
+                } else if (typeof document.mozHidden !== "undefined") {
+                    hidden = "mozHidden";
+                    visibilityChange = "mozvisibilitychange";
+                } else if (typeof document.msHidden !== "undefined") {
+                    hidden = "msHidden";
+                    visibilityChange = "msvisibilitychange";
+                } else if (typeof document.webkitHidden !== "undefined") {
+                    hidden = "webkitHidden";
+                    visibilityChange = "webkitvisibilitychange";
+                }
+                // console.log(hidden,visibilityChange)
+				document.addEventListener(visibilityChange, () => {
+					if(document[hidden]) {
+                        // 页面被挂起
+                        // console.log('隐藏')                        
+					}
+					else {
+                        // console.log('显示')
+						this.getList();
+                        this.update()
+						//window.location.reload();
+					}
+				});
+            },
+            // 关闭挑战成功弹窗
+            msgClose () {
+                this.msgBoxShow = false
+            },
+        },
+        mounted(){
+			this.addEvent();
+            this.getList();
+            this.getMediaOther();
+            // this.getGoods()
+            this.mescroll = new MeScroll(this.$refs.mescroll, { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到				
+				down: {
+                    isLock: true,
+				 },
+				up: {
+                    use:false,
+                    // auto: false,
+                    isBounce: false,
+					callback: this.upCallback,
+					page: {
+                      num: 0,
+                      size:10
+					},
+					// htmlNodata: '<p class="upwarp-nodata">—— 我也是有底线的 ——</p>',
+					noMoreSize: 5,
+					empty: {
+					  warpId: 'd26',
+					  icon: imgConfig.NODATA_IMG || '../../image/kong.png',
+                      tip: imgConfig.NODATA_TEXT || '暂无相关数据~'
+					}
+				}
+			});	
+        }
+    })
+</script>
+
+</html>

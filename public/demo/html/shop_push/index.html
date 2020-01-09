@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拓店推手</title>
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <!-- <link rel="stylesheet" href="../../css/libs/iconfont.css"> -->
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css"> -->
+    <!-- <link rel="stylesheet" href="../../js/mint-ui/style.css">   -->
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" > -->
+    <style media="screen">
+	html,body { background: #f7f7f7;font-family:PingFang SC;}
+    #vue-app{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+       .header {
+            position: relative;
+            width: 100%;
+            height: 0.88rem;
+            color:rgba(47,47,47,1);
+            line-height: 0.88rem;
+            font-size: 0.34rem;
+            font-weight:bold;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            background: #FFFFFF;
+            border-bottom: 0.01rem solid #EEEEEE;
+        }
+
+        .header .left {
+          display: flex;align-items: center; justify-content: center;
+            position: absolute;
+            bottom: 0;
+            left: .3rem;
+            height: 0.88rem;
+        }
+        .header .left .back{
+            height: .32rem;
+            width: 0.18rem;
+            background: url(../../image/back1.png) no-repeat;
+            background-size: cover;
+        }
+        .header .right{
+            width: 1.4rem;
+            height: 100%;
+            position: absolute;
+            right: 0.3rem;
+            /* top: 0.29rem; */
+            font-size: 0.28rem;
+            line-height: 0.88rem;
+            color: #666666;
+            font-weight: 500;
+            text-align: center;
+        }
+        .content{
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .content-top{
+            width:6.9rem;
+            height:2.8rem;
+            background:rgba(255,255,255,1);
+            border-radius:0.1rem;
+            margin: 0.26rem 0 0.2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .content-top h3{
+            font-size:0.26rem;
+            font-weight:500;
+            color:rgba(102,102,102,1);
+        }
+        .money{
+            width:2.26rem;
+            height:0.5rem;
+            font-size:0.3rem;
+            font-weight:bold;
+            color:rgba(217,43,36,1);
+            text-align: center;
+            line-height: 0.5rem;
+            margin: 0.25rem 0 0.5rem 0;
+        }
+        .money span{
+            font-size:0.4rem;
+        }
+        .content-top p{
+            height:0.26rem;
+            font-size:0.24rem;
+            font-weight:400;
+            color:rgba(102,102,102,1);
+            display: flex;
+            align-items: center;
+        }
+        .content-top p img{
+            width: 0.24rem;
+            height: 0.24rem;
+            margin-right: 0.1rem;
+        }
+        .content-bottom{
+            width:6.9rem;
+            height:2.69rem;
+            background:rgba(255,255,255,1);
+            border-radius:0.1rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .content-bottom-t{
+            width: 100%;
+            height: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 0.01rem solid rgba(238,238,238,1);
+        }
+        .content-bottom-t p{
+            font-size:0.3rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+            margin-left: 0.35rem;
+        }
+        .content-bottom-t .more{
+            height: 100%;
+            width: 0.58rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .content-bottom-t img{
+            height: 0.26rem;
+            width: 0.18rem;
+        }
+        .content-bottom-b{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .content-bottom-b .detail{
+            font-size:0.26rem;
+            font-weight:400;
+            color:rgba(102,102,102,1);
+            height: 100%;
+            width: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .content-bottom-b .detail p{
+            height: 0.5rem;
+            font-size:0.4rem;
+            font-weight:bold;
+            color:rgba(47,47,47,1);
+            line-height: 0.5rem;
+            margin-top: 0.15rem;
+        }
+
+        .content1{
+            flex: 1;
+            background: url(../../image/shop_push/bj.jpg);
+            background-size: 100% 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .content1-btn{
+            width:5.9rem;
+            height:0.86rem;
+            background:linear-gradient(180deg,rgba(255,129,80,1) 0%,rgba(246,62,62,1) 100%);
+            box-shadow:0 0.03rem 0.27rem 0 rgba(167,9,3,0.2);
+            border-radius:0.43rem;
+            font-size:0.34rem;
+            font-weight:bold;
+            color:rgba(255,250,247,1);
+            line-height:0.86rem;
+            text-align: center;
+            margin: 0 auto 0.54rem;
+        }
+        .messageBox{
+            width: 100%;
+            height: calc(100% - 0.88rem);
+            position: absolute;
+            top: 0.88rem;
+            left: 0;
+            background: rgba(47,47,47,0.6);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .messageBox .boxCon{
+            width:5.9rem;
+            height:2.7rem;
+            background:rgba(255,255,255,1);
+            border-radius:0.2rem;
+        }
+        .messageBox .boxCon .title{
+            height: 1.46rem;
+            width: 100%;
+            border-bottom: 0.01rem solid rgba(238,238,238,1);
+            text-align: center;
+            font-size:0.3rem;
+            font-weight:500;
+            color:rgba(47,47,47,1);
+            line-height:0.52rem;
+            padding-top: 0.3rem;
+        }
+        .messageBox .boxCon .boxBtn{
+            width: 100%;
+            height: 0.93rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size:0.34rem;
+            font-weight:500;
+            color:rgba(22,117,225,1);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vue-app" class="myIncome">
+        <div class="header">
+            <div  v-if='isShowBackBtn' class="left">
+                <div class="back" @click="onBack"></div>
+            </div>
+            <div class="center">{{title}}</div>
+            <div class="right" @click="toRule">拓店规则</div>
+        </div>
+        <!-- 推手显示 -->
+        <div class="content" v-if="pushInfo">
+            <div class="content-top">
+                <h3>总收益</h3>
+                <div class="money">￥<span>{{pushInfo.price}}</span></div>
+                <!-- <span><img src="../../image/shop_push/caution.png"><span>每月20日结算上月预估佣金</span></p> -->
+            </div>
+            <div class="content-bottom">
+                <div class="content-bottom-t">
+                    <p>全部佣金数据</p>
+                    <div class="more" @click="toMore">
+                        <img src="../../image/shop_push/more.png">
+                    </div>
+                </div>
+                <div class="content-bottom-b">
+                    <div class="detail">
+                        <h4>昨日</h4>
+                        <p>{{pushInfo.price1}}</p>
+                    </div>
+                    <div class="detail">
+                        <h4>本月</h4>
+                        <p>{{pushInfo.price2}}</p>
+                    </div>
+                    <div class="detail">
+                        <h4>上月</h4>
+                        <p>{{pushInfo.price3}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 非推手显示-->
+        <div class="content1" v-if="!pushInfo" :style="{backgroundImage: 'url(' + thumb + ')'}">
+            <div class="content1-btn" v-if="status != '1'" @click="apply">申请入驻</div>
+        </div>
+        <!-- 非推手弹窗 -->
+        <div class="messageBox" v-if="msgBox">
+            <div class="boxCon">
+                <div class="title" v-html="info">
+                    
+                </div>
+                <div class="boxBtn" @click="backBtn">确定</div>
+            </div>
+        </div>
+    </div>  
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<!-- 线上路径，线上需开启 -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?201910311956"></script> -->
+<!-- 本地调试路径 -->
+<script src="../../js/http.js?i=201911211908"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<!-- <script src="../../js/mint-ui/index.js"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js?201906051207" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script> -->
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script> -->
+<script type="text/javascript">
+    // Vue.use(window.VueAwesomeSwiper)
+    var vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            isPush:false,
+            showBox:false,
+            pushInfo:'',
+            info:'',
+            thumb:'',
+            status:1, // 0 申请 1 自动成为（等级限制） 2 申请并成为（等级限制）
+            msgBox:false,
+            title:''
+        },
+        created: function() {
+            
+        },
+        methods: {
+            
+            // 返回
+            onBack: function (ret, err) {
+              dsBridge.call('closeWin')
+            },
+            backBtn(){
+                dsBridge.call('closeWin')
+            },
+            toMore(){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/shop_push/detail.html',type: 'web'})
+            },
+            toRule(){
+                dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/shop_push/rule.html',type: 'web'})
+            },
+            getPushInfo: function () {
+                Http.post(Http.HOST+Http.API_URL.OTOPUSHHANDUSER,{},true).then((res)=>{
+                    if (res.code == 0) {
+                        this.pushInfo = res.data
+                        this.title = res.data.title
+                        utils.storage.set('pushRule', res.data.info)
+                    } else if (res.code == 1) {
+                        Http.post(Http.HOST+Http.API_URL.OTOPUSHHAND,{},true).then((res)=>{
+                            if (res.code == 0) {
+                                this.title = res.data.title
+                                this.status = res.data.status
+                                this.thumb = res.data.thumb
+                                if (res.data.pushhand.status == 0) {
+                                    this.info = '您的推手权限已被禁用</br>请联系管理员！'
+                                    this.msgBox = true
+                                } else {
+                                    this.info = res.data.info
+                                    if (this.info != '' && this.status != 2) {
+                                        this.msgBox = true
+                                    }
+                                }   
+                            }
+                        })
+                    }
+                })
+            },
+            apply(){
+                var _this = this
+                Http.post(Http.HOST+Http.API_URL.OTOPUSHHAND,{type:'save'},true).then((res)=>{
+                    if (res.code == 0) {
+                        dsBridge.call("toast", {msg: res.msg})
+                    }else if (res.code == 1) { 
+                        if (_this.status == 2) {
+                            _this.info = res.msg
+                            _this.msgBox = true
+                        }
+
+                    }
+                })
+            }
+            
+        },
+        mounted: function () {
+            this.getPushInfo()
+        }
+        
+    })
+</script>
+
+</html>

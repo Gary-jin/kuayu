@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>商品详情</title>
+    <meta name="description" content="U券_淘宝客系统">
+    <meta name="keywords" content="U券_淘宝客系统">
+    <meta name="apple-mobile-web-app-capable" content="yes" /> <!-- apple devices fullscreen -->
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    
+    <style>
+        html, body{
+            background: #ffffff;
+            height: 100vh;
+        }
+        .title {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            z-index: 9;
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .swiper_prefecture{
+            width: 100%;
+            height: 5.8rem;
+        }
+        .swiper_prefecture .swiper-slide{
+            display: flex;
+            justify-content: center;
+        }
+        .swiper_prefecture img{
+            width: 100%;
+        }
+        /* .swiper-pagination.swiper-pagination-bullets{
+            bottom: 26px;
+            left: 0;
+            width: 100%;
+            background: none;
+        } */
+        .swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction{
+            bottom: 20px !important;
+            left: 85% !important;
+            width: .7rem !important;
+            color:rgba(255,255,255,1);
+            background:rgba(0,0,0, .4);
+            /* height:38px; */
+            border-radius:19px;
+        }
+        .swiper-pagination .swiper-pagination-bullet {
+            background: #ffffff;
+            width: .12rem;
+            height: .12rem;
+            opacity: .8;
+            margin-right: .12rem;
+        }
+        .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active{
+            width: .12rem;
+            height: .12rem;
+            background: #D92121;
+        }
+        /* goodsdetails_tit_box */
+        .goodsdetails_tit_box{
+            width: 100%;
+            height:1.98rem;
+        }
+        .goodsdetails_tit_box .goodsdetails_core{
+            padding: 0 .3rem;
+            overflow: hidden;
+        }
+        .goodsdetails_tit{
+            font-size: .32rem;
+            font-weight:bold;
+            color:rgba(51,51,51,1);
+            margin-top: .32rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .goodsdetails_tit img{
+            width: .32rem;
+            height: .32rem;
+        }
+        .goodsdetails_price {
+            display: flex;
+            justify-content: space-between;
+            margin-top: .23rem;
+        }
+        .goodsdetails_price1 span:nth-child(1){
+            font-size: .32rem;
+            font-weight:500;
+            color:rgba(217,33,33,1);
+        }
+        .goodsdetails_price1 span:nth-child(2){
+            font-size: .38rem;
+            font-weight:bold;
+            color:rgba(217,33,33,1);
+        }
+        .goodsdetails_price2{
+            font-size: .26rem;
+            font-weight:500;
+            color:rgba(153,153,153,1);
+        }
+        .goods_core_detail{
+            height: .88rem;
+            font-size: .3rem;
+            font-weight:500;
+            color:rgba(51,51,51,1);
+            line-height: .88rem;
+            margin-left: .3rem;
+        }
+        .count{
+            margin-bottom: .98rem;
+        }
+        .count >img{
+            width: 100%;
+            display: block;
+        }
+        .googsdetails_bottom{
+            width: 100%;
+            height: .98rem;
+            font-size: .32rem;
+            font-weight:500;
+            color:rgba(255,255,255,1);
+            line-height: .98rem;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            display: flex;
+        }
+        .googsdetails_bottom >div:nth-child(1){
+            width: 35%;
+            font-size: .26rem;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+        .googsdetails_bottom >div:nth-child(1) >img{
+            width: .44rem;
+            height: .4rem;
+            margin-right: .2rem;
+        }
+        .googsdetails_bottom >div:nth-child(2){
+            width: 65%;
+            background:linear-gradient(-90deg,rgba(217,33,33,1),rgba(255,101,73,1));
+        }
+        .core_box {
+            margin-left: .3rem;
+            margin-bottom: .1rem;
+        }
+        .core_box >div{
+            height: .5rem;
+            font-size: .3rem;
+            font-weight: bold;
+            color: rgba(51,51,51,1);
+            line-height: .5rem;
+        }
+
+
+        #mescroll{
+            width: 100%;
+            position: fixed;
+            top: .88rem;
+            bottom: 0;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+       
+    <div id="prefecture" v-cloak>
+        <div class="title">
+            <img src="./../../image/back.png" alt="" @click='onBack'>
+            <div class="title_text">商品详情</div>
+        </div>
+        <!-- <div style="height: .88rem;"></div> -->
+        <div class="common-warp mescroll" ref="mescroll" id="mescroll" >
+            <div class="warp" id="d26">
+                <div class="swiper-container swiper_prefecture">
+                    <swiper :options="swiperOption" ref="mySwiper" style="height:100%;">
+                        <swiper-slide v-for="(img, index) in muti_thumb" :key="index">
+                            <img  :src="img"  alt="">
+                        </swiper-slide>
+                    </swiper>
+                    <div class="swiper-pagination" slot="pagination"></div>
+                </div>
+                <div class="goodsdetails_tit_box">
+                    <div class="goodsdetails_core">
+                        <div class="goodsdetails_tit">
+                           {{goodsList.title}}
+                        </div>
+                        <div class="goodsdetails_price">
+                            <div class="goodsdetails_price1"><span>￥</span><span>{{goodsList.price}}</span></div>
+                            <div class="goodsdetails_price2">销量:{{goodsList.sales}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="core_box">
+                    <div v-show="core1">现金+积分支付：{{pay_type.money}}元+{{pay_type.point}}积分</div>
+                    <div v-show="core2">积分支付：{{pay_type.all_point}}积分</div>
+                </div>
+                <div style="height: .2rem;background: #f7f7f7;"></div>
+                <div class="goods_core_detail">商品详情</div>
+                <div class="count" v-html="goodsList.desc"></div>
+                <div class="googsdetails_bottom" >
+                    <div @click="bdsq(goodsList.customer_service)">
+                        <img src="./../../image/oto_order_detaiols/nouncc.png" alt="">
+                        客服</div>
+                    <div @click="goBug(goodsList.id)">我要购买</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=201910112231"></script> -->
+<script src="../../js/http.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<script src="../../js/libs/common.js"></script>
+<script type="text/javascript">
+    Vue.use(window.VueAwesomeSwiper)
+    window.vueObj = new Vue({
+        el: "#prefecture",
+        data:{
+            swiperOption: {
+                // autoplay: true,
+                loop: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                    type: 'fraction'
+                },
+            },
+            mescroll: null,
+            goodsList: [],
+            goodsId: '',
+            muti_thumb : [],//轮播图
+            pay_type: [],
+            core1: false,
+            core2: false
+        },
+        mounted(){
+            var Request = new Object();
+            Request = GetRequest();
+            this.goodsId = Request['goodsId']
+            console.log(this.goodsId)
+            this.getstyle()
+        },
+        methods: {
+			onBack: function(){
+				dsBridge.call('closeWin')
+			},
+            getstyle (page,mescroll) {
+                Http.post(Http.HOST+Http.API_URL.AREAGOODSDETAIL,{goodsId: this.goodsId},true).then((res)=>{
+                    if (res.code === 0) {
+                        this.goodsList = res.data
+                        this.muti_thumb = this.goodsList.muti_thumb
+                        this.pay_type = res.data.pay_type
+                        console.log(this.pay_type)
+                        if (this.pay_type.point>0 || this.pay_type.money>0) {
+                            this.core1 = true
+                        } else {
+                            this.core1 = false
+                        }
+                        if (this.pay_type.all_point>0) {
+                            this.core2 = true
+                        } else {
+                            this.core2 = false
+                        }
+                    }
+                })
+            },
+            bdsq (url) {
+                dsBridge.call("open", { url: url, type: 'web' })
+                //  window.location.href = url
+            },
+            goBug (data){
+                dsBridge.call('openWin', '/mall/firmOrderActive?data='+data);
+            }
+        },
+        
+    })
+</script>
+
+</html>

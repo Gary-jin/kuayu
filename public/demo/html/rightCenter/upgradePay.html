@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>付费升级</title>
+    <script>
+		(function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128?i=1">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+    <script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+    <style >
+        html,body{
+            background: #121214;
+            height: 100vh;
+        }
+        #header{
+            padding: 0 .3rem .3rem .26rem;
+            position: relative;
+        }
+        #header .left i{
+            color:#fff;
+            font-size:0.4rem;
+        }
+        #header .title {
+            display: block;
+            width: 100%;
+            text-align: center;
+            font-size: .34rem;
+            color: #fff;
+            margin-left: -0.4rem;
+        }
+        .right-top{
+            background: url('../../image/rightCenter/index/rightBg.png') no-repeat;
+            background-size: 100% 100%;
+            margin-bottom: 1.2rem;
+        }
+        .right-top .info{
+            text-align:center
+        }
+        .right-top .swiper-warp{
+            margin: .40rem .3rem;
+        }
+        .right-top .swiper-warp{
+            background: -webkit-linear-gradient(left, #EFDAA2, #ECBE77);
+            border-radius: .3rem;
+            text-align: center;
+        }
+        .right-top .swiper-warp ul li{
+            float:left;
+            width:33.33%;
+            margin-bottom: .33rem;
+        }
+        .right-top .swiper-warp .warp{
+            padding: 0 .15rem;
+        }
+        .right-top .swiper-warp .title{
+            font-size:.3rem;
+            color:#2F2F2F;
+            font-weight:normal;
+            padding: .35rem 0 .40rem
+        }
+        .right-top .swiper-warp ul{
+            padding-bottom: .20rem;
+        }
+        .right-top .swiper-warp li .img img{
+            width:.88rem;
+            height: .88rem;
+        }
+        .right-top .swiper-warp li .tit{
+            color:#2f2f2f;
+            padding:.16rem 0 .1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .right-top .swiper-warp li .tit img{
+            width: 0.16rem;
+            height: 0.2rem;
+        }
+        .right-top .swiper-warp li .tit h4{
+            /*font-size: .24rem;*/
+            font-weight:normal;
+        }
+        .right-top .swiper-warp li .desc{
+            font-size:.22rem;
+            color:#666;
+        }
+        .upgrade-pay  .title{
+            color:#EFD79E;
+            font-size:.34rem;
+            display:flex;
+            align-items:center;
+            justify-content: center;
+        }
+        .upgrade-pay  .title:before, .upgrade-pay  .title:after{
+            content: '';
+            display:inline-block;
+            width:.56rem;
+            background-color:#5F5F5F;
+            height:.02rem;
+
+        }
+        .upgrade-pay  .title:before{
+            margin-right: .20rem;
+        }
+        .upgrade-pay  .title:after{
+            margin-left: .20rem;
+        }
+        .upgrade-pay .list{
+            padding:0 .24rem;
+            margin-top: .45rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .upgrade-pay .info{
+            width: 2.1rem;
+            height: 2.55rem;
+            margin:0 .11rem;
+            background: url('../../image/rightCenter/index/upgarde2.png') no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+        }
+        .upgrade-pay .recomnend{
+            background: url('../../image/rightCenter/index/upgarde.png') no-repeat;
+            background-size: 100% 100%;
+        }
+        .upgrade-pay .info .pay-title{
+            font-size:.30rem;
+            color:#333;
+            padding: .7rem 0 .25rem;
+        }
+        .upgrade-pay .info .money{
+            font-size:.58rem;
+            color:#D92B24
+        }
+        .upgrade-pay .info .money span{
+            font-size:.36rem;
+            margin-right: .08rem;
+        }
+        .upgrade-pay .info .recom{
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0 .07rem;
+            background: linear-gradient(to left, #6C11EB, #CF1AE5);;
+            color: #fff;
+            border-top-right-radius: .1rem;
+            border-bottom-left-radius: .1rem;
+            font-size: .24rem;
+            height: .36rem;
+            line-height: .36rem
+        }
+
+        .upgrade-footer{
+            color:#fff;
+            position:fixed;
+            bottom:0;
+            left: 0;
+            right: 0;
+            display:flex;
+            align-items:center;
+            justify-content: space-between;
+            height:1.04rem;
+            line-height:1.04rem;
+            background-color:#313132;
+            padding-left:.42rem
+        }
+        .upgrade-footer .money{
+            font-size:.52rem;
+            color:#E7CA8C;
+            font-weight:bold
+        }
+        .upgrade-footer .money span{
+            font-size:.36rem
+        }
+        .upgrade-footer .money span:first-child{
+            margin-right:.06rem
+        }
+        .upgrade-footer .money span:last-child{
+            font-weight:normal;
+            margin-left:.1rem;
+            font-size: .28rem
+        }
+        .upgrade-footer .btn{
+            width: 3.08rem;
+            background: url('../../image/rightCenter/index/footer.png') no-repeat;
+            background-size: 100% 100%;
+            text-align: center;
+            font-size: .34rem;
+            color: #2F2F2F;
+            font-weight: bold;
+        }
+        .upgrade-footer .btn span{
+            padding-left: .5rem;
+        }
+    </style>
+</head>
+
+<body>
+<div id="vue-app" >
+    <div class="yujiazai" v-if="yujiazai" :style="{paddingTop: statusH + 'px'}">
+        <div class="top"></div>
+        <div class="middle" v-for="x in 10"></div>
+    </div>
+    <div v-if="!yujiazai">
+        <div class="right-top" :style="{paddingTop: statusH + 'px'}">
+            <div id="header" class="flex">
+                <div class="left" @click="onBack()"><i class="iconfont icon-back"></i></div>
+                <div class="title flex_1">付费升级</div>
+            </div>
+            <div class="swiper-warp">
+                <div class="warp">
+                    <h3 class="title">升级可享</h3>
+                    <ul class="content clr">
+                        <li v-for="item in cashPay[0].rights" :key="item.id">
+                            <div class="img"><img :src="item.img" alt=""></div>
+                            <div class="tit"><h4>{{item.tip}}{{item.tipAppend}}</h4><img v-if="item.tipAppend" src="../../image/rightCenter/index/top.png" alt=""></div>
+                            <p class="desc">{{item.text}}</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="upgrade-pay">
+                <h3 class="title">付费标准</h3>
+                <div class="list">
+                    <div class="info" v-for="(item, index) in giftPay.cards" :class="type == item.expire ? 'recomnend' : ''" @click="toSelect(item.expire, item.price)" :key="index">
+                        <span class="pay-title">{{item.text}}{{item.recomnend}}</span>
+                        <h3 class="money"><span>¥</span>{{item.price}}</h3>
+                        <span class="recom" v-if="item.recommend == 1">推荐</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="upgrade-footer">
+            <p class="money"><span>¥</span>{{payMoney}}<span>/&nbsp;{{payTitle}}</span></p>
+            <div class="btn" @click="toPay"><span>立即升级</span></div>
+        </div>
+    </div>
+    
+</div>
+</body>
+
+<script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=201910112230"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/common.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: '#vue-app',
+        data: {
+            id: '',
+            cashPay: '',
+            giftPay: '',
+            yujiazai: true,
+            payMoney: '',
+            type: '',
+            payTitle: '',
+			mobile: ''
+        },
+        mounted(){
+            this.getParameter()
+            this.getList()
+        },
+		created () {
+			let bodyHeight = document.body.clientHeight
+			let safeArea = dsBridge.call('receiveParams', 'safeAreaTop1')
+			let size = (document.documentElement.clientWidth / 7.5)
+			//this.statusH = (safeArea / size)
+			this.statusH = safeArea
+			this.mobile = dsBridge.call('receiveParams', 'mobile')
+		},
+        methods: {
+            getParameter(){
+                var Request = new Object();
+                Request = GetRequest();
+                this.id = Request['id']
+            },
+            toSelect: function(type, money){
+                this.type = type
+                this.payMoney = money
+                this.commonFunD()
+            },
+            onBack: function(ret, err){
+                dsBridge.call('closeWin')
+            },
+            commonFunD: function () {
+                let that = this
+                if (that.type == 'month') {
+                    that.payTitle = '月'
+                } else if(that.type == 'year'){
+                    that.payTitle = '年'
+                } else if(that.type == 'forever'){
+                    that.payTitle = '永久'
+                }
+            },
+            getList: function(refresh) {
+                Http.post(Http.HOST+Http.API_URL.RIGHTERPAY,{id: this.id},true).then((res)=>{
+                    this.yujiazai = false
+                    if(res.code === 0){
+                       this.cashPay = res.data.rightsList
+                       this.giftPay = res.data.payRights
+                       for(i=0; i < this.giftPay.cards.length; i++){
+                            if(this.giftPay.cards[i].recommend == 1){
+                                this.payMoney = this.giftPay.cards[i].price
+                                this.type = this.giftPay.cards[i].expire
+                                this.commonFunD()
+                            }else{
+                                this.payMoney = this.giftPay.cards[0].price
+                                this.type = this.giftPay.cards[0].expire
+                                this.commonFunD()
+                            }
+                       }
+                    }
+                })
+            },
+            toPay(){
+				console.log(Http.HOST)
+				console.log(Http.API_URL.GETUSERINFO)
+				 Http.post(Http.HOST+Http.API_URL.GETUSERINFO,{},true).then((res)=>{
+                    if(res.code === 0){
+						console.log('mobile', res.data)
+						if(res.data.mobile){
+							dsBridge.call("open", {url: Http.HOST+'/uqWeb/html/rightCenter/payStyle.html?id=' + this.id + '&expire=' + this.type,type: 'web'})
+						}else{
+						 dsBridge.call("openWin", '/judgemobile')
+						}
+					}
+                       
+                })
+				
+				console.log('mobile', this.mobile)
+            }
+        }
+    })
+</script>
+
+</html>

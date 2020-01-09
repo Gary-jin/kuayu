@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>申请签约</title>
+    <meta name="description" content="U券_淘宝客系统">
+    <meta name="keywords" content="U券_淘宝客系统">
+    <meta name="apple-mobile-web-app-capable" content="yes" /> <!-- apple devices fullscreen -->
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script>
+        (function(doc, win) {
+          var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function() {
+            var clientWidth = docEl.clientWidth;
+            if(!clientWidth) return;
+            if(clientWidth >= 750) {
+              docEl.style.fontSize = '100px';
+            } else {
+              docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+            }
+          };
+          if(!doc.addEventListener) return;
+          win.addEventListener(resizeEvt, recalc, false);
+          doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+      </script>
+    <link rel="stylesheet" href="../../css/common.css?i=1128">
+    <link rel="stylesheet" href="../../css/libs/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/libs/mescroll/mescroll.min.css" >
+    <link rel="stylesheet" type="text/css" href="../../css/libs/swiper_min.css">
+    <link rel="stylesheet" href="../../js/tab/style.css">
+    <style>
+        html, body{
+            background: #f7f7f7;
+            height: 100vh;
+        }
+        .title_box{
+            position: fixed;
+            top: 0;
+            z-index: 9;
+            width: 100%;
+        }
+        .title {
+            width: 100%;
+            height: .88rem;
+            background: #fff;
+            display: flex;
+            align-items: center;
+        }
+
+        .title>img {
+            height: .32rem;
+            width: auto;
+            margin-left: .3rem;
+            margin-right: 2.43rem;
+        }
+
+        .title_text {
+            width: 1.68rem;
+            height: .33rem;
+            font-size: .34rem;
+            font-weight: bold;
+            color: rgba(47, 47, 47, 1);
+            line-height: .36rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .contract_box{
+            width: 100%;
+            margin-top: .3rem;
+        }
+        .contract_core_box{
+            margin-bottom: .2rem;
+            padding:  0 .2rem;
+        }
+        .contract_core_tit{
+            /* height: 2.2rem; */
+            border-radius: .1rem;
+            background:#ffffff;
+            overflow: hidden;
+            margin-bottom: .2rem;
+        }
+        .contract_core_tit>div{
+            padding: 0 .3rem;
+        }
+        .contract_core_tit>div:nth-child(1){
+            font-size: .3rem;
+            font-weight:bold;
+            color:rgba(51,51,51,1);
+            margin: .35rem 0 .3rem 0;
+        }
+        .contract_core_txtcore{
+            margin-bottom: .56rem;
+        }
+        .contract_core_txtcore >div{
+            font-size:.28rem;
+            font-weight:bold;
+            color:rgba(51,51,51,1);
+        }
+        .contract_btn_box{
+            /* display: flex;
+            justify-content: center; */
+            overflow: hidden;
+        }
+        .contract_btn_box .contract_btn{
+            width: 5rem;
+            height: .88rem;
+            background:linear-gradient(-90deg,rgba(217,33,33,1),rgba(255,101,73,1));
+            border-radius: .1rem;
+            font-size: .32rem;
+            font-weight:500;
+            color:rgba(255,255,255,1);
+            text-align: center;
+            line-height: .8rem;
+            margin: .8rem auto 0;
+        }
+        .contract_btn_box .contract_btn.contract_btn1{
+            background: #e2e2e2;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+       
+    <div id="prefecture" v-cloak>
+        <div class="title_box">
+            <div class="title">
+                <img src="./../../image/back.png" alt="" @click='onBack'>
+                <div class="title_text">申请签约</div>
+            </div>
+            <div class="contract_box">
+                <div class="contract_core_box">
+                    <div class="contract_core_tit" v-for="(item,index) in 2" :key="index">
+                        <div>条件：</div>
+                        <div class="contract_core_txtcore">
+                            <div v-html=''>1.等级为市场总监级为市场总监级为市场总监级为市场总监级为市场总监级为市场总监级为市场总监。</div>
+                            <div>1.等级为市场总监级为市场总监级为市场总监级为市场总监级为市场总监级为市场总监级为市场总监。</div>
+                        </div>
+                    </div>
+                    <div class="contract_btn_box">
+                        <div class="contract_btn">立即申请</div>
+                        <div class="contract_btn contract_btn1">您已申请</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/dsbridge.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/axios.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/utils.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/swiper_min.js" charset="utf-8"></script>
+<!-- <script src="https://native.youquanyun.com/uqWeb/js/http.js?i=201911211908?i=201910112231"></script> -->
+<script src="../../js/http.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_min.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/qs.js" charset="utf-8"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/mescroll/mescroll.min.js"></script>
+<script src="https://native.youquanyun.com/uqWeb/js/libs/vue_awesome_swiper.js" charset="utf-8"></script>
+<script type="text/javascript">
+    window.vueObj = new Vue({
+        el: "#prefecture",
+        data:{
+            mescroll: null,
+            goodsList: ''
+        },
+        mounted(){
+
+        },
+        methods: {
+			onBack: function(){
+				dsBridge.call('closeWin')
+			},
+             
+            
+        },
+        
+    })
+</script>
+
+</html>
